@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "edu-lms"
+version = "0.1.0"
+description = "LMS for educational purposes"
+authors = ["Odilbek Arziev <odarziev@mail.ru>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4"
+django = ">=5.0,<6.0"
+djangorestframework = ">=3.16.1,<4.0.0"
+django-environ = "^0.12.0"
+psycopg2-binary = "^2.9.10"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
