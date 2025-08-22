@@ -1,0 +1,14 @@
+from rest_framework import serializers
+from {app}.models import {model}
+from core.utils.serializers import ValidatorSerializer
+
+
+class {model}Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = {model}
+        fields = ("__all__")
+
+
+class {model}FilterSerializer(ValidatorSerializer):
+    search = serializers.CharField(required=False)
+    page = serializers.IntegerField(default=1)

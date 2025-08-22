@@ -1,0 +1,12 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from {app}.serializers.{file} import {model}Serializer
+
+
+class {model}ListView(APIView):
+    def post(self, request):
+        serializer = {model}Serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by=request.user)
+        return Response(serializer.data, 201)

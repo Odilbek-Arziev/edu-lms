@@ -1,0 +1,43 @@
+from django.urls import reverse
+
+from core.tests.base_test import BaseTestCase
+from users.tests.constants import USER_TOKEN
+
+
+class ProductTest(BaseTestCase):
+    fixtures = ('users_and_tokens.yaml', '{model}')
+
+    def setUp(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + USER_TOKEN)
+
+    def test_list(self):
+        response = self.client.get(reverse('{app}:{model}-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["results"][0]["id"], 1)
+        self.assertEqual(response.data["results"][1]["id"], 2)
+
+    def test_detail(self):
+        url = reverse('{app}:{model}-detail', kwargs={kwargs})
+        response = self.client.get(url)
+        self.assertEqual(response.data["id"], 1)
+
+    def test_create(self):
+        response = self.client.post(reverse('{app}:{model}-list'), {return_object})
+        self.assertEqual(response.status_code, 201)
+
+        response = self.client.post(reverse('{app}:{model}-list'), {return_object})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['product_sale'], ["This field is required."])
+
+    def test_delete(self):
+        response = self.client.delete(reverse('{app}:{model}-detail', kwargs={kwargs}))
+        self.assertEqual(response.status_code, 204)
+
+    def test_update(self):
+        url = reverse('{app}:{model}-detail', kwargs={kwargs})
+        response = self.client.put(url, {return_object})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.put(url, {return_object})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['id'], ["This field is required."])

@@ -1,0 +1,15 @@
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from {app}.models import {model}
+from {app}.serializers.{file} import {model}Serializer
+
+
+class {model}DetailView(APIView):
+    def put(self, request, pk):
+        instance = get_object_or_404({model}, id=pk)
+        serializer = {model}Serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(updated_by=request.user)
+        return Response(serializer.data)
