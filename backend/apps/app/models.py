@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import BaseModel
+from django.utils.text import slugify
 
 LEVEL_CHOICES = [
     ('beginner', 'Beginner'),
@@ -27,7 +28,7 @@ class Course(BaseModel):
     author = models.ForeignKey('users.CustomUser', on_delete=models.PROTECT)
     is_active = models.BooleanField(default=True)
     duration = models.PositiveSmallIntegerField()
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     level = models.CharField(max_length=255, choices=LEVEL_CHOICES, default="beginner")
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -44,24 +45,35 @@ class Course(BaseModel):
         related_name="courses"
     )
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
 
 class Module(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
 
     course = models.ForeignKey('app.Course', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.title} ({self.course.title})"
 
     class Meta:
         ordering = ["order"]
 
+    def __str__(self):
+        return f"{self.title} ({self.course.title})"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
 
 class Category(BaseModel):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcategories')
@@ -70,6 +82,11 @@ class Category(BaseModel):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
         ordering = ["order"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class Enrollment(BaseModel):
@@ -91,6 +108,7 @@ class Lesson(BaseModel):
     title = models.CharField(max_length=255)
     content = models.TextField()
     is_preview = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True, null=True, blank=True)
 
     module = models.ForeignKey('app.Module', on_delete=models.CASCADE, related_name='lessons')
 
@@ -99,6 +117,11 @@ class Lesson(BaseModel):
 
     def __str__(self):
         return f"{self.module.title} - {self.title}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class LiveSession(BaseModel):
@@ -118,15 +141,20 @@ class Material(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     url = models.URLField(blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
 
     lesson = models.ForeignKey('app.Lesson', on_delete=models.CASCADE, related_name='materials')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class Homework(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     deadline = models.DateField(null=True, blank=True)
-    assigned_at = models.DateField()
 
     lesson = models.ForeignKey('app.Lesson', on_delete=models.CASCADE, related_name='homeworks')
 
