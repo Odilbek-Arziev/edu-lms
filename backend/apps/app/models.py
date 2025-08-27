@@ -10,6 +10,7 @@ from app.querysets.lesson import LessonQuerySet
 from app.querysets.live_session import LiveSessionQuerySet
 from app.querysets.material import MaterialQuerySet
 from app.querysets.homework import HomeworkQuerySet
+
 from app.querysets.homework_submission import HomeworkSubmissionQuerySet
 
 LEVEL_CHOICES = [
@@ -103,6 +104,9 @@ class Category(BaseModel):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.title
+
 
 class Enrollment(BaseModel):
     enrolled_at = models.DateField(auto_now_add=True)
@@ -172,6 +176,9 @@ class Material(BaseModel):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.title
+
 
 class Homework(BaseModel):
     title = models.CharField(max_length=255)
@@ -190,6 +197,9 @@ class HomeworkCriterion(BaseModel):
 
     homework = models.ForeignKey('app.Homework', on_delete=models.CASCADE, related_name='criteria')
 
+    def __str__(self):
+        return self.text
+
 
 class HomeworkSubmission(BaseModel):
     file = models.FileField(upload_to='homeworks/')
@@ -199,6 +209,9 @@ class HomeworkSubmission(BaseModel):
     homework = models.ForeignKey('app.Homework', on_delete=models.CASCADE, related_name='submissions')
     student = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='homework_submissions')
     objects = HomeworkSubmissionQuerySet.as_manager()
+
+    def __str__(self):
+        return f"{self.student.first_name} {self.student.last_name} - {self.homework}"
 
 
 class SubmissionCriterionResult(BaseModel):
