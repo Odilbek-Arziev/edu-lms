@@ -7,11 +7,13 @@ class LiveSessionViewSet(BaseModelViewSet):
     serializer_class = LiveSessionSerializer
 
     def get_queryset(self):
-        search = self.request.query_params.get('search')
-        date_from = self.request.query_params.get('date_from')
-        date_to = self.request.query_params.get('date_to')
-        student = self.request.query_params.get('student')
-        course = self.request.query_params.get('course')
+        params = self.request.query_params
+
+        search = params.get('search')
+        date_from = params.get('date_from')
+        date_to = params.get('date_to')
+        student = params.get('student')
+        course = params.get('course')
 
         return LiveSession.objects.list(
             search=search,

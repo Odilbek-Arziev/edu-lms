@@ -10,8 +10,8 @@ from app.querysets.lesson import LessonQuerySet
 from app.querysets.live_session import LiveSessionQuerySet
 from app.querysets.material import MaterialQuerySet
 from app.querysets.homework import HomeworkQuerySet
-
 from app.querysets.homework_submission import HomeworkSubmissionQuerySet
+from app.querysets.homework_criterion import HomeworkCriterionQuerySet
 
 LEVEL_CHOICES = [
     ('beginner', 'Beginner'),
@@ -194,6 +194,7 @@ class Homework(BaseModel):
 
 class HomeworkCriterion(BaseModel):
     text = models.TextField()
+    objects = HomeworkCriterionQuerySet.as_manager()
 
     homework = models.ForeignKey('app.Homework', on_delete=models.CASCADE, related_name='criteria')
 

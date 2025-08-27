@@ -4,5 +4,13 @@ from core.views.viewsets import BaseModelViewSet
 
 
 class HomeworkCriterionViewSet(BaseModelViewSet):
-    queryset = HomeworkCriterion.objects.all()
     serializer_class = HomeworkCriterionSerializer
+
+    def get_queryset(self):
+        homework = self.request.query_params.get('homework')
+        queryset = HomeworkCriterion.objects.list()
+
+        if homework:
+            queryset = queryset.filter(homework__pk=homework)
+
+        return queryset

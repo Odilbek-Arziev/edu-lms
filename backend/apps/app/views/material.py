@@ -8,6 +8,7 @@ class MaterialViewSet(BaseModelViewSet):
     lookup_field = 'slug'
 
     def get_queryset(self):
-        search = self.request.query_params.get('search')
-        lesson = self.request.query_params.get('lesson')
+        params = self.request.query_params
+        search = params.get('search')
+        lesson = params.get('lesson')
         return Material.objects.list(search=search, lesson=lesson)

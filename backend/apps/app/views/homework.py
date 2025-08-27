@@ -7,6 +7,14 @@ class HomeworkViewSet(BaseModelViewSet):
     serializer_class = HomeworkSerializer
 
     def get_queryset(self):
-        search = self.request.query_params.get('search')
-        lesson = self.request.query_params.get('lesson')
-        return Homework.objects.list(search=search, lesson=lesson)
+        params = self.request.query_params
+        search = params.get('search')
+        lesson = params.get('lesson')
+        course = params.get('course')
+
+        queryset = Homework.objects.list(search=search, lesson=lesson)
+
+        if course:
+            queryset = queryset.filter(lesson__module__course__title__icontains=course)
+
+        return queryset

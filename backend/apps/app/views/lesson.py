@@ -8,5 +8,13 @@ class LessonViewSet(BaseModelViewSet):
     lookup_field = 'slug'
 
     def get_queryset(self):
-        search = self.request.query_params.get('search')
-        return Lesson.objects.list(search=search)
+        params = self.request.query_params
+        search = params.get('search')
+        course = params.get('course')
+
+        queryset = Lesson.objects.list(search=search)
+
+        if course:
+            queryset = queryset.filter(module__course__title__icontains=course)
+
+        return queryset
