@@ -4,6 +4,10 @@ from core.views.viewsets import BaseModelViewSet
 
 
 class MaterialViewSet(BaseModelViewSet):
-    queryset = Material.objects.all()
     serializer_class = MaterialSerializer
     lookup_field = 'slug'
+
+    def get_queryset(self):
+        search = self.request.query_params.get('search')
+        lesson = self.request.query_params.get('lesson')
+        return Material.objects.list(search=search, lesson=lesson)

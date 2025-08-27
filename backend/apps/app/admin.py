@@ -16,9 +16,14 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "course__title", "is_active", "order")
+    list_display = ("id", "title", "course_title", "is_active", "order")
     search_fields = ("title",)
-    list_filter = ("is_active",)
+
+    def course_title(self, obj):
+        return obj.course.title
+
+    course_title.admin_order_field = "course__title"
+    course_title.short_description = "Course"
 
 
 @admin.register(Category)
@@ -30,9 +35,15 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    list_display = ("id", "student", "course__title", "status", "progress", "final_grade", "enrolled_at")
+    list_display = ("id", "student", "course_title", "status", "progress", "final_grade", "enrolled_at")
     list_filter = ("status", "course")
     search_fields = ("student__username", "course__title")
+
+    def course_title(self, obj):
+        return obj.course.title
+
+    course_title.admin_order_field = "course__title"
+    course_title.short_description = "Course"
 
 
 @admin.register(Lesson)
@@ -43,9 +54,15 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(LiveSession)
 class LiveSessionAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "course__title", "student", "scheduled_at", "duration_minutes")
+    list_display = ("id", "title", "course_title", "student", "scheduled_at", "duration_minutes")
     list_filter = ("course", "scheduled_at")
     search_fields = ("title",)
+
+    def course_title(self, obj):
+        return obj.course.title
+
+    course_title.admin_order_field = "course__title"
+    course_title.short_description = "Course"
 
 
 @admin.register(Material)
@@ -76,5 +93,17 @@ class HomeworkSubmissionAdmin(admin.ModelAdmin):
 
 @admin.register(SubmissionCriterionResult)
 class SubmissionCriterionResultAdmin(admin.ModelAdmin):
-    list_display = ("id", "submission__homework__title", "criterion__text", "is_met")
+    list_display = ("id", "homework_title", "criterion_text", "is_met")
     list_filter = ("is_met",)
+
+    def homework_title(self, obj):
+        return obj.submission.homework.title
+
+    homework_title.admin_order_field = "submission__homework__title"
+    homework_title.short_description = "Homework"
+
+    def criterion_text(self, obj):
+        return obj.criterion.text
+
+    criterion_text.admin_order_field = "criterion__text"
+    criterion_text.short_description = "Criterion"

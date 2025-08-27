@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from app.models import Homework
+from app.serializers.lesson import LessonSerializer
 
 
 class HomeworkSerializer(serializers.ModelSerializer):
@@ -12,3 +13,9 @@ class HomeworkSerializer(serializers.ModelSerializer):
             'deadline',
             'lesson'
         ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['lesson'] = LessonSerializer(instance.lesson).data
+
+        return representation
