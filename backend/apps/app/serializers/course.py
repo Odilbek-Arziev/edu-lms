@@ -5,11 +5,12 @@ from app.serializers.category import CategorySerializer
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Course
         fields = [
+            'id',
             'title',
             'description',
             'author',
@@ -21,9 +22,3 @@ class CourseSerializer(serializers.ModelSerializer):
             'end_date',
             'category'
         ]
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['category'] = CategorySerializer(instance.category).data
-
-        return representation

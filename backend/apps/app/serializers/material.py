@@ -5,12 +5,15 @@ from app.serializers.lesson import LessonSerializer
 
 
 class MaterialSerializer(serializers.ModelSerializer):
+    lesson = LessonSerializer(read_only=True)
+
     class Meta:
         model = Material
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['lesson'] = LessonSerializer(instance.lesson).data
-
-        return representation
+        fields = [
+            'id',
+            'title',
+            'description',
+            'url',
+            'slug',
+            'lesson'
+        ]

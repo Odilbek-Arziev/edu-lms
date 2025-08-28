@@ -3,7 +3,7 @@ from .models import (
     Course, Module, Category, Enrollment,
     Lesson, LiveSession, Material,
     Homework, HomeworkCriterion, HomeworkSubmission,
-    SubmissionCriterionResult
+    SubmissionCriterionResult, SubmissionReview
 )
 
 
@@ -54,7 +54,7 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(LiveSession)
 class LiveSessionAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "course_title", "student", "scheduled_at", "duration_minutes")
+    list_display = ("id", "title", "course_title", "scheduled_at", "duration_minutes")
     list_filter = ("course", "scheduled_at")
     search_fields = ("title",)
 
@@ -91,16 +91,17 @@ class HomeworkSubmissionAdmin(admin.ModelAdmin):
     list_filter = ("homework",)
 
 
+@admin.register(SubmissionReview)
+class SubmissionReviewAdmin(admin.ModelAdmin):
+    list_display = ("id", "received_at", "is_accepted", "general_feedback", "submission", "reviewer")
+    search_fields = ("reviewer__username",)
+    list_filter = ("received_at",)
+
+
 @admin.register(SubmissionCriterionResult)
 class SubmissionCriterionResultAdmin(admin.ModelAdmin):
-    list_display = ("id", "homework_title", "criterion_text", "is_met")
+    list_display = ("id", "criterion_text", "is_met")
     list_filter = ("is_met",)
-
-    def homework_title(self, obj):
-        return obj.submission.homework.title
-
-    homework_title.admin_order_field = "submission__homework__title"
-    homework_title.short_description = "Homework"
 
     def criterion_text(self, obj):
         return obj.criterion.text

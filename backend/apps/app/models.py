@@ -155,11 +155,8 @@ class LiveSession(BaseModel):
     link = models.URLField()
     objects = LiveSessionQuerySet.as_manager()
 
-    student = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='student_sessions')
+    students = models.ManyToManyField('users.CustomUser', related_name='live_sessions')
     course = models.ForeignKey('app.Course', on_delete=models.CASCADE, related_name='live_sessions')
-
-    def __str__(self):
-        return f"{self.student.get_full_name()} - {self.title} ({self.course.title})"
 
 
 class Material(BaseModel):
@@ -184,12 +181,22 @@ class Homework(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     deadline = models.DateField(null=True, blank=True)
+    max_attempts = models.PositiveSmallIntegerField(default=5)
     objects = HomeworkQuerySet.as_manager()
 
     lesson = models.ForeignKey('app.Lesson', on_delete=models.CASCADE, related_name='homeworks')
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['lesson', 'title'], name='unique_lesson_homework_title')
+        ]
+
     def __str__(self):
         return self.title
+
+    def can_submit(self, student):
+        attempts = self.submissions.filter(student=student).count()
+        return attempts < self.max_attempts
 
 
 class HomeworkCriterion(BaseModel):
@@ -203,29 +210,43 @@ class HomeworkCriterion(BaseModel):
 
 
 class HomeworkSubmission(BaseModel):
-    file = models.FileField(upload_to='homeworks/')
+    file = models.FileField(upload_to='homeworks/', null=True, blank=True)
     comment_from_student = models.TextField()
     submitted_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     homework = models.ForeignKey('app.Homework', on_delete=models.CASCADE, related_name='submissions')
     student = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='homework_submissions')
+    previous_submission = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.SET_NULL, related_name='resubmissions'
+    )
     objects = HomeworkSubmissionQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.student.first_name} {self.student.last_name} - {self.homework}"
 
 
+class SubmissionReview(BaseModel):
+    received_at = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(default=False)
+    general_feedback = models.TextField()
+
+    submission = models.ForeignKey('app.HomeworkSubmission', on_delete=models.CASCADE, related_name='review')
+    reviewer = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='checked_homeworks')
+
+    def __str__(self):
+        return f"Review of {self.submission} by {self.reviewer}"
+
+
 class SubmissionCriterionResult(BaseModel):
     is_met = models.BooleanField(default=False)
     feedback = models.TextField(null=True, blank=True)
 
-    submission = models.ForeignKey('app.HomeworkSubmission', on_delete=models.CASCADE, related_name='criteria_results')
     criterion = models.ForeignKey('app.HomeworkCriterion', on_delete=models.CASCADE)
+    review = models.ForeignKey('app.SubmissionReview', on_delete=models.CASCADE, related_name='criteria_results',
+                               null=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['submission', 'criterion'], name='unique_submission_criterion'),
+            models.UniqueConstraint(fields=['review', 'criterion'], name='unique_review_criterion')
         ]
-
-    def __str__(self):
-        return f"{self.submission.student.get_name()} - {self.criterion.text} ({'OK' if self.is_met else 'NO'})"

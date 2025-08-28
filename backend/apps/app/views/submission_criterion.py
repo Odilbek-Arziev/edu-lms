@@ -4,5 +4,5 @@ from core.views.viewsets import BaseModelViewSet
 
 
 class SubmissionCriterionViewSet(BaseModelViewSet):
-    queryset = SubmissionCriterionResult.objects.all()
+    queryset = SubmissionCriterionResult.objects.list()
     serializer_class = SubmissionCriterionSerializer

@@ -1,6 +1,12 @@
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from core.views.viewsets import BaseModelViewSet
+
 from app.models import LiveSession
 from app.serializers.live_session import LiveSessionSerializer
-from core.views.viewsets import BaseModelViewSet
+
+from apps.users.serializers.UserSerializer import UserSerializer
 
 
 class LiveSessionViewSet(BaseModelViewSet):
@@ -22,3 +28,10 @@ class LiveSessionViewSet(BaseModelViewSet):
             student=student,
             course=course
         )
+
+    @action(detail=True, methods=['GET'])
+    def students(self, request, pk=None):
+        live_session = self.get_object()
+        students = live_session.students.all()
+        serializer = UserSerializer(students, many=True)
+        return Response(serializer.data)

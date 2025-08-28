@@ -6,25 +6,19 @@ from app.models import (
     HomeworkCriterion
 )
 from app.serializers.homework_criterion import HomeworkCriterionSerializer
-from app.serializers.homework_submission import HomeworkSubmissionSerializer
+from app.serializers.submission_review import SubmissionReviewSerializer
 
 
 class SubmissionCriterionSerializer(serializers.ModelSerializer):
-    submission = serializers.PrimaryKeyRelatedField(queryset=HomeworkSubmission.objects.all())
-    criterion = serializers.PrimaryKeyRelatedField(queryset=HomeworkCriterion.objects.all())
+    criterion = HomeworkCriterionSerializer(read_only=True)
+    review = SubmissionReviewSerializer(read_only=True)
 
     class Meta:
         model = SubmissionCriterionResult
         fields = [
+            'id',
             'is_met',
             'feedback',
-            'submission',
-            'criterion'
+            'criterion',
+            'review'
         ]
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['submission'] = HomeworkSubmissionSerializer(instance.submission).data
-        representation['criterion'] = HomeworkCriterionSerializer(instance.criterion).data
-
-        return representation

@@ -6,4 +6,8 @@ from app.models import HomeworkCriterion
 class HomeworkCriterionSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeworkCriterion
-        fields = "__all__"
+        fields = [
+            'id',
+            'text',
+            'homework',
+        ]

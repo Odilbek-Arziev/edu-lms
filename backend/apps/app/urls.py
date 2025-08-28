@@ -12,6 +12,7 @@ from .views.live_session import LiveSessionViewSet
 from .views.material import MaterialViewSet
 from .views.module import ModuleViewSet
 from .views.submission_criterion import SubmissionCriterionViewSet
+from .views.submission_review import SubmissionReviewViewSet
 
 router = DefaultRouter()
 
@@ -20,12 +21,13 @@ router.register(r"courses", CourseViewSet, basename='course')
 router.register(r"enrollments", EnrollmentViewSet, basename='enrollment')
 router.register(r"modules", ModuleViewSet, basename='module')
 router.register(r"lessons", LessonViewSet, basename='lesson')
-router.register(r"homeworks", HomeworkViewSet, basename='homework')
 router.register(r"live_sessions", LiveSessionViewSet, basename='live_session')
 router.register(r"materials", MaterialViewSet, basename='material')
+router.register(r"homeworks", HomeworkViewSet, basename='homework')
 router.register(r"homework_criterion", HomeworkCriterionViewSet, basename='homework_criterion')
 router.register(r"homework_submissions", HomeworkSubmissionViewSet, basename='homework_submission')
 router.register(r"submission_criterion_results", SubmissionCriterionViewSet, basename='submission_criterion')
+router.register(r"submission_reviews", SubmissionReviewViewSet, basename='submission_review')
 
 urlpatterns = [
     path("", include(router.urls)),
