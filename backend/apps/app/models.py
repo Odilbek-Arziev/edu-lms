@@ -12,6 +12,8 @@ from app.querysets.material import MaterialQuerySet
 from app.querysets.homework import HomeworkQuerySet
 from app.querysets.homework_submission import HomeworkSubmissionQuerySet
 from app.querysets.homework_criterion import HomeworkCriterionQuerySet
+from app.querysets.submission_criterion import SubmissionCriterionResultQuerySet
+from app.querysets.submission_review import SubmissionReviewQueryset
 
 LEVEL_CHOICES = [
     ('beginner', 'Beginner'),
@@ -214,22 +216,36 @@ class HomeworkSubmission(BaseModel):
     comment_from_student = models.TextField()
     submitted_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    objects = HomeworkSubmissionQuerySet.as_manager()
 
     homework = models.ForeignKey('app.Homework', on_delete=models.CASCADE, related_name='submissions')
     student = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='homework_submissions')
     previous_submission = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.SET_NULL, related_name='resubmissions'
     )
-    objects = HomeworkSubmissionQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.student.first_name} {self.student.last_name} - {self.homework}"
+
+    @property
+    def is_checked(self):
+        latest = (
+            HomeworkSubmission.objects
+                .filter(student=self.student, homework=self.homework)
+                .order_by("-created_at")
+                .first()
+        )
+
+        if not latest:
+            return False
+        return latest.review.exists()
 
 
 class SubmissionReview(BaseModel):
     received_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.BooleanField(default=False)
     general_feedback = models.TextField()
+    objects = SubmissionReviewQueryset.as_manager()
 
     submission = models.ForeignKey('app.HomeworkSubmission', on_delete=models.CASCADE, related_name='review')
     reviewer = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='checked_homeworks')
@@ -241,6 +257,7 @@ class SubmissionReview(BaseModel):
 class SubmissionCriterionResult(BaseModel):
     is_met = models.BooleanField(default=False)
     feedback = models.TextField(null=True, blank=True)
+    objects = SubmissionCriterionResultQuerySet.as_manager()
 
     criterion = models.ForeignKey('app.HomeworkCriterion', on_delete=models.CASCADE)
     review = models.ForeignKey('app.SubmissionReview', on_delete=models.CASCADE, related_name='criteria_results',
