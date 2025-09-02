@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from app.models import LiveSession, Course
 from app.serializers.course import CourseSerializer
-from users.serializers.UserSerializer import UserSerializer
+from users.serializers.user import UserSerializer
 
 
 class LiveSessionSerializer(serializers.ModelSerializer):

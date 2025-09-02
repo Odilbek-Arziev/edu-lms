@@ -6,7 +6,7 @@ from core.views.viewsets import BaseModelViewSet
 from app.models import LiveSession
 from app.serializers.live_session import LiveSessionSerializer
 
-from apps.users.serializers.UserSerializer import UserSerializer
+from apps.users.serializers.user import UserSerializer
 
 
 class LiveSessionViewSet(BaseModelViewSet):

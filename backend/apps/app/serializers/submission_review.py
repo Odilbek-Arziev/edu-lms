@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from app.models import SubmissionReview, HomeworkSubmission
-from users.serializers.UserSerializer import UserSerializer
+from users.serializers.user import UserSerializer
 
 
 class SubmissionReviewSerializer(serializers.ModelSerializer):

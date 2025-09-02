@@ -21,7 +21,7 @@ from app.serializers.homework_submission import HomeworkSubmissionSerializer
 from app.serializers.live_session import LiveSessionSerializer
 from app.serializers.module import ModuleSerializer
 
-from apps.users.serializers.UserSerializer import UserSerializer
+from apps.users.serializers.user import UserSerializer
 
 
 class CourseViewSet(BaseModelViewSet):

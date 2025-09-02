@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from app.models import Enrollment, Course
 from app.serializers.course import CourseSerializer
-from users.serializers.UserSerializer import UserSerializer
+from users.serializers.user import UserSerializer
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):

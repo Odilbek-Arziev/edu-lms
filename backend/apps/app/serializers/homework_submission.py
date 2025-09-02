@@ -5,7 +5,7 @@ from app.models import HomeworkSubmission, Homework
 from .homework import HomeworkSerializer
 from .submission_review import SubmissionReviewSerializer
 
-from users.serializers.UserSerializer import UserSerializer
+from users.serializers.user import UserSerializer
 
 
 class HomeworkSubmissionSerializer(serializers.ModelSerializer):
