@@ -7,7 +7,7 @@ from users.serializers.UserSerializer import UserSerializer
 
 class LiveSessionSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
-    student = UserSerializer(read_only=True)
+    students = UserSerializer(read_only=True)
 
     class Meta:
         model = LiveSession
