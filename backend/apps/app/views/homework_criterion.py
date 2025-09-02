@@ -8,9 +8,6 @@ class HomeworkCriterionViewSet(BaseModelViewSet):
 
     def get_queryset(self):
         homework = self.request.query_params.get('homework')
-        queryset = HomeworkCriterion.objects.list()
-
-        if homework:
-            queryset = queryset.filter(homework__pk=homework)
+        queryset = HomeworkCriterion.objects.list(homework=homework)
 
         return queryset

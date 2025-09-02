@@ -16,10 +16,7 @@ class HomeworkViewSet(BaseModelViewSet):
         lesson = params.get('lesson')
         course = params.get('course')
 
-        queryset = Homework.objects.list(search=search, lesson=lesson)
-
-        if course:
-            queryset = queryset.filter(lesson__module__course__title__icontains=course)
+        queryset = Homework.objects.list(search=search, lesson=lesson, course=course)
 
         return queryset
 

@@ -7,8 +7,14 @@ class LessonQuerySet(BaseQuerySet):
             return self
         return self.filter(title__icontains=term)
 
-    def list(self, search=None):
+    def for_course(self, course):
+        if not course:
+            return course
+        return self.filter(module__course__title__icontains=course)
+
+    def list(self, search=None, course=None):
         return (
             self.search(search)
                 .order_by("-created_at")
+                .for_course(course)
         )

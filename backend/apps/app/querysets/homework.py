@@ -12,9 +12,15 @@ class HomeworkQuerySet(BaseQuerySet):
             return self
         return self.filter(lesson__title__icontains=lesson)
 
-    def list(self, search=None, lesson=None):
+    def by_course(self, course):
+        if not course:
+            return self
+        return self.filter(lesson__module__course__title__icontains=course)
+
+    def list(self, search=None, lesson=None, course=None):
         return (
             self.search(search)
                 .for_lesson(lesson)
+                .by_course(course)
                 .order_by("-created_at")
         )

@@ -21,10 +21,7 @@ class LessonViewSet(BaseModelViewSet):
         search = params.get('search')
         course = params.get('course')
 
-        queryset = Lesson.objects.list(search=search)
-
-        if course:
-            queryset = queryset.filter(module__course__title__icontains=course)
+        queryset = Lesson.objects.list(search=search, course=course)
 
         return queryset
 
