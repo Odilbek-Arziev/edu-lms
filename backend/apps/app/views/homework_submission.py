@@ -15,6 +15,11 @@ class HomeworkSubmissionViewSet(BaseModelViewSet):
         student = params.get('student')
         course = params.get('course')
         status = params.get('status')
+        state = params.get('state')
+        checked_from = params.get('checked_from')
+        checked_to = params.get('checked_to')
+        homework_from = params.get('homework_from')
+        homework_to = params.get('homework_to')
 
         queryset = HomeworkSubmission.objects.list(
             date_from=date_from,
@@ -22,6 +27,11 @@ class HomeworkSubmissionViewSet(BaseModelViewSet):
             student=student,
             course=course,
             status=status,
+            state=state,
+            checked_from=checked_from,
+            checked_to=checked_to,
+            homework_from=homework_from,
+            homework_to=homework_to
         )
 
         return queryset

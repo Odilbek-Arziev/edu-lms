@@ -229,16 +229,11 @@ class HomeworkSubmission(BaseModel):
 
     @property
     def is_checked(self):
-        latest = (
-            HomeworkSubmission.objects
-                .filter(student=self.student, homework=self.homework)
-                .order_by("-created_at")
-                .first()
-        )
+        return self.review.exists()
 
-        if not latest:
-            return False
-        return latest.review.exists()
+    @property
+    def is_approved(self):
+        return self.review.filter(is_accepted=True).exists()
 
 
 class SubmissionReview(BaseModel):

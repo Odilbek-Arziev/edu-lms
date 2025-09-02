@@ -73,7 +73,7 @@ class MaterialAdmin(admin.ModelAdmin):
 
 @admin.register(Homework)
 class HomeworkAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "lesson", "deadline")
+    list_display = ("id", "title", "lesson", "deadline", "created_at")
     list_filter = ("lesson", "deadline")
     search_fields = ("title",)
 
@@ -93,7 +93,7 @@ class HomeworkSubmissionAdmin(admin.ModelAdmin):
 
 @admin.register(SubmissionReview)
 class SubmissionReviewAdmin(admin.ModelAdmin):
-    list_display = ("id", "received_at", "is_accepted", "general_feedback", "submission", "reviewer")
+    list_display = ("id", "received_at", "created_at", "is_accepted", "general_feedback", "submission", "reviewer")
     search_fields = ("reviewer__username",)
     list_filter = ("received_at",)
 

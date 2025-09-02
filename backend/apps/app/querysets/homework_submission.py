@@ -18,13 +18,42 @@ class HomeworkSubmissionQuerySet(BaseQuerySet):
 
         return self.filter(homework__lesson__module__course__title__icontains=course)
 
-    def within_period(self, date_from=None, date_to=None):
+    def within_submit_period(self, date_from=None, date_to=None):
+        """
+        :returns submissions of the period
+        """
         filters = {}
 
         if date_from:
             filters["submitted_at__gte"] = date_from
         if date_to:
             filters["submitted_at__lte"] = date_to
+
+        return self.filter(**filters)
+
+    def within_check_period(self, checked_from=None, checked_to=None):
+        """
+        :returns submissions which was checked in this period
+        """
+        filters = {}
+
+        if checked_from:
+            filters["review__created_at__gte"] = checked_from
+        if checked_to:
+            filters["review__created_at__lte"] = checked_to
+
+        return self.filter(**filters)
+
+    def within_homework_period(self, homework_from=None, homework_to=None):
+        """
+        :returns submissions which was created for homework given in this period
+        """
+        filters = {}
+
+        if homework_from:
+            filters["homework__created_at__gte"] = homework_from
+        if homework_to:
+            filters["homework__created_at__lte"] = homework_to
 
         return self.filter(**filters)
 
@@ -47,11 +76,29 @@ class HomeworkSubmissionQuerySet(BaseQuerySet):
 
         return latest_submissions
 
-    def list(self, date_from=None, date_to=None, student=None, course=None, status=None):
+    def by_state(self, state):
+        if not state:
+            return self
+
+        latest_submissions = (
+            self.order_by("student_id", "homework_id", "-created_at")
+                .distinct("student_id", "homework_id")
+        )
+
+        if state == 'approved':
+            return latest_submissions.filter(review__is_accepted=True)
+        elif state == 'rejected':
+            return latest_submissions.filter(review__is_accepted=False)
+
+    def list(self, date_from=None, date_to=None, student=None, course=None, status=None, state=None, checked_from=None,
+             checked_to=None, homework_from=None, homework_to=None):
         return (
             self.by_student(student)
                 .for_course(course)
                 .by_status(status)
-                .within_period(date_from, date_to)
+                .by_state(state)
+                .within_submit_period(date_from, date_to)
+                .within_check_period(checked_from, checked_to)
+                .within_homework_period(homework_from, homework_to)
                 .order_by("student_id", "homework_id", "-created_at")
         )

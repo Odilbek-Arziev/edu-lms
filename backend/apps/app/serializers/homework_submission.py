@@ -12,6 +12,7 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
     student = UserSerializer(read_only=True)
     homework = HomeworkSerializer(read_only=True)
     is_checked = serializers.BooleanField(read_only=True)
+    is_approved = serializers.BooleanField(read_only=True)
     review = SubmissionReviewSerializer(many=True, read_only=True)
 
     class Meta:
@@ -25,6 +26,7 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
             'is_active',
             'previous_submission',
             'is_checked',
+            'is_approved',
             'review'
         ]
 
