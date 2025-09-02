@@ -86,9 +86,15 @@ class HomeworkCriterionAdmin(admin.ModelAdmin):
 
 @admin.register(HomeworkSubmission)
 class HomeworkSubmissionAdmin(admin.ModelAdmin):
-    list_display = ("id", "homework", "student", "submitted_at")
+    list_display = ("id", "homework_pk", "student", "submitted_at", "is_active", "previous_submission_pk")
     search_fields = ("student__username",)
     list_filter = ("homework",)
+
+    def previous_submission_pk(self, obj):
+        return obj.previous_submission_id
+
+    def homework_pk(self, obj):
+        return obj.homework_id
 
 
 @admin.register(SubmissionReview)

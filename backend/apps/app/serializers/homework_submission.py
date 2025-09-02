@@ -13,7 +13,7 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
     homework = HomeworkSerializer(read_only=True)
     is_checked = serializers.BooleanField(read_only=True)
     is_approved = serializers.BooleanField(read_only=True)
-    review = SubmissionReviewSerializer(many=True, read_only=True)
+    review = SubmissionReviewSerializer(read_only=True)
 
     class Meta:
         model = HomeworkSubmission
@@ -32,23 +32,41 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context['request']
+        validated_data['student'] = request.user
         prev_submission = validated_data.get('previous_submission')
 
         if prev_submission:
-            if not prev_submission.homework.can_submit(request.user):
+            homework = prev_submission.homework
+
+            if not homework.can_submit(request.user):
                 raise ValidationError('The limit of submission attempts has been exceeded.')
 
-            validated_data['homework'] = prev_submission.homework
-            validated_data['student'] = prev_submission.student
+            if getattr(prev_submission, "review", None):
+                raise ValidationError('You cannot submit homework twice after review.')
 
+            if HomeworkSubmission.objects.filter(
+                    homework=homework,
+                    student=request.user,
+                    is_active=True
+            ).exclude(id=prev_submission.id).exists():
+                raise ValidationError('You already have an active submission for this homework.')
+
+            validated_data['homework'] = homework
             prev_submission.is_active = False
             prev_submission.save()
 
         else:
-            homework = self.initial_data.get('homework')
-            if not homework:
+            homework_id = self.initial_data.get('homework')
+            if not homework_id:
                 raise ValidationError('Homework must be given!')
 
-            validated_data['homework_id'] = homework
+            if HomeworkSubmission.objects.filter(
+                    homework_id=homework_id,
+                    student=request.user,
+                    is_active=True
+            ).exists():
+                raise ValidationError('You already have an active submission for this homework.')
+
+            validated_data['homework_id'] = homework_id
 
         return super().create(validated_data)

@@ -225,7 +225,7 @@ class HomeworkSubmission(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name} - {self.homework}"
+        return f"{self.student.first_name} {self.student.last_name} - {self.homework} - {self.is_active}"
 
     @property
     def is_checked(self):
@@ -242,7 +242,12 @@ class SubmissionReview(BaseModel):
     general_feedback = models.TextField()
     objects = SubmissionReviewQueryset.as_manager()
 
-    submission = models.ForeignKey('app.HomeworkSubmission', on_delete=models.CASCADE, related_name='review')
+    submission = models.OneToOneField(
+        'app.HomeworkSubmission',
+        on_delete=models.CASCADE,
+        related_name='review',
+        limit_choices_to={'is_active': True}
+    )
     reviewer = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='checked_homeworks')
 
     def __str__(self):
