@@ -26,3 +26,23 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class EmailVerificationCode(models.Model):
+    REGISTER = 'register'
+    LOGIN = 'login'
+
+    CODE_CHOICES = [
+        (REGISTER, 'Register'),
+        (LOGIN, 'Login'),
+    ]
+
+    email = models.CharField(max_length=255)
+    code = models.CharField(max_length=4)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    attempt_left = models.PositiveSmallIntegerField(default=3)
+    code_type = models.CharField(max_length=255, choices=CODE_CHOICES, default='register')
+
+    def __str__(self):
+        return f"{self.email} - {self.code} - {'used' if self.is_used else 'not used'}"

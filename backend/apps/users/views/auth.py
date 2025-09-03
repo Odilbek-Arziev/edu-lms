@@ -29,7 +29,3 @@ class AuthViewSet(viewsets.ViewSet):
         serializer = CustomTokenRefreshSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data)
-
-    @action(detail=False, methods=["post"])
-    def logout(self, request):
-        return Response({"msg": "logged out"})
