@@ -1,7 +1,10 @@
+export const HOST_API_URL = process.env.REACT_APP_HOST_API_URL;
+
 //REGISTER
 export const POST_FAKE_REGISTER = "/auth/signup";
 
 //LOGIN
+export const POST_LOGIN = "users/auth/login";
 export const POST_FAKE_LOGIN = "/auth/signin";
 export const POST_FAKE_JWT_LOGIN = "/post-jwt-login";
 export const POST_FAKE_PASSWORD_FORGET = "/auth/forgot-password";
