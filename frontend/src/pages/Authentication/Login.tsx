@@ -84,7 +84,6 @@ const Login = (props: any) => {
         }),
         onSubmit: (values) => {
             login(values);
-            setLoader(true);
         }
     });
 
