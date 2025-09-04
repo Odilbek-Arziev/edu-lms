@@ -4,8 +4,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from users.serializers.register import RegisterSerializer
-
 from users.serializers.token import CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer
+from users.models import EmailVerificationCode
+from users.services.email import send_email_code
 
 
 class AuthViewSet(viewsets.ViewSet):
@@ -15,8 +16,12 @@ class AuthViewSet(viewsets.ViewSet):
     def register(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"msg": "registered", "user": serializer.data})
+        user = serializer.save()
+
+        verification_code = EmailVerificationCode.objects.create_for_email(user.email)
+        send_email_code(verification_code)
+
+        return Response({"msg": "registered, check your email", "user": serializer.data})
 
     @action(detail=False, methods=["post"])
     def login(self, request):

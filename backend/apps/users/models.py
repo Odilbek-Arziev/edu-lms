@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from core.models import BaseModel
+from users.managers.email import EmailVerificationCodeManager
 
 
 class CustomUser(AbstractUser):
@@ -16,6 +17,7 @@ class CustomUser(AbstractUser):
     ]
 
     role = models.CharField(max_length=255, choices=ROLE_CHOICES)
+    is_active = models.BooleanField(default=False)
 
     def is_student(self):
         return self.role == self.STUDENT
@@ -45,6 +47,7 @@ class EmailVerificationCode(BaseModel):
     is_used = models.BooleanField(default=False)
     attempt_left = models.PositiveSmallIntegerField(default=3)
     code_type = models.CharField(max_length=255, choices=CODE_CHOICES, default='register')
+    objects = EmailVerificationCodeManager()
 
     def __str__(self):
         return f"{self.email} - {self.code} - {'used' if self.is_used else 'not used'}"
