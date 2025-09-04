@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from core.models import BaseModel
+
 
 class CustomUser(AbstractUser):
     STUDENT = 'student'
@@ -28,7 +30,7 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-class EmailVerificationCode(models.Model):
+class EmailVerificationCode(BaseModel):
     REGISTER = 'register'
     LOGIN = 'login'
 
