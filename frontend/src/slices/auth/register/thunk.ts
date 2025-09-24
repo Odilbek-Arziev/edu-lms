@@ -1,17 +1,9 @@
 //Include Both Helper File with needed methods
 import {getFirebaseBackend} from "../../../helpers/firebase_helper";
-import {
-    postFakeRegister,
-    postJwtRegister,
-} from "../../../helpers/fakebackend_helper";
+import {postFakeRegister,} from "../../../helpers/fakebackend_helper";
 
 // action
-import {
-    registerUserSuccessful,
-    registerUserFailed,
-    resetRegisterFlagChange,
-    // apiErrorChange
-} from "./reducer";
+import {registerUserFailed, resetRegisterFlagChange,} from "./reducer";
 import {APIClient} from "../../../helpers/api_helper";
 
 // initialize relavant method of both Auth
@@ -50,6 +42,16 @@ export const resetRegisterFlag = () => {
     } catch (error) {
         return error;
     }
+};
+
+export const verifyUser = (payload: { code: string; email: string | null }) => async (dispatch: any) => {
+  const api = new APIClient();
+
+  try {
+    return await api.create("/users/code/verify_code/", payload);
+  } catch (error: any) {
+    return error.response?.data || { non_field_errors: ["Неизвестная ошибка"] };
+  }
 };
 
 // export const apiError = () => async (dispatch : any) => {

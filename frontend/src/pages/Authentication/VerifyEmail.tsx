@@ -1,0 +1,194 @@
+import React, {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {Card, CardBody, Col, Container, Row, Button} from 'reactstrap';
+
+//import images
+import logoLight from "../../assets/images/logo-light.png";
+import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+import {maskEmail} from "../../helpers/maskEmail";
+import {verifyUser} from "../../slices/auth/register/thunk";
+import {useDispatch} from "react-redux";
+import {log} from "util";
+
+const Swal = require("sweetalert2");
+
+const VerifyEmail = () => {
+    let verifyEmail = localStorage.getItem('verifyEmail')
+    const [loader, setLoader] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch<any>();
+
+    const handleSubmit = async () => {
+        try {
+            setLoader(true);
+            const otp =
+                getInputElement(1).value +
+                getInputElement(2).value +
+                getInputElement(3).value +
+                getInputElement(4).value;
+
+            const result: any = await dispatch(verifyUser({code: otp, email: verifyEmail}));
+            setLoader(false);
+
+            if (result?.msg === 'Email confirmed') {
+                await Swal.fire({
+                    title: "Аккаунт подтвержден",
+                    text: `Ваш аккаунт был успешно подтвержден!`,
+                    icon: "success",
+                    confirmButtonText: "Ок",
+                });
+                localStorage.removeItem("verifyEmail");
+                return result;
+            }
+            if (result?.non_field_errors) {
+                await Swal.fire({
+                    title: "Ошибка",
+                    text: result.non_field_errors[0],
+                    icon: "error",
+                });
+                return;
+            }
+
+            throw new Error("Ошибка регистрации");
+        } catch (e: any) {
+            console.log(e);
+
+            const errorMessage = e.response?.data?.non_field_errors?.[0] || "Ошибка. Попробуйте снова";
+
+            await Swal.fire({
+                title: "Ошибка",
+                text: errorMessage,
+                icon: "error",
+            });
+        }
+    };
+
+    const getInputElement = (index: number): HTMLInputElement => {
+        return document.getElementById('digit' + index + '-input') as HTMLInputElement;
+    };
+
+    const moveToNext = (index: any) => {
+        let value = getInputElement(index).value
+
+        if (value.length === 1) {
+            if (index !== 4) {
+                getInputElement(index + 1).focus();
+            } else {
+                getInputElement(index).blur();
+                handleSubmit().then(r => console.log(r))
+            }
+        }
+    }
+
+    document.title = "Two Step Verification | Velzon - React Admin & Dashboard Template";
+    return (
+        <React.Fragment>
+            <div className="auth-page-wrapper">
+                <ParticlesAuth>
+                    <div className="auth-page-content">
+                        <Container>
+                            <Row>
+                                <Col lg={12}>
+                                    <div className="text-center mt-sm-5 mb-4 text-white-50">
+                                        <div>
+                                            <Link to="/dashboard" className="d-inline-block auth-logo">
+                                                <img src={logoLight} alt="" height="20"/>
+                                            </Link>
+                                        </div>
+                                        <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            <Row className="justify-content-center">
+                                <Col md={8} lg={6} xl={5}>
+                                    <Card className="mt-4">
+                                        <CardBody className="p-4">
+                                            <div className="mb-4">
+                                                <div className="avatar-lg mx-auto">
+                                                    <div
+                                                        className="avatar-title bg-light text-primary display-5 rounded-circle">
+                                                        <i className="ri-mail-line"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="p-2 mt-4">
+                                                <div className="text-muted text-center mb-4 mx-lg-3">
+                                                    <h4>Verify Your Email</h4>
+                                                    <p>Please enter the 4 digit code sent to <span
+                                                        className="fw-semibold">
+                                                        {verifyEmail ? maskEmail(verifyEmail) : ""}
+                                                    </span></p>
+                                                </div>
+
+                                                <form autoComplete='off'>
+                                                    <Row>
+                                                        <Col className="col-3">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="digit1-input"
+                                                                       className="visually-hidden">Digit 1</label>
+                                                                <input type="text"
+                                                                       className="form-control form-control-lg bg-light border-light text-center"
+                                                                       maxLength={1}
+                                                                       id="digit1-input" onKeyUp={() => moveToNext(1)}/>
+                                                            </div>
+                                                        </Col>
+
+                                                        <Col className="col-3">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="digit2-input"
+                                                                       className="visually-hidden">Digit 2</label>
+                                                                <input type="text"
+                                                                       className="form-control form-control-lg bg-light border-light text-center"
+                                                                       maxLength={1}
+                                                                       id="digit2-input" onKeyUp={() => moveToNext(2)}/>
+                                                            </div>
+                                                        </Col>
+
+                                                        <Col className="col-3">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="digit3-input"
+                                                                       className="visually-hidden">Digit 3</label>
+                                                                <input type="text"
+                                                                       className="form-control form-control-lg bg-light border-light text-center"
+                                                                       maxLength={1}
+                                                                       id="digit3-input" onKeyUp={() => moveToNext(3)}/>
+                                                            </div>
+                                                        </Col>
+
+                                                        <Col className="col-3">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="digit4-input"
+                                                                       className="visually-hidden">Digit 4</label>
+                                                                <input type="text"
+                                                                       className="form-control form-control-lg bg-light border-light text-center"
+                                                                       maxLength={1}
+                                                                       id="digit4-input" onKeyUp={() => moveToNext(4)}/>
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </form>
+                                                <div className="mt-3">
+                                                    <Button color="success" className="w-100">Confirm</Button>
+                                                </div>
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                                    <div className="mt-4 text-center">
+                                        <p className="mb-0">Didn't receive a code ? <Link to="/auth-pass-reset-basic"
+                                                                                          className="fw-semibold text-primary text-decoration-underline">Resend</Link>
+                                        </p>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
+                </ParticlesAuth>
+
+            </div>
+        </React.Fragment>
+    );
+};
+
+export default VerifyEmail;

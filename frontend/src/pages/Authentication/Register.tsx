@@ -33,14 +33,16 @@ const Register = () => {
             const result: any = await dispatch(registerUser(data));
             setLoader(false);
 
-            if (result?.msg === 'registered') {
+            if (result?.msg === 'created') {
                 await Swal.fire({
-                    title: "Регистрация успешна!",
-                    text: "Теперь вы можете войти в систему",
+                    title: "Подтвердите аккаунт",
+                    text: `На почту ${result.user.email} отправлен код для подтвердения аккаунта`,
                     icon: "success",
-                    confirmButtonText: "Войти",
+                    confirmButtonText: "Ок",
                 });
-                navigate("/login");
+
+                localStorage.setItem("verifyEmail", result.user.email);
+                navigate("/verify-email");
             } else {
                 throw new Error("Ошибка регистрации");
             }

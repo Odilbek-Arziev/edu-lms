@@ -1,24 +1,43 @@
-from rest_framework import serializers
-from users.models import EmailVerificationCode
 from django.utils.timezone import now
+from rest_framework import serializers
+
+from users.models import EmailVerificationCode
 
 
 class VerifyCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField(max_length=4)
 
-    def validate(self, data):
-        try:
-            verification = EmailVerificationCode.objects.get(
-                email=data['email'],
-                code=data['code'],
-                is_used=False
-            )
-        except EmailVerificationCode.DoesNotExist:
-            raise serializers.ValidationError('Incorrect code')
+    def validate_code(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Код должен быть числовым")
+        return value
 
-        if (now() - verification.created_at).seconds > 180:
-            raise serializers.ValidationError('The code has expired')
+    def validate(self, attrs):
+        email, code = attrs["email"], attrs["code"]
 
-        data['verification'] = verification
-        return data
+        verification = EmailVerificationCode.objects.filter(
+            email=email, is_used=False
+        ).first()
+
+        if not verification:
+            raise serializers.ValidationError({"non_field_errors": ["Код не найден или истек. Запросите новый код"]})
+
+        if verification.expires_at < now():
+            raise serializers.ValidationError({"non_field_errors": ["Срок действия кода истёк"]})
+
+        if verification.code != code:
+            verification.attempt_left -= 1
+            verification.save(update_fields=["attempt_left"])
+            if verification.attempt_left <= 0:
+                verification.is_used = True
+                verification.save(update_fields=["is_used"])
+                raise serializers.ValidationError(
+                    {"non_field_errors": ["Превышено количество попыток, запросите новый код"]})
+
+            raise serializers.ValidationError({
+                "non_field_errors": [f"Неверный код, осталось попыток: {verification.attempt_left}"]
+            })
+
+        attrs["verification"] = verification
+        return attrs

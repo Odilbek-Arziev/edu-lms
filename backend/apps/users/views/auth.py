@@ -21,7 +21,7 @@ class AuthViewSet(viewsets.ViewSet):
         verification_code = EmailVerificationCode.objects.create_for_email(user.email)
         send_email_code(verification_code)
 
-        return Response({"msg": "registered, check your email", "user": serializer.data})
+        return Response({"msg": "created", "user": serializer.data})
 
     @action(detail=False, methods=["post"])
     def login(self, request):

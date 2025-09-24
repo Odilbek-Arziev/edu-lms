@@ -1,4 +1,3 @@
-from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -29,26 +28,6 @@ class CodeViewSet(viewsets.ViewSet):
         serializer = VerifyCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        email = serializer.validated_data["email"]
-        code = serializer.validated_data["code"]
-
-        verification = EmailVerificationCode.objects.filter(
-            email=email,
-            code=code,
-            code_type="registration",
-            is_used=False,
-            expires_at__gte=timezone.now()
-        ).first()
-
-        if not verification:
-            return Response({"error": "Incorrect code"}, 400)
-
-        user = CustomUser.objects.filter(email=email).first()
-        if user:
-            user.is_active = True
-            user.save()
-
+        verification = serializer.validated_data["verification"]
         verification.is_used = True
         verification.save()
-
-        return Response({"msg": "Email confirmed"})
