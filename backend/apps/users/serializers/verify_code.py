@@ -1,4 +1,3 @@
-from django.utils.timezone import now
 from rest_framework import serializers
 
 from users.models import EmailVerificationCode
@@ -14,25 +13,10 @@ class VerifyCodeSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        email, code = attrs["email"], attrs["code"]
-
-        verification = EmailVerificationCode.objects.filter(
-            email=email, is_used=False
-        ).first()
+        verification = EmailVerificationCode.objects.filter(email=attrs["email"], is_used=False).first()
 
         if not verification:
-            raise serializers.ValidationError({"non_field_errors": ["Код не найден или истек. Запросите новый код"]})
-
-        if verification.expires_at < now():
-            raise serializers.ValidationError({"non_field_errors": ["Срок действия кода истёк"]})
-
-        if verification.code != code:
-            verification.attempt_left -= 1
-            verification.save(update_fields=["attempt_left"])
-
-            raise serializers.ValidationError({
-                "non_field_errors": [f"Неверный код, осталось попыток: {verification.attempt_left}"]
-            })
+            raise serializers.ValidationError({"non_field_errors": ["Код не найден или истек"]})
 
         attrs["verification"] = verification
         return attrs

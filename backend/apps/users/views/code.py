@@ -29,7 +29,10 @@ class CodeViewSet(viewsets.ViewSet):
     def verify_code(self, request):
         serializer = VerifyCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         verification = serializer.validated_data["verification"]
-        response_data, status = handle_user_verification(verification)
+        code_input = serializer.validated_data["code"]
+
+        response_data, status = handle_user_verification(verification, code_input)
 
         return Response(response_data, status=status)
