@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {Card, CardBody, Col, Container, Row, Button} from 'reactstrap';
 
@@ -8,7 +8,6 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {maskEmail} from "../../helpers/maskEmail";
 import {verifyUser} from "../../slices/auth/register/thunk";
 import {useDispatch} from "react-redux";
-import {log} from "util";
 
 const Swal = require("sweetalert2");
 
