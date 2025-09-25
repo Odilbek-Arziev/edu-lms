@@ -29,11 +29,6 @@ class VerifyCodeSerializer(serializers.Serializer):
         if verification.code != code:
             verification.attempt_left -= 1
             verification.save(update_fields=["attempt_left"])
-            if verification.attempt_left <= 0:
-                verification.is_used = True
-                verification.save(update_fields=["is_used"])
-                raise serializers.ValidationError(
-                    {"non_field_errors": ["Превышено количество попыток, запросите новый код"]})
 
             raise serializers.ValidationError({
                 "non_field_errors": [f"Неверный код, осталось попыток: {verification.attempt_left}"]

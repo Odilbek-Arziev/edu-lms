@@ -9,6 +9,8 @@ from users.services.email import send_email_code
 
 from users.models import EmailVerificationCode, CustomUser
 
+from users.services.code import handle_user_verification
+
 
 class CodeViewSet(viewsets.ViewSet):
     class CodeViewSet(viewsets.ViewSet):
@@ -27,7 +29,7 @@ class CodeViewSet(viewsets.ViewSet):
     def verify_code(self, request):
         serializer = VerifyCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         verification = serializer.validated_data["verification"]
-        verification.is_used = True
-        verification.save()
+        response_data, status = handle_user_verification(verification)
+
+        return Response(response_data, status=status)

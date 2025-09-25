@@ -31,7 +31,15 @@ const Register = () => {
         try {
             setLoader(true);
             const result: any = await dispatch(registerUser(data));
-            setLoader(false);
+
+            if (result?.non_field_errors) {
+                await Swal.fire({
+                    title: "Ошибка",
+                    text: result.non_field_errors[0],
+                    icon: "error",
+                });
+                return;
+            }
 
             if (result?.msg === 'created') {
                 await Swal.fire({
@@ -46,14 +54,27 @@ const Register = () => {
             } else {
                 throw new Error("Ошибка регистрации");
             }
-        } catch (e) {
-            console.log(e)
+        } catch (e: any) {
+            const result = e.response.data
+
+            const fieldErrors = Object.keys(result || {}).map(key => {
+                if (Array.isArray(result[key])) {
+                    return `${key}: ${result[key].join(", ")}`;
+                }
+                return null;
+            }).filter(Boolean);
+
+
+            if (fieldErrors.length > 0) {
+                await Swal.fire({
+                    title: "Ошибка",
+                    text: fieldErrors.join("\n"),
+                    icon: "error",
+                });
+                return;
+            }
+        } finally {
             setLoader(false);
-            await Swal.fire({
-                title: "Ошибка",
-                text: "Не удалось зарегистрироваться. Попробуйте снова",
-                icon: "error",
-            });
         }
     };
 

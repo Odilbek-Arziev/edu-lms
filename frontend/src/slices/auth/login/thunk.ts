@@ -13,46 +13,30 @@ export const loginUser = (user: any, history: any) => async (dispatch: any) => {
 
     try {
         let response;
-
         if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
             let fireBaseBackend: any = getFirebaseBackend();
-            response = fireBaseBackend.loginUser(
-                user.email,
-                user.password
-            );
+            response = await fireBaseBackend.loginUser(user.email, user.password);
         } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-            response = api.create("/users/auth/login/", {
+            response = await api.create("/users/auth/login/", {
                 login: user.login,
                 password: user.password,
             });
-        } else if (process.env.REACT_APP_DEFAULTAUTH) {
+        } else {
             response = postFakeLogin({
                 email: user.email,
                 password: user.password,
             });
         }
 
-        let data = await response;
+        dispatch(loginSuccess(response));
 
-        if (data) {
-            sessionStorage.setItem("authUser", JSON.stringify(data));
-            if (process.env.REACT_APP_DEFAULTAUTH === "fake") {
-                var finallogin: any = JSON.stringify(data);
-                finallogin = JSON.parse(finallogin)
-                data = finallogin.data;
-                if (finallogin.status === "success") {
-                    dispatch(loginSuccess(data));
-                    history('/dashboard')
-                } else {
-                    dispatch(apiError(finallogin));
-                }
-            } else {
-                dispatch(loginSuccess(data));
-                history('/dashboard')
-            }
-        }
-    } catch (error) {
-        dispatch(apiError(error));
+        if (history) history("/dashboard");
+
+        return response;
+    } catch (error: any) {
+        const safeError = error.response?.data || {non_field_errors: ["Неизвестная ошибка"]};
+        dispatch(apiError(safeError));
+        return safeError;
     }
 };
 

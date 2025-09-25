@@ -5,7 +5,7 @@ from random import randrange
 
 
 class EmailVerificationCodeManager(models.Manager):
-    def create_for_email(self, email, code_type="registration"):
+    def create_for_email(self, email, code_type="register"):
         self.filter(
             email=email,
             is_used=False,

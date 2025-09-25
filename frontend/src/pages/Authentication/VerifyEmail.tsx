@@ -38,7 +38,7 @@ const VerifyEmail = () => {
                     confirmButtonText: "Ок",
                 });
                 localStorage.removeItem("verifyEmail");
-                return result;
+                navigate('/login')
             }
             if (result?.non_field_errors) {
                 await Swal.fire({
@@ -46,10 +46,9 @@ const VerifyEmail = () => {
                     text: result.non_field_errors[0],
                     icon: "error",
                 });
+                clearInputs();
                 return;
             }
-
-            throw new Error("Ошибка регистрации");
         } catch (e: any) {
             console.log(e);
 
@@ -60,11 +59,20 @@ const VerifyEmail = () => {
                 text: errorMessage,
                 icon: "error",
             });
+            clearInputs();
         }
     };
 
     const getInputElement = (index: number): HTMLInputElement => {
         return document.getElementById('digit' + index + '-input') as HTMLInputElement;
+    };
+
+    const clearInputs = () => {
+        for (let i = 1; i <= 4; i++) {
+            const input = document.getElementById(`digit${i}-input`) as HTMLInputElement;
+            if (input) input.value = "";
+        }
+        getInputElement(1).focus();
     };
 
     const moveToNext = (index: any) => {
@@ -75,7 +83,7 @@ const VerifyEmail = () => {
                 getInputElement(index + 1).focus();
             } else {
                 getInputElement(index).blur();
-                handleSubmit().then(r => console.log(r))
+                handleSubmit()
             }
         }
     }

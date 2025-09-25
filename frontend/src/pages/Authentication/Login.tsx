@@ -30,6 +30,8 @@ import {loginUser, socialLogin, resetLoginFlag} from "../../slices/thunks";
 import logoLight from "../../assets/images/logo-light.png";
 import {createSelector} from 'reselect';
 
+const Swal = require("sweetalert2");
+
 const Login = (props: any) => {
     const dispatch = useDispatch<any>();
     const selectLayoutState = (state: any) => state;
@@ -64,9 +66,25 @@ const Login = (props: any) => {
     const login = async (data: any) => {
         setLoader(true);
         try {
-            await dispatch(loginUser(data, props.router.navigate));
-        } catch (error: any) {
-            console.error("Login error:", error);
+            const result: any = await dispatch(loginUser(data, props.router.navigate));
+            if (result?.non_field_errors) {
+                await Swal.fire({
+                    title: "Ошибка",
+                    text: result.non_field_errors[0],
+                    icon: "error",
+                });
+                return;
+            }
+        } catch (e: any) {
+            console.log(e);
+
+            const errorMessage = e.response?.data?.non_field_errors?.[0] || "Ошибка. Попробуйте снова";
+
+            await Swal.fire({
+                title: "Ошибка",
+                text: errorMessage,
+                icon: "error",
+            });
         } finally {
             setLoader(false);
         }

@@ -5,14 +5,18 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app/backend
+WORKDIR /app
 
-COPY . /app/
+COPY pyproject.toml poetry.lock /app/
 
-RUN pip install --upgrade pip
-RUN pip install poetry
-RUN poetry config virtualenvs.create false \
+RUN pip install --upgrade pip \
+    && pip install poetry \
+    && poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
+
+COPY backend/ /app/backend/
+
+WORKDIR /app/backend
 
 EXPOSE 8000
 
