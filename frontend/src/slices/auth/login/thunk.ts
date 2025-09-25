@@ -30,7 +30,7 @@ export const loginUser = (user: any, history: any) => async (dispatch: any) => {
 
         dispatch(loginSuccess(response));
 
-        if (history) history("/dashboard");
+        if (history) history("/");
 
         return response;
     } catch (error: any) {

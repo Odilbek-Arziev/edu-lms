@@ -1,13 +1,13 @@
 import React from 'react';
-import { Routes, Route } from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 //Layouts
 import NonAuthLayout from "../Layouts/NonAuthLayout";
 import VerticalLayout from "../Layouts/index";
 
 //routes
-import { authProtectedRoutes, publicRoutes } from "./allRoutes";
-import AuthProtected  from './AuthProtected';
+import {authProtectedRoutes, publicRoutes} from "./allRoutes";
+import AuthProtected from './AuthProtected';
 
 const Index = () => {
     return (
@@ -17,11 +17,7 @@ const Index = () => {
                     {publicRoutes.map((route, idx) => (
                         <Route
                             path={route.path}
-                            element={
-                                <NonAuthLayout>
-                                    {route.component}
-                                </NonAuthLayout>
-                            }
+                            element={<NonAuthLayout>{route.element}</NonAuthLayout>}
                             key={idx}
                         />
                     ))}
@@ -33,8 +29,9 @@ const Index = () => {
                             path={route.path}
                             element={
                                 <AuthProtected>
-                                    <VerticalLayout>{route.component}</VerticalLayout>
-                                </AuthProtected>}
+                                    <VerticalLayout>{route.element}</VerticalLayout>
+                                </AuthProtected>
+                            }
                             key={idx}
                         />
                     ))}
