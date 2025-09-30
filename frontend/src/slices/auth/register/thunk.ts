@@ -1,6 +1,5 @@
 //Include Both Helper File with needed methods
 import {getFirebaseBackend} from "../../../helpers/firebase_helper";
-import {postFakeRegister,} from "../../../helpers/fakebackend_helper";
 
 // action
 import {registerUserFailed, resetRegisterFlagChange,} from "./reducer";
@@ -16,20 +15,25 @@ export const registerUser = (user: any) => async (dispatch: any) => {
     try {
         let response;
 
-        if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-            response = fireBaseBackend.registerUser(user.email, user.password);
-            // yield put(registerUserSuccessful(response));
-        } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-            response = api.create("/users/auth/register/", {
-                email: user.email,
-                username: user.username,
-                password: user.password,
-            });
-            return response
+        response = api.create("/users/auth/register/", {
+            email: user.email,
+            username: user.username,
+            password: user.password,
+        });
+        return response
+    } catch (error: any) {
+        dispatch(registerUserFailed(error));
+    }
+};
 
-        } else if (process.env.REACT_APP_API_URL) {
-            response = postFakeRegister(user);
-        }
+export const resendCode = (email: string) => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        let response;
+
+        response = api.create("/users/code/send_verification_code/", {email});
+        return response
     } catch (error: any) {
         dispatch(registerUserFailed(error));
     }
@@ -37,21 +41,20 @@ export const registerUser = (user: any) => async (dispatch: any) => {
 
 export const resetRegisterFlag = () => {
     try {
-        const response = resetRegisterFlagChange();
-        return response;
+        return resetRegisterFlagChange();
     } catch (error) {
         return error;
     }
 };
 
 export const verifyUser = (payload: { code: string; email: string | null }) => async (dispatch: any) => {
-  const api = new APIClient();
+    const api = new APIClient();
 
-  try {
-    return await api.create("/users/code/verify_code/", payload);
-  } catch (error: any) {
-    return error.response?.data || { non_field_errors: ["Неизвестная ошибка"] };
-  }
+    try {
+        return await api.create("/users/code/verify_code/", payload);
+    } catch (error: any) {
+        return error.response?.data || {non_field_errors: ["Неизвестная ошибка"]};
+    }
 };
 
 // export const apiError = () => async (dispatch : any) => {

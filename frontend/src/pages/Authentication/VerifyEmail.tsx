@@ -6,20 +6,49 @@ import {Card, CardBody, Col, Container, Row, Button} from 'reactstrap';
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {maskEmail} from "../../helpers/maskEmail";
-import {verifyUser} from "../../slices/auth/register/thunk";
+import {resendCode, verifyUser} from "../../slices/auth/register/thunk";
 import {useDispatch} from "react-redux";
 
 const Swal = require("sweetalert2");
 
 const VerifyEmail = () => {
     let verifyEmail = localStorage.getItem('verifyEmail')
-    const [loader, setLoader] = useState(false);
+
+    const initialTime = 90
+    const [resend, setResend] = useState(false)
+    const [seconds, setSeconds] = useState(initialTime)
+
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
 
+    useEffect(() => {
+        if (seconds === 0) return
+
+        const timer = setInterval(() => {
+            setSeconds((prev: number) => {
+                if (prev <= 1) {
+                    clearInterval(timer)
+                    setResend(true)
+                    return 0
+                }
+                return prev - 1
+            })
+        }, 1000)
+
+        return () => clearInterval(timer)
+    }, [resend])
+
     const handleSubmit = async () => {
         try {
-            setLoader(true);
+            Swal.fire({
+                title: 'Загрузка...',
+                html: 'Пожалуйста, подождите',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+
             const otp =
                 getInputElement(1).value +
                 getInputElement(2).value +
@@ -27,7 +56,7 @@ const VerifyEmail = () => {
                 getInputElement(4).value;
 
             const result: any = await dispatch(verifyUser({code: otp, email: verifyEmail}));
-            setLoader(false);
+            Swal.close()
 
             if (result?.msg === 'Email confirmed') {
                 await Swal.fire({
@@ -62,6 +91,57 @@ const VerifyEmail = () => {
         }
     };
 
+    const handleResend = async () => {
+        try {
+            Swal.fire({
+                title: 'Отправка кода...',
+                html: 'Пожалуйста, подождите',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+
+            let email = localStorage.getItem('verifyEmail') ?? '';
+
+            const result: any = await dispatch(resendCode(email));
+
+            if (result?.msg === 'Code sent successfully') {
+                await Swal.fire({
+                    title: "Код отправлен повторно",
+                    text: `На почту ${email} отправлен код для подтверждения аккаунта`,
+                    icon: "success",
+                    confirmButtonText: "Ок",
+                });
+
+                setResend(false);
+                setSeconds(initialTime);
+            }
+        } catch (e: any) {
+            Swal.close();
+            const result = e.response.data
+
+            const fieldErrors = Object.keys(result || {}).map(key => {
+                if (Array.isArray(result[key])) {
+                    return `${key}: ${result[key].join(", ")}`;
+                }
+                return null;
+            }).filter(Boolean);
+
+
+            if (fieldErrors.length > 0) {
+                await Swal.fire({
+                    title: "Ошибка",
+                    text: fieldErrors.join("\n"),
+                    icon: "error",
+                });
+                return;
+            }
+        } finally {
+             Swal.close();
+        }
+    };
+
     const getInputElement = (index: number): HTMLInputElement => {
         return document.getElementById('digit' + index + '-input') as HTMLInputElement;
     };
@@ -85,6 +165,12 @@ const VerifyEmail = () => {
                 handleSubmit()
             }
         }
+    }
+
+    const formatTime = (seconds: number) => {
+        let minRemain = Math.floor(seconds / 60)
+        let secondsRemain = seconds % 60
+        return `${minRemain}:${String(secondsRemain).padStart(2, '0')}`
     }
 
     document.title = "Two Step Verification | Velzon - React Admin & Dashboard Template";
@@ -183,9 +269,25 @@ const VerifyEmail = () => {
                                         </CardBody>
                                     </Card>
                                     <div className="mt-4 text-center">
-                                        <p className="mb-0">Didn't receive a code ? <Link to="/auth-pass-reset-basic"
-                                                                                          className="fw-semibold text-primary text-decoration-underline">Resend</Link>
-                                        </p>
+                                        {
+                                            resend ? (
+                                                <p className="mb-0">Didn't receive a code ?
+                                                    &nbsp;
+                                                    <Link to="#"
+                                                          onClick={handleResend}
+                                                          className="fw-semibold text-primary text-decoration-underline">
+                                                        Resend
+                                                    </Link>
+                                                </p>
+
+                                            ) : (
+                                                <p className="mb-0">
+                                                    <span>Didn't receive a code ?</span> &nbsp;
+                                                    <span
+                                                        className='text-secondary'>Available in {formatTime(seconds)}</span>
+                                                </p>
+                                            )
+                                        }
                                     </div>
                                 </Col>
                             </Row>

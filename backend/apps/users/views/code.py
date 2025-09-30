@@ -13,17 +13,19 @@ from users.services.code import handle_user_verification
 
 
 class CodeViewSet(viewsets.ViewSet):
-    class CodeViewSet(viewsets.ViewSet):
-        @action(detail=False, methods=["post"], permission_classes=[AllowAny])
-        def send_verification_code(self, request):
-            serializer = EmailVerificationCodeSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
+    @action(detail=False, methods=["post"], permission_classes=[AllowAny])
+    def send_verification_code(self, request):
+        serializer = EmailVerificationCodeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-            email = serializer.validated_data['email']
-            verification_code = EmailVerificationCode.objects.create_for_email(email)
+        email = serializer.validated_data['email']
 
-            send_email_code(verification_code)
-            return Response({"msg": "Code sent successfully"})
+        EmailVerificationCode.objects.filter(email=email, is_used=False).delete()
+
+        verification_code = EmailVerificationCode.objects.create_for_email(email)
+
+        send_email_code(verification_code)
+        return Response({"msg": "Code sent successfully"})
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def verify_code(self, request):
