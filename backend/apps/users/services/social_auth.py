@@ -1,9 +1,7 @@
 import requests
-import logging
-from users.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
-logger = logging.getLogger("oauth2")
+from users.models import CustomUser
 
 
 class SocialAuthService:
@@ -15,65 +13,59 @@ class SocialAuthService:
 
         data = {
             "code": code,
-            "client_id": cfg['client_id'],
-            "client_secret": cfg['client_secret'],
-            "redirect_uri": cfg['redirect_uri'],
-            "grant_type": "authorization_code"
+            "client_id": cfg.get('client_id'),
+            "client_secret": cfg.get('client_secret'),
+            "redirect_uri": cfg.get('redirect_uri'),
+            "grant_type": cfg.get('grant_type', 'authorization_code')
         }
-
         headers = {'Accept': 'application/json'}
-        resp = requests.post(cfg['token_url'], data=data, headers=headers)
+
+        token_response = requests.post(url=cfg.get('token_url'), data=data, headers=headers)
 
         try:
-            token_data = resp.json()
+            token_data = token_response.json()
         except Exception as e:
-            logger.error(f"[{provider.upper()}] Invalid JSON response: {resp.text}")
-            raise ValueError(f"Invalid JSON response from {provider}: {e}")
+            raise ValueError(f'Invalid JSON response from {provider}: {e}')
 
-        if resp.status_code != 200:
+        if not token_response.ok:
             raise ValueError(f"Token request failed: {token_data}")
 
         access_token = token_data.get('access_token')
         if not access_token:
-            raise ValueError(f"No access_token in response: {token_data}")
+            raise ValueError('No access_token returned')
 
         return access_token
 
     def fetch_user_info(self, provider, access_token):
         cfg = self.configs[provider]
-        user_info_url = cfg['user_info_url']
 
-        resp = requests.get(user_info_url, headers={'Authorization': f'Bearer {access_token}'})
+        user_info_response = requests.get(cfg['user_info_url'], headers={'Authorization': f'Bearer {access_token}'})
 
-        if not resp.ok:
-            logger.error(f"[{provider.upper()}] Failed to get user info: {resp.text}")
-            raise ValueError(f"Failed to get user info: {resp.text}")
+        if not user_info_response.ok:
+            raise ValueError(f"Failed to get user info: {user_info_response.text}")
 
-        data = resp.json()
-        email = data.get('email')
+        user_data = user_info_response.json()
+        email = user_data.get('email')
 
-        if provider == 'github' and not email:
-            email_resp = requests.get(
-                cfg['emails_url'],
-                headers={'Authorization': f'Bearer {access_token}'}
-            )
+        if not email and provider == 'github':
+            emails_response = requests.get(cfg['emails_url'], headers={'Authorization': f'Bearer {access_token}'})
 
-            if email_resp.ok:
-                emails = email_resp.json()
+            if emails_response.ok:
+                emails = emails_response.json()
                 primary = next((e for e in emails if e.get('primary')), None)
                 email = primary.get('email') if primary else emails[0].get('email')
 
         if provider == 'google':
             return {
                 'email': email,
-                'first_name': data.get('given_name', ''),
-                'last_name': data.get('family_name', ''),
+                'first_name': user_data.get('given_name', ''),
+                'last_name': user_data.get('family_name', '')
             }
 
         return {
             'email': email,
-            'first_name': data.get('name') or data.get('login'),
-            'last_name': '',
+            'first_name': user_data.get('login') or user_data.get('name'),
+            'last_name': ""
         }
 
     def get_or_create_user(self, user_info):
