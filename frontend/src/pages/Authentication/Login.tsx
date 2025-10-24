@@ -18,8 +18,7 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 //redux
 import {useSelector, useDispatch} from "react-redux";
 
-import {Link} from "react-router-dom";
-import withRouter from "../../Components/Common/withRouter";
+import {Link, useNavigate} from "react-router-dom";
 // Formik validation
 import * as Yup from "yup";
 import {useFormik} from "formik";
@@ -29,10 +28,12 @@ import {loginUser, socialLogin, resetLoginFlag} from "../../slices/thunks";
 
 import logoLight from "../../assets/images/logo-light.png";
 import {createSelector} from 'reselect';
+import {HOST_API_URL} from "../../helpers/url_helper";
 
 const Swal = require("sweetalert2");
 
 const Login = (props: any) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch<any>();
     const selectLayoutState = (state: any) => state;
     const loginpageData = createSelector(
@@ -106,13 +107,18 @@ const Login = (props: any) => {
     });
 
     const signIn = (type: any) => {
-        dispatch(socialLogin(type, props.router.navigate));
+        const width = 600, height = 700;
+        const left = window.innerWidth / 2 - width / 2;
+        const top = window.innerHeight / 2 - height / 2;
+        const authUrl = `${HOST_API_URL}users/social/${type}/`;
+
+        (window as any).socialPopup = window.open(
+            authUrl,
+            `${type}-auth`,
+            `width=${width},height=${height},top=${top},left=${left},status=no,menubar=no,location=no,resizable=yes,scrollbars=yes`
+        );
     };
 
-    //handleTwitterLoginResponse
-    // const twitterResponse = e => {}
-
-    //for facebook and google authentication
     const socialResponse = (type: any) => {
         signIn(type);
     };
@@ -125,6 +131,31 @@ const Login = (props: any) => {
             }, 3000);
         }
     }, [dispatch, errorMsg]);
+
+    useEffect(() => {
+        const channel = new BroadcastChannel("social_auth");
+
+        channel.onmessage = (event: MessageEvent) => {
+            console.log("Получены данные из popup:", event.data);
+            const {access, refresh} = event.data || {};
+
+            if (access && refresh) {
+                sessionStorage.setItem("authUser", JSON.stringify(event.data));
+
+                if ((window as any).socialPopup && !(window as any).socialPopup.closed) {
+                    (window as any).socialPopup.close();
+                }
+
+                setTimeout(() => {
+                    // TODO: does not work
+                    navigate("/dashboard")
+                }, 300);
+            }
+        };
+
+        return () => channel.close();
+    }, [navigate]);
+
 
     document.title = "Basic SignIn | Velzon - React Admin & Dashboard Template";
     return (
@@ -238,7 +269,7 @@ const Login = (props: any) => {
                                                     </div>
                                                     <div>
                                                         <Link
-                                                            to="#"
+                                                            to=""
                                                             className="btn btn-danger btn-icon me-1"
                                                             onClick={e => {
                                                                 e.preventDefault();
@@ -248,7 +279,7 @@ const Login = (props: any) => {
                                                             <i className="ri-google-fill fs-16"/>
                                                         </Link>
                                                         <Link
-                                                            to="#"
+                                                            to=""
                                                             className="btn btn-dark btn-icon me-1"
                                                             onClick={e => {
                                                                 e.preventDefault();
@@ -256,7 +287,7 @@ const Login = (props: any) => {
                                                             }}
                                                         >
                                                             <i
-                                                            className="ri-github-fill fs-16"></i>
+                                                                className="ri-github-fill fs-16"></i>
                                                         </Link>
                                                     </div>
                                                 </div>
@@ -280,4 +311,4 @@ const Login = (props: any) => {
     );
 };
 
-export default withRouter(Login);
+export default Login

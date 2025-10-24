@@ -238,6 +238,7 @@ import FunnelCharts from "../pages/Charts/ApexCharts/FunnelCharts";
 import DashboardJob from "pages/Dashboardjob";
 import Kanbanboard from "pages/Tasks/KanbanBoard";
 import VerifyEmail from "../pages/Authentication/VerifyEmail";
+import SocialCallback from "../Components/Custom/SocialCallback";
 
 
 const authProtectedRoutes = [
@@ -456,7 +457,7 @@ const publicRoutes = [
     {path: "/forgot-password", element: <ForgetPasswordPage/>},
     {path: "/register", element: <Register/>},
     {path: "/verify-email", element: <VerifyEmail/>},
-
+    {path: "/social-callback", element: <SocialCallback/>},
 
     //AuthenticationInner pages
     {path: "/auth-signin-basic", element: <BasicSignIn/>},

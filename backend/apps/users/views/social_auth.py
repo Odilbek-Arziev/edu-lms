@@ -1,3 +1,5 @@
+import json
+import urllib
 from urllib.parse import urlencode
 
 from django.shortcuts import redirect
@@ -14,6 +16,7 @@ from config.providers_config import provider_configs
 class SocialLoginViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
     service = SocialAuthService(provider_configs)
+    frontend_url = 'http://localhost:3000'
 
     @action(detail=False, methods=['get'], url_path=r'(?P<provider>(google|github))')
     def social_auth(self, request, provider):
@@ -39,6 +42,6 @@ class SocialLoginViewSet(viewsets.ViewSet):
             user_info = self.service.fetch_user_info(provider, access_token)
             result = self.service.get_or_create_user(user_info)
 
-            return Response(result)
+            return redirect(f"{self.frontend_url}/social-callback?data={urllib.parse.quote(json.dumps(result))}")
         except Exception as e:
             return Response({'error': str(e)}, status=400)
