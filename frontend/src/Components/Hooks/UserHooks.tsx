@@ -1,15 +1,23 @@
 import {useEffect, useState} from "react";
-import {getLoggedinUser} from "../../helpers/api_helper";
+import {getLoggedinUser, setAuthorization} from "../../helpers/api_helper";
 
 const useProfile = () => {
-    const userProfileSession = getLoggedinUser();
-    const [loading, setLoading] = useState(!userProfileSession);
-    const [userProfile, setUserProfile] = useState(userProfileSession);
+    const [loading, setLoading] = useState(true);
+    const [userProfile, setUserProfile] = useState<any>(null);
 
     useEffect(() => {
-        const userProfileSession = getLoggedinUser();
-        setUserProfile(userProfileSession);
-        setLoading(!userProfileSession);
+
+        const user = getLoggedinUser();
+
+        if (user) {
+            setUserProfile(user);
+            setAuthorization(user.access);
+        } else {
+            console.log("❌ Пользователь не найден в useProfile");
+            setUserProfile(null);
+        }
+
+        setLoading(false);
     }, []);
 
     return {

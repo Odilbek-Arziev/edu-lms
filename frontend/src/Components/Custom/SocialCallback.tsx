@@ -11,14 +11,22 @@ export default function SocialCallback() {
 
                 const channel = new BroadcastChannel("social_auth");
                 channel.postMessage(data);
-                channel.close();
 
-                setTimeout(() => window.close(), 300);
+                channel.close();
+                window.close();
+
             } catch (err) {
-                console.error("Ошибка парсинга данных", err);
+                console.error("❌ Ошибка парсинга данных", err);
             }
+        } else {
+            console.error("⚠️ Параметр data не найден");
         }
     }, []);
 
-    return <div>Авторизация через соцсеть...</div>;
+    return (
+        <div style={{ padding: "20px", textAlign: "center" }}>
+            <h2>✅ Авторизация успешна!</h2>
+            <p>Окно закроется автоматически...</p>
+        </div>
+    );
 }

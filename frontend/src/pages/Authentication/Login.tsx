@@ -29,6 +29,7 @@ import {loginUser, socialLogin, resetLoginFlag} from "../../slices/thunks";
 import logoLight from "../../assets/images/logo-light.png";
 import {createSelector} from 'reselect';
 import {HOST_API_URL} from "../../helpers/url_helper";
+import {setLoggedinUser} from "../../helpers/api_helper";
 
 const Swal = require("sweetalert2");
 
@@ -136,26 +137,22 @@ const Login = (props: any) => {
         const channel = new BroadcastChannel("social_auth");
 
         channel.onmessage = (event: MessageEvent) => {
-            console.log("Получены данные из popup:", event.data);
             const {access, refresh} = event.data || {};
 
             if (access && refresh) {
-                sessionStorage.setItem("authUser", JSON.stringify(event.data));
+                const saved = setLoggedinUser(event.data);
 
-                if ((window as any).socialPopup && !(window as any).socialPopup.closed) {
-                    (window as any).socialPopup.close();
-                }
-
-                setTimeout(() => {
-                    // TODO: does not work
-                    navigate("/dashboard")
+                if (saved) {
+                    setTimeout(() => {
+                    navigate("/dashboard", {replace: true});
                 }, 300);
+                } else {
+                    console.error("❌ Ошибка сохранения данных");
+                }
             }
         };
 
-        return () => channel.close();
-    }, [navigate]);
-
+    }, []);
 
     document.title = "Basic SignIn | Velzon - React Admin & Dashboard Template";
     return (
