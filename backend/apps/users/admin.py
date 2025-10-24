@@ -14,5 +14,5 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(EmailVerificationCode)
 class UserAdmin(admin.ModelAdmin):
-    fields = ('email', 'code', 'is_used', 'code_type')
-    list_display = ('email', 'code', 'expires_at', 'is_used', 'attempt_left', 'code_type')
+    fields = ('email', 'token', 'is_used', 'code_type')
+    list_display = ('email', 'code', 'token', 'expires_at', 'is_used', 'attempt_left', 'code_type')

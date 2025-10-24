@@ -68,7 +68,7 @@ const Login = (props: any) => {
     const login = async (data: any) => {
         setLoader(true);
         try {
-            const result: any = await dispatch(loginUser(data, props.router.navigate));
+            const result: any = await dispatch(loginUser(data, navigate));
             if (result?.non_field_errors) {
                 await Swal.fire({
                     title: "Ошибка",

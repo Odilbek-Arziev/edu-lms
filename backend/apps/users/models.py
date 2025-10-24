@@ -42,7 +42,8 @@ class EmailVerificationCode(BaseModel):
     ]
 
     email = models.CharField(max_length=255)
-    code = models.CharField(max_length=4)
+    code = models.CharField(max_length=4, null=True)
+    token = models.CharField(max_length=128, unique=True, null=True)
     expires_at = models.DateTimeField()
     is_used = models.BooleanField(default=False)
     attempt_left = models.PositiveSmallIntegerField(default=3)

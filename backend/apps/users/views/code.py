@@ -20,7 +20,7 @@ class CodeViewSet(viewsets.ViewSet):
 
         email = serializer.validated_data['email']
 
-        EmailVerificationCode.objects.filter(email=email, is_used=False).delete()
+        EmailVerificationCode.objects.filter(email=email, is_used=False, code_type='register').delete()
 
         verification_code = EmailVerificationCode.objects.create_for_email(email)
 

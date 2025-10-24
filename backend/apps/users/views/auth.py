@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from users.serializers.register import RegisterSerializer
-from users.serializers.token import CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer
+from users.serializers.auth import CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer
 from users.models import EmailVerificationCode
 from users.services.email import send_email_code
 
