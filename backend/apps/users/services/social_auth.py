@@ -59,13 +59,15 @@ class SocialAuthService:
             return {
                 'email': email,
                 'first_name': user_data.get('given_name', ''),
-                'last_name': user_data.get('family_name', '')
+                'last_name': user_data.get('family_name', ''),
+                'username': email
             }
 
         return {
             'email': email,
             'first_name': user_data.get('login') or user_data.get('name'),
-            'last_name': ""
+            'last_name': "",
+            'username': email
         }
 
     def get_or_create_user(self, user_info):
@@ -76,6 +78,7 @@ class SocialAuthService:
         user, created = CustomUser.objects.get_or_create(
             email=email,
             defaults={
+                'username': user_info.get('username', ''),
                 'first_name': user_info.get('first_name', ''),
                 'last_name': user_info.get('last_name', ''),
                 'is_active': True

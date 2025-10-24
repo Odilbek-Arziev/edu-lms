@@ -1,11 +1,9 @@
-import axios, {AxiosResponse, AxiosRequestConfig} from "axios";
+import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import config from "../config";
 
 const {api} = config;
 
-/**
- * Создаём два клиента: публичный (без токена) и авторизованный (с токеном)
- */
+
 const defaultConfig = {
     baseURL: api.API_URL,
     headers: {
@@ -16,7 +14,6 @@ const defaultConfig = {
 const publicAxios = axios.create(defaultConfig);
 const authAxios = axios.create(defaultConfig);
 
-// Response interceptor для обоих
 const responseInterceptor = (response: any) =>
     response.data ? response.data : response;
 
@@ -53,9 +50,7 @@ authAxios.interceptors.request.use(
     }
 );
 
-/**
- * Установка токена в авторизованный клиент
- */
+
 const setAuthorization = (token: string | null) => {
 
     if (!token) {
@@ -67,9 +62,7 @@ const setAuthorization = (token: string | null) => {
     authAxios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
-/**
- * Берём текущего пользователя из localStorage
- */
+
 const getLoggedinUser = () => {
     let user = localStorage.getItem("authUser");
 
@@ -84,29 +77,22 @@ const getLoggedinUser = () => {
     }
 
     try {
-        const parsed = JSON.parse(user);
-        return parsed;
+        return JSON.parse(user);
     } catch (error) {
         console.error("❌ Ошибка парсинга authUser:", error);
         return null;
     }
 };
 
-/**
- * ДОБАВЛЕНО: Очистка данных авторизации
- */
+
 const clearAuth = () => {
-    console.log("🧹 Очистка данных авторизации");
     localStorage.removeItem("authUser");
     sessionStorage.removeItem("authUser");
     delete authAxios.defaults.headers.common["Authorization"];
 };
 
-/**
- * ДОБАВЛЕНО: Сохранение пользователя
- */
+
 const setLoggedinUser = (userData: any) => {
-    console.log("💾 Сохранение данных пользователя");
 
     if (!userData || !userData.access || !userData.refresh) {
         console.error("❌ Невалидные данные пользователя:", userData);
@@ -115,9 +101,7 @@ const setLoggedinUser = (userData: any) => {
 
     try {
         localStorage.setItem("authUser", JSON.stringify(userData));
-        console.log("✅ Данные сохранены в localStorage");
 
-        // Устанавливаем токен сразу
         setAuthorization(userData.access);
 
         return true;
@@ -127,15 +111,12 @@ const setLoggedinUser = (userData: any) => {
     }
 };
 
-/**
- * Универсальный APIClient
- */
+
 class APIClient {
     private client: typeof publicAxios | typeof authAxios;
 
     constructor(auth: boolean = true) {
         this.client = auth ? authAxios : publicAxios;
-        console.log(`🔧 APIClient создан (auth: ${auth})`);
     }
 
     get = (url: string, params?: any): Promise<AxiosResponse> => {
@@ -146,27 +127,22 @@ class APIClient {
                 .join("&");
         }
         const fullUrl = queryString ? `${url}?${queryString}` : url;
-        console.log(`📤 GET запрос: ${fullUrl}`);
         return this.client.get(fullUrl);
     };
 
     create = (url: string, data: any): Promise<AxiosResponse> => {
-        console.log(`📤 POST запрос: ${url}`);
         return this.client.post(url, data);
     };
 
     update = (url: string, data: any): Promise<AxiosResponse> => {
-        console.log(`📤 PATCH запрос: ${url}`);
         return this.client.patch(url, data);
     };
 
     put = (url: string, data: any): Promise<AxiosResponse> => {
-        console.log(`📤 PUT запрос: ${url}`);
         return this.client.put(url, data);
     };
 
     delete = (url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> => {
-        console.log(`📤 DELETE запрос: ${url}`);
         return this.client.delete(url, {...config});
     };
 }
