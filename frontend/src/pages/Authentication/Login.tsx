@@ -286,6 +286,12 @@ const Login = (props: any) => {
                                                             <i
                                                                 className="ri-github-fill fs-16"></i>
                                                         </Link>
+                                                        <Link
+                                                            to="/email-auth"
+                                                            className="btn btn-primary btn-icon me-1"
+                                                        >
+                                                            <i className="ri-mail-line  fs-16"></i>
+                                                        </Link>
                                                     </div>
                                                 </div>
                                             </Form>

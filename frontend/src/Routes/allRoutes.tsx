@@ -239,6 +239,8 @@ import DashboardJob from "pages/Dashboardjob";
 import Kanbanboard from "pages/Tasks/KanbanBoard";
 import VerifyEmail from "../pages/Authentication/VerifyEmail";
 import SocialCallback from "../Components/Custom/SocialCallback";
+import EmailLinkLoginPage from "../pages/Authentication/EmailLinkLogin";
+import MagicLoginPage from "../pages/Authentication/MagicLoginPage";
 
 
 const authProtectedRoutes = [
@@ -455,6 +457,8 @@ const publicRoutes = [
     {path: "/logout", element: <Logout/>},
     {path: "/login", element: <Login/>},
     {path: "/forgot-password", element: <ForgetPasswordPage/>},
+    {path: "/email-auth", element: <EmailLinkLoginPage/>},
+    {path: "/magic-login", element: <MagicLoginPage/>},
     {path: "/register", element: <Register/>},
     {path: "/verify-email", element: <VerifyEmail/>},
     {path: "/social-callback", element: <SocialCallback/>},

@@ -2,7 +2,6 @@
 import {getFirebaseBackend} from "../../../helpers/firebase_helper";
 import {
     postFakeLogin,
-    postJwtLogin,
 } from "../../../helpers/fakebackend_helper";
 
 import {loginSuccess, logoutUserSuccess, apiError, reset_login_flag} from './reducer';

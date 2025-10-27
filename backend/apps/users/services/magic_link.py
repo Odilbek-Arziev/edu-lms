@@ -10,9 +10,10 @@ from users.models import EmailVerificationCode, CustomUser
 
 
 def send_magic_link(token, email):
+    FRONTEND_URL = settings.FRONTEND_URL
     subject = "Ваша ссылка для входа"
     plain_message = f"Ссылка для входа. Срок действия — 10 минут."
-    url = f'http://localhost:8000/api/v1/users/magic_link/verify_magic_token?email={email}&token={token}'
+    url = f"{FRONTEND_URL}/magic-login?email={email}&token={token}"
 
     html_message = render_to_string(
         "magic_link.html",
@@ -44,9 +45,5 @@ def handle_magic_link(email, raw_token):
     obj.save(update_fields=['is_used'])
 
     user, _ = CustomUser.objects.get_or_create(email=email)
-
     refresh = RefreshToken.for_user(user)
-    return {
-        "access": str(refresh.access_token),
-        "refresh": str(refresh),
-    }, 200
+    return {"access": str(refresh.access_token), "refresh": str(refresh)}, 200
