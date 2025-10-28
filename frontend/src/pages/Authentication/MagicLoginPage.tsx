@@ -12,6 +12,7 @@ const MagicLoginPage = () => {
         const params = new URLSearchParams(location.search);
         const token = params.get("token");
         const email = params.get("email");
+        const linkType = params.get("link_type");
 
         if (!token || !email) {
             navigate("/login");
@@ -19,11 +20,15 @@ const MagicLoginPage = () => {
         }
 
         axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/users/magic_link/verify_magic_token/`, {
-            params: {token, email}
+            params: {token, email, link_type: linkType}
         })
             .then(res => {
-                localStorage.setItem("authUser", JSON.stringify(res.data));
-                navigate("/dashboard");
+                if (linkType == 'login') {
+                    localStorage.setItem("authUser", JSON.stringify(res.data));
+                    navigate("/dashboard");
+                } else if (linkType == 'reset_password') {
+                    navigate('/reset-password')
+                }
             })
             .catch(() => {
                 Swal.fire({

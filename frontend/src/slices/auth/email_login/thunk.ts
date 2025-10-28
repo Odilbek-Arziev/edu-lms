@@ -5,7 +5,7 @@ export const emailLinkLogin = (formData: any, history: any) => async (dispatch: 
     try {
         const api = new APIClient();
 
-        const response = await api.create("/users/magic_link/send_magic_link/", formData);
+        const response = await api.create("/users/magic_link/send_magic_link/?link_type=login", formData);
 
         if (response) {
             dispatch(

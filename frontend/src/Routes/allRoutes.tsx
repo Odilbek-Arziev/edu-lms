@@ -241,6 +241,7 @@ import VerifyEmail from "../pages/Authentication/VerifyEmail";
 import SocialCallback from "../Components/Custom/SocialCallback";
 import EmailLinkLoginPage from "../pages/Authentication/EmailLinkLogin";
 import MagicLoginPage from "../pages/Authentication/MagicLoginPage";
+import ResetPasswordPage from "../pages/Authentication/ResetPassword";
 
 
 const authProtectedRoutes = [
@@ -462,6 +463,7 @@ const publicRoutes = [
     {path: "/register", element: <Register/>},
     {path: "/verify-email", element: <VerifyEmail/>},
     {path: "/social-callback", element: <SocialCallback/>},
+    {path: "/reset-password", element: <ResetPasswordPage/>},
 
     //AuthenticationInner pages
     {path: "/auth-signin-basic", element: <BasicSignIn/>},

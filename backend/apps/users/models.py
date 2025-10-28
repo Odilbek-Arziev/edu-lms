@@ -35,10 +35,12 @@ class CustomUser(AbstractUser):
 class EmailVerificationCode(BaseModel):
     REGISTER = 'register'
     LOGIN = 'login'
+    RESET_PASSWORD = 'reset_password'
 
     CODE_CHOICES = [
         (REGISTER, 'Register'),
         (LOGIN, 'Login'),
+        (RESET_PASSWORD, 'Reset password'),
     ]
 
     email = models.CharField(max_length=255)
