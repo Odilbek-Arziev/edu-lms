@@ -11,7 +11,7 @@ from users.models import EmailVerificationCode, CustomUser
 
 def send_magic_link(token, email, link_type='login'):
     FRONTEND_URL = settings.FRONTEND_URL
-    url = f"{FRONTEND_URL}/magic-login?email={email}&token={token}&link_type={link_type}"
+    url = f"{FRONTEND_URL}/magic-login?token={token}"
 
     if link_type == 'login':
         subject = "Ваша ссылка для входа"
@@ -35,13 +35,11 @@ def send_magic_link(token, email, link_type='login'):
     )
 
 
-def handle_magic_link(email, raw_token, link_type):
+def handle_magic_link(raw_token):
     token_hash = hashlib.sha3_256(raw_token.encode()).hexdigest()
     obj = EmailVerificationCode.objects.filter(
-        email=email,
         token=token_hash,
         is_used=False,
-        code_type=link_type,
         expires_at__gt=timezone.now()
     ).first()
 
@@ -51,11 +49,18 @@ def handle_magic_link(email, raw_token, link_type):
     obj.is_used = True
     obj.save(update_fields=['is_used'])
 
-    # reset password
-    if link_type == 'reset_password':
-        return {'msg': 'Token verified, proceed to set a new password'}, 200
+    if obj.code_type == 'reset_password':
+        return {
+                   "status": "ok",
+                   "link_type": "reset_password",
+                   "token": raw_token
+               }, 200
 
-    # login
-    user, _ = CustomUser.objects.get_or_create(email=email)
+    user = CustomUser.objects.get(email=obj.email)
     refresh = RefreshToken.for_user(user)
-    return {"access": str(refresh.access_token), "refresh": str(refresh)}, 200
+    return {
+               "status": "ok",
+               "link_type": "login",
+               "access": str(refresh.access_token),
+               "refresh": str(refresh)
+           }, 200

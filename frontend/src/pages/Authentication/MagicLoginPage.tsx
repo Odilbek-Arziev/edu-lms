@@ -11,23 +11,22 @@ const MagicLoginPage = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const token = params.get("token");
-        const email = params.get("email");
-        const linkType = params.get("link_type");
 
-        if (!token || !email) {
+        if (!token) {
             navigate("/login");
             return;
         }
 
         axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/users/magic_link/verify_magic_token/`, {
-            params: {token, email, link_type: linkType}
+            params: {token}
         })
             .then(res => {
-                if (linkType == 'login') {
+                const {link_type} = res.data;
+                if (link_type === 'login') {
                     localStorage.setItem("authUser", JSON.stringify(res.data));
                     navigate("/dashboard");
-                } else if (linkType == 'reset_password') {
-                    navigate('/reset-password')
+                } else if (link_type === 'reset_password') {
+                    navigate('/reset-password', {state: {token}});
                 }
             })
             .catch(() => {

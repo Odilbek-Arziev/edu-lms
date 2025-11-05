@@ -22,12 +22,8 @@ class MagicLinkViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["get"], permission_classes=[AllowAny])
     def verify_magic_token(self, request):
-        email = request.query_params.get("email")
         token = request.query_params.get("token")
-        link_type = request.query_params.get('link_type', 'login')
-
-        if not email or not token:
-            return Response({"detail": "Missing email or token"}, status=400)
-
-        response_data, status_code = handle_magic_link(email, token, link_type)
+        if not token:
+            return Response({"detail": "Missing token"}, status=400)
+        response_data, status_code = handle_magic_link(token)
         return Response(response_data, status=status_code)
