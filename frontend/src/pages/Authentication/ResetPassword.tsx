@@ -1,19 +1,66 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, Col, Container, Row, Form, Input, Label, FormFeedback } from 'reactstrap';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Button, Card, CardBody, Col, Container, Row, Form, Input, Label, FormFeedback} from 'reactstrap';
 import logoLight from "../../assets/images/logo-light.png";
 
 //formik
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+import {useDispatch} from "react-redux";
+import {resetPassword} from "../../slices/auth/reset/thunk";
+
+const Swal = require("sweetalert2");
 
 const ResetPasswordPage = () => {
+    const navigate = useNavigate()
+    const location = useLocation();
+    let token = location.state?.token
 
-    document.title = "Create New Password | Velzon - React Admin & Dashboard Template";
-
+    const dispatch = useDispatch<any>();
     const [passwordShow, setPasswordShow] = useState<boolean>(false);
     const [confrimPasswordShow, setConfrimPasswordShow] = useState<boolean>(false);
+    const [loader, setLoader] = useState<boolean>(false);
+
+    const resetPasswordHandler = async (data: any) => {
+        setLoader(true);
+
+        try {
+            const result: any = await dispatch(resetPassword({...data, token}, navigate));
+
+            if (result?.status === "ok") {
+                await Swal.fire({
+                    title: "Успех",
+                    text: "Пароль успешно изменён. Пожалуйста, войдите снова.",
+                    icon: "success",
+                    confirmButtonText: "Ок",
+                });
+
+                navigate("/login");
+            }
+
+            if (result?.non_field_errors) {
+                await Swal.fire({
+                    title: "Ошибка",
+                    text: result.non_field_errors[0],
+                    icon: "error",
+                });
+                return;
+            }
+        } catch (e: any) {
+            console.log(e);
+
+            const errorMessage = e.response?.data?.non_field_errors?.[0] || "Ошибка. Попробуйте снова";
+
+            await Swal.fire({
+                title: "Ошибка",
+                text: errorMessage,
+                icon: "error",
+            });
+        } finally {
+            setLoader(false);
+        }
+    };
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -34,7 +81,7 @@ const ResetPasswordPage = () => {
                 .required('Confirm Password is required')
         }),
         onSubmit: (values) => {
-            // console.log(values);
+            resetPasswordHandler(values)
         }
     });
     return (
@@ -46,7 +93,7 @@ const ResetPasswordPage = () => {
                             <div className="text-center mt-sm-5 mb-4 text-white-50">
                                 <div>
                                     <Link to="/#" className="d-inline-block auth-logo">
-                                        <img src={logoLight} alt="" height="20" />
+                                        <img src={logoLight} alt="" height="20"/>
                                     </Link>
                                 </div>
                                 <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
@@ -60,7 +107,8 @@ const ResetPasswordPage = () => {
                                 <CardBody className="p-4">
                                     <div className="text-center mt-2">
                                         <h5 className="text-primary">Create new password</h5>
-                                        <p className="text-muted">Your new password must be different from previous used password.</p>
+                                        <p className="text-muted">Your new password must be different from previous used
+                                            password.</p>
                                     </div>
 
                                     <div className="p-2">
@@ -80,19 +128,26 @@ const ResetPasswordPage = () => {
                                                         invalid={validation.errors.password && validation.touched.password ? true : false}
                                                     />
                                                     {validation.errors.password && validation.touched.password ? (
-                                                        <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                                                        <FormFeedback
+                                                            type="invalid">{validation.errors.password}</FormFeedback>
                                                     ) : null}
-                                                    <Button color="link" onClick={() => setPasswordShow(!passwordShow)} className="position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button"
-                                                        id="password-addon"><i className="ri-eye-fill align-middle"></i></Button>
+                                                    <Button color="link" onClick={() => setPasswordShow(!passwordShow)}
+                                                            className="position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                                            type="button"
+                                                            id="password-addon"><i
+                                                        className="ri-eye-fill align-middle"></i></Button>
                                                 </div>
-                                                <div id="passwordInput" className="form-text">Must be at least 8 characters.</div>
+                                                <div id="passwordInput" className="form-text">Must be at least 8
+                                                    characters.
+                                                </div>
                                             </div>
 
                                             <div className="mb-3">
-                                                <Label className="form-label" htmlFor="confirm-password-input">Confirm Password</Label>
+                                                <Label className="form-label" htmlFor="confirm-password-input">Confirm
+                                                    Password</Label>
                                                 <div className="position-relative auth-pass-inputgroup mb-3">
                                                     <Input
-                                                         type={confrimPasswordShow ? "text" : "password"}
+                                                        type={confrimPasswordShow ? "text" : "password"}
                                                         className="form-control pe-5 password-input"
                                                         placeholder="Confirm password"
                                                         id="confirm-password-input"
@@ -103,35 +158,48 @@ const ResetPasswordPage = () => {
                                                         invalid={validation.errors.confirm_password && validation.touched.confirm_password ? true : false}
                                                     />
                                                     {validation.errors.confirm_password && validation.touched.confirm_password ? (
-                                                        <FormFeedback type="invalid">{validation.errors.confirm_password}</FormFeedback>
+                                                        <FormFeedback
+                                                            type="invalid">{validation.errors.confirm_password}</FormFeedback>
                                                     ) : null}
-                                                    <Button color="link" onClick={() => setConfrimPasswordShow(!confrimPasswordShow)} className="position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button">
-                                                    <i className="ri-eye-fill align-middle"></i></Button>
+                                                    <Button color="link"
+                                                            onClick={() => setConfrimPasswordShow(!confrimPasswordShow)}
+                                                            className="position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                                            type="button">
+                                                        <i className="ri-eye-fill align-middle"></i></Button>
                                                 </div>
                                             </div>
 
                                             <div id="password-contain" className="p-3 bg-light mb-2 rounded">
                                                 <h5 className="fs-13">Password must contain:</h5>
-                                                <p id="pass-length" className="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                                <p id="pass-lower" className="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                <p id="pass-upper" className="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                                <p id="pass-number" className="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                                <p id="pass-length" className="invalid fs-12 mb-2">Minimum <b>8
+                                                    characters</b></p>
+                                                <p id="pass-lower"
+                                                   className="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                                <p id="pass-upper" className="invalid fs-12 mb-2">At
+                                                    least <b>uppercase</b> letter (A-Z)</p>
+                                                <p id="pass-number" className="invalid fs-12 mb-0">A
+                                                    least <b>number</b> (0-9)</p>
                                             </div>
 
                                             <div className="form-check">
-                                                <Input className="form-check-input" type="checkbox" value="" id="auth-remember-check" />
-                                                <Label className="form-check-label" htmlFor="auth-remember-check">Remember me</Label>
+                                                <Input className="form-check-input" type="checkbox" value=""
+                                                       id="auth-remember-check"/>
+                                                <Label className="form-check-label" htmlFor="auth-remember-check">Remember
+                                                    me</Label>
                                             </div>
 
                                             <div className="mt-4">
-                                                <Button color="success" className="w-100" type="submit">Reset Password</Button>
+                                                <Button color="success" className="w-100" type="submit">Reset
+                                                    Password</Button>
                                             </div>
                                         </Form>
                                     </div>
                                 </CardBody>
                             </Card>
                             <div className="mt-4 text-center">
-                                <p className="mb-0">Wait, I remember my password... <Link to="/auth-signin-basic" className="fw-semibold text-primary text-decoration-underline"> Click here </Link> </p>
+                                <p className="mb-0">Wait, I remember my password... <Link to="/login"
+                                                                                          className="fw-semibold text-primary text-decoration-underline"> Click
+                                    here </Link></p>
                             </div>
                         </Col>
                     </Row>

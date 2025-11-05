@@ -46,9 +46,6 @@ def handle_magic_link(raw_token):
     if not obj:
         return {"detail": "Неверная или просроченная ссылка"}, 400
 
-    obj.is_used = True
-    obj.save(update_fields=['is_used'])
-
     if obj.code_type == 'reset_password':
         return {
                    "status": "ok",
@@ -58,6 +55,10 @@ def handle_magic_link(raw_token):
 
     user = CustomUser.objects.get(email=obj.email)
     refresh = RefreshToken.for_user(user)
+
+    obj.is_used = True
+    obj.save(update_fields=['is_used'])
+
     return {
                "status": "ok",
                "link_type": "login",
