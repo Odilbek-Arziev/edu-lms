@@ -1,8 +1,4 @@
-//Include Both Helper File with needed methods
 import {getFirebaseBackend} from "../../../helpers/firebase_helper";
-import {
-    postFakeLogin,
-} from "../../../helpers/fakebackend_helper";
 
 import {loginSuccess, logoutUserSuccess, apiError, reset_login_flag} from './reducer';
 import {APIClient} from "../../../helpers/api_helper";
@@ -11,31 +7,30 @@ export const loginUser = (user: any, history: any) => async (dispatch: any) => {
     const api = new APIClient();
 
     try {
-        let response;
-        if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-            let fireBaseBackend: any = getFirebaseBackend();
-            response = await fireBaseBackend.loginUser(user.email, user.password);
-        } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-            response = await api.create("/users/auth/login/", {
-                login: user.login,
-                password: user.password,
-            });
-        } else {
-            response = postFakeLogin({
-                email: user.email,
-                password: user.password,
-            });
-        }
+        const response = await api.create("/users/auth/login/", {
+            login: user.login,
+            password: user.password,
+        });
 
         dispatch(loginSuccess(response));
-
         if (history) history("/");
-
         return response;
+
     } catch (error: any) {
-        const safeError = error.response?.data || {non_field_errors: ["Неизвестная ошибка"]};
-        dispatch(apiError(safeError));
-        return safeError;
+        const status = error.response?.status;
+        const data = error.response?.data || {};
+        let message = "Ошибка входа. Попробуйте снова.";
+
+        if (status === 429) {
+            message = data.detail || "Аккаунт заблокирован: слишком много попыток. Попробуйте позже.";
+        } else if (data.non_field_errors?.length) {
+            message = data.non_field_errors[0];
+        } else if (data.detail) {
+            message = data.detail;
+        }
+
+        dispatch(apiError(message));
+        return {non_field_errors: [message]};
     }
 };
 
@@ -58,14 +53,6 @@ export const logoutUser = () => async (dispatch: any) => {
 export const socialLogin = (type: any, history: any) => async (dispatch: any) => {
     try {
         let response;
-
-        if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-            const fireBaseBackend: any = getFirebaseBackend();
-            response = fireBaseBackend.socialLoginUser(type);
-        }
-        //  else {
-        //   response = postSocialLogin(data);
-        // }
 
         const socialdata = await response;
         if (socialdata) {
