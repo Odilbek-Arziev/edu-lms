@@ -1,12 +1,12 @@
 import hashlib
 
-from django.core.mail import send_mail
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import EmailVerificationCode, CustomUser
+
+from users.utils.email_helper import send_to_mail
 
 
 def send_magic_link(token, email, link_type='login'):
@@ -15,23 +15,21 @@ def send_magic_link(token, email, link_type='login'):
 
     if link_type == 'login':
         subject = "Ваша ссылка для входа"
-        plain_message = f"Ссылка для входа. Срок действия — 10 минут."
+        plain_message = "Ссылка для входа. Срок действия — 10 минут."
 
     else:
         subject = "Ваша ссылка для сброса пароля"
         plain_message = f"Перейдите по ссылке, чтобы сбросить пароль. Срок действия — 10 минут."
 
-    html_message = render_to_string(
-        "magic_link.html",
-        {"url": url}
-    )
-
-    send_mail(
-        subject,
-        plain_message,
-        settings.DEFAULT_FROM_EMAIL,
-        [email],
-        html_message=html_message
+    send_to_mail(
+        email=email,
+        subject=subject,
+        plain_message=plain_message,
+        html_data={
+            "title": subject,
+            "url": url,
+            "expiry_minutes": 10,
+        }
     )
 
 
