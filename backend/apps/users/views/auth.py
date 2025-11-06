@@ -25,7 +25,7 @@ class AuthViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["post"])
     def login(self, request):
-        serializer = CustomTokenObtainPairSerializer(data=request.data)
+        serializer = CustomTokenObtainPairSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data)
 
