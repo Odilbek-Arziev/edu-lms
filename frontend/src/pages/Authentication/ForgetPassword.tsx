@@ -106,7 +106,7 @@ const ForgetPasswordPage = (props: any) => {
                                         <i className="ri-mail-send-line display-5 text-success mb-3"/>
 
                                     </div>
-                                    {!forgetSuccessMsg && (
+                                    {(!forgetSuccessMsg && !forgetError) && (
                                         <Alert className="border-0 alert-warning text-center mb-2 mx-2" role="alert">
                                             Enter your email and instructions will be sent to you!
                                         </Alert>

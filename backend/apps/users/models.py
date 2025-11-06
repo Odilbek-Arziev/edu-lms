@@ -10,14 +10,23 @@ class CustomUser(AbstractUser):
     TEACHER = 'teacher'
     ADMIN = 'admin'
 
+    OAUTH = 'oauth'
+    EMAIL = 'email'
+
     ROLE_CHOICES = [
         (STUDENT, 'Student'),
         (TEACHER, 'Teacher'),
         (ADMIN, 'Admin')
     ]
 
+    REGISTRATION_TYPE_CHOICES = [
+        (EMAIL, "Email/Password"),
+        (OAUTH, "OAuth"),
+    ]
+
     role = models.CharField(max_length=255, choices=ROLE_CHOICES)
     is_active = models.BooleanField(default=False)
+    register_type = models.CharField(max_length=255, choices=REGISTRATION_TYPE_CHOICES, null=True)
 
     def is_student(self):
         return self.role == self.STUDENT

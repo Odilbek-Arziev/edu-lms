@@ -13,6 +13,12 @@ export const emailLinkLogin = (formData: any, history: any) => async (dispatch: 
             );
         }
     } catch (error: any) {
-        dispatch(emailLoginError(error.message || "Something went wrong while sending the link."));
+        console.error("Ошибка при отправке magic link:", error);
+
+        const payload =
+            error.response?.data ||
+            {detail: error.message || "Что-то пошло не так при отправке ссылки."};
+
+        dispatch(emailLoginError(payload));
     }
 };

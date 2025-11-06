@@ -11,13 +11,13 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        login_field = attrs.get("login")
+        login_field = attrs.get("login").lower()
         password = attrs.get("password")
 
         try:
             user = CustomUser.objects.get(Q(email=login_field) | Q(username=login_field))
         except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("Incorrect username/email or password")
+            raise serializers.ValidationError(f"User with {login_field} credentials not exists")
 
         if not user.check_password(password):
             raise serializers.ValidationError("Incorrect username/email or password")
@@ -31,7 +31,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
             "role": user.role,
-            "email": user.email,
+            "email": user.email.lower(),
             "username": user.username,
         }
 

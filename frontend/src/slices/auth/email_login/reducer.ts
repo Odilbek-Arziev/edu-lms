@@ -6,14 +6,17 @@ export const initialState = {
 };
 
 const emailLoginSlice = createSlice({
+
     name: "email_login",
     initialState,
     reducers: {
         emailLoginSuccess(state, action) {
-            state.loginSuccessMsg = action.payload
+            state.loginSuccessMsg = action.payload;
+            state.loginError = null;
         },
         emailLoginError(state, action) {
-            state.loginError = action.payload
+            console.log(action.payload)
+            state.loginError = action.payload?.non_field_errors?.[0] || action.payload?.detail || "Ошибка входа";
         },
     },
 });

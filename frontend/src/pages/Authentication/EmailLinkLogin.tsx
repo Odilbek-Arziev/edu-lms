@@ -86,7 +86,7 @@ const EmailLinkLoginPage = (props: any) => {
                                         <h5 className="text-primary">Instant Login via Email</h5>
                                         <i className="ri-mail-send-line display-5 text-success mb-3"></i>
                                     </div>
-                                    {!loginSuccessMsg && (
+                                    {(!loginSuccessMsg && !loginError) && (
                                         <Alert className="border-0 alert-warning text-center mb-2 mx-2" role="alert">
                                             Enter your email and link will be sent to you!
                                         </Alert>

@@ -18,7 +18,7 @@ class AuthViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        verification_code = EmailVerificationCode.objects.create_for_email(user.email)
+        verification_code = EmailVerificationCode.objects.create_for_email(user.email.lower())
         send_email_code(verification_code)
 
         return Response({"msg": "created", "user": serializer.data})

@@ -81,7 +81,8 @@ class SocialAuthService:
                 'username': user_info.get('username', ''),
                 'first_name': user_info.get('first_name', ''),
                 'last_name': user_info.get('last_name', ''),
-                'is_active': True
+                'is_active': True,
+                'register_type': 'oauth'
             }
         )
         refresh = RefreshToken.for_user(user)
