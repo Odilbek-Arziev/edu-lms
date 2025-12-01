@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from users.models import EmailVerificationCode, CustomUser
 from users.serializers.code import EmailVerificationCodeSerializer
-from users.services.magic_link import send_magic_link, handle_magic_link
+from users.services.email import send_magic_link
+from users.services.magic_link import handle_magic_link
 
 
 class MagicLinkViewSet(viewsets.ViewSet):

@@ -1,36 +1,7 @@
 import hashlib
-
-from django.conf import settings
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from users.models import EmailVerificationCode, CustomUser
-
-from users.utils.email_helper import send_to_mail
-
-
-def send_magic_link(token, email, link_type='login'):
-    FRONTEND_URL = settings.FRONTEND_URL
-    url = f"{FRONTEND_URL}/magic-login?token={token}"
-
-    if link_type == 'login':
-        subject = "Ваша ссылка для входа"
-        plain_message = "Ссылка для входа. Срок действия — 10 минут."
-
-    else:
-        subject = "Ваша ссылка для сброса пароля"
-        plain_message = f"Перейдите по ссылке, чтобы сбросить пароль. Срок действия — 10 минут."
-
-    send_to_mail(
-        email=email,
-        subject=subject,
-        plain_message=plain_message,
-        html_data={
-            "title": subject,
-            "url": url,
-            "expiry_minutes": 10,
-        }
-    )
 
 
 def handle_magic_link(raw_token):

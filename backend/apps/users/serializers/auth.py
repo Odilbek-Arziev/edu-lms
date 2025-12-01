@@ -7,9 +7,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import CustomUser
 from users.utils.axes_helpers import prepare_axes_request
+from users.services.email import send_security_alert
+
+import logging
 
 User = get_user_model()
 axes_handler = AxesProxyHandler()
+logger = logging.getLogger(__name__)
 
 
 class CustomTokenObtainPairSerializer(serializers.Serializer):
@@ -36,7 +40,12 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
             )
 
         if not user.check_password(password):
-            axes_handler.user_login_failed(sender=User, credentials=credentials, request=django_request, )
+            axes_handler.user_login_failed(sender=User, credentials=credentials, request=django_request)
+            attempts = axes_handler.get_failures(request=django_request, credentials=credentials)
+
+            if attempts == 3:
+                send_security_alert(user.email)
+
             raise serializers.ValidationError("Incorrect username/email or password")
 
         if not user.is_active:

@@ -110,6 +110,11 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -166,9 +171,8 @@ AUTH_USER_MODEL = 'users.CustomUser'
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = timedelta(minutes=15)
 AXES_LOCK_OUT_AT_FAILURE = True
-AXES_USE_USER_AGENT = True
-AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
-AXES_ONLY_USER_FAILURES = False
+AXES_RESET_ON_SUCCESS = True
+AXES_ENABLED = True
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
