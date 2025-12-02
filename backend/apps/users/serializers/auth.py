@@ -53,6 +53,18 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
         axes_handler.user_logged_in(sender=User, request=django_request, user=user)
 
+        current_ip = request.META.get('REMOTE_ADDR')
+        current_ua = request.META.get('HTTP_USER_AGENT')
+
+        is_new_device = not user.trusted_devices.filter(
+            ip_address=current_ip,
+            user_agent=current_ua
+        ).exists()
+
+        if is_new_device:
+            send_security_alert(user.email, login_success=True)
+            user.trusted_devices.create(ip_address=current_ip, user_agent=current_ua)
+
         refresh = RefreshToken.for_user(user)
 
         return {

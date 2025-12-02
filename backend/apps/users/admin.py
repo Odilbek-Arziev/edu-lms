@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from .models import CustomUser, EmailVerificationCode
+from .models import *
 
 admin.site.unregister(Group)
 
@@ -16,3 +16,9 @@ class UserAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     fields = ('email', 'token', 'is_used', 'code_type')
     list_display = ('email', 'code', 'token', 'expires_at', 'is_used', 'attempt_left', 'code_type')
+
+
+@admin.register(TrustedDevice)
+class UserAdmin(admin.ModelAdmin):
+    fields = ('user', 'ip_address', 'user_agent')
+    list_display = ('user', 'ip_address', 'user_agent')

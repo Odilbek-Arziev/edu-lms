@@ -63,3 +63,12 @@ class EmailVerificationCode(BaseModel):
 
     def __str__(self):
         return f"{self.email} - {self.code} - {'used' if self.is_used else 'not used'}"
+
+
+class TrustedDevice(BaseModel):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='trusted_devices')
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField()
+
+    class Meta:
+        unique_together = ('user', 'ip_address', 'user_agent')

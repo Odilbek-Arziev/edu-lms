@@ -1,6 +1,5 @@
 from axes.helpers import get_client_ip_address, get_client_user_agent
-from django.contrib.sessions.models import Session
-from django.utils import timezone
+
 
 
 def prepare_axes_request(request):
