@@ -25,7 +25,7 @@ class CodeViewSet(viewsets.ViewSet):
         verification_code = EmailVerificationCode.objects.create_for_email(email)
 
         send_email_code(verification_code)
-        return Response({"msg": "Code sent successfully"})
+        return Response({"msg": "Code sent successfully"}, status=200)
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def verify_code(self, request):

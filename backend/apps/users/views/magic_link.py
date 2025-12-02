@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -16,10 +17,19 @@ class MagicLinkViewSet(viewsets.ViewSet):
         serializer = EmailVerificationCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
+
+        key = f"magic_link_limit:{email}"
+        if cache.get(key):
+            return Response(
+                {'detail': 'Too many requests. Please. try again after 1 min'},
+                status=429
+            )
+        cache.set(key, True, timeout=60)
+
         EmailVerificationCode.objects.filter(email=email, is_used=False, code_type=link_type).delete()
         instance, token = EmailVerificationCode.objects.create_for_token(email, code_type=link_type)
         send_magic_link(token, email, link_type)
-        return Response({"msg": "Code sent successfully"})
+        return Response({"msg": "Code sent successfully"}, status=200)
 
     @action(detail=False, methods=["get"], permission_classes=[AllowAny])
     def verify_magic_token(self, request):
