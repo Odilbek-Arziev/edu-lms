@@ -10,6 +10,7 @@ import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {createSelector} from "reselect";
 import {emailLinkLogin} from "../../slices/auth/email_login/thunk";
+import {resetEmailLogin} from "../../slices/auth/email_login/reducer";
 
 const Swal = require("sweetalert2");
 
@@ -21,7 +22,9 @@ const EmailLinkLoginPage = (props: any) => {
         enableReinitialize: true,
         initialValues: {email: ""},
         validationSchema: Yup.object({
-            email: Yup.string().required("Please Enter Your Email"),
+            email: Yup.string()
+                .email("Введите корректный email")
+                .required("Пожалуйста, введите ваш email"),
         }),
         onSubmit: async (values) => {
             setIsLoading(true);
@@ -43,6 +46,13 @@ const EmailLinkLoginPage = (props: any) => {
 
     const {loginError, loginSuccessMsg} = useSelector(selectEmailLoginState);
 
+    // Очищаем состояние при размонтировании компонента
+    useEffect(() => {
+        return () => {
+            dispatch(resetEmailLogin());
+        };
+    }, [dispatch]);
+
     useEffect(() => {
         if (isLoading) {
             Swal.fire({
@@ -55,11 +65,14 @@ const EmailLinkLoginPage = (props: any) => {
             });
         } else {
             Swal.close();
-            validation.resetForm();
+            // Сбрасываем форму только при успешной отправке
+            if (loginSuccessMsg) {
+                validation.resetForm();
+            }
         }
-    }, [isLoading]);
+    }, [isLoading, loginSuccessMsg]);
 
-    document.title = "Reset Password | Velzon - React Admin & Dashboard Template";
+    document.title = "Вход через Email | Velzon";
 
     return (
         <ParticlesAuth>
@@ -83,14 +96,17 @@ const EmailLinkLoginPage = (props: any) => {
                             <Card className="mt-4">
                                 <CardBody className="p-4">
                                     <div className="text-center mt-2">
-                                        <h5 className="text-primary">Instant Login via Email</h5>
+                                        <h5 className="text-primary">Быстрый вход через Email</h5>
+                                        <p className="text-muted">Войдите без пароля</p>
                                         <i className="ri-mail-send-line display-5 text-success mb-3"></i>
                                     </div>
+
                                     {(!loginSuccessMsg && !loginError) && (
                                         <Alert className="border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                            Enter your email and link will be sent to you!
+                                            Введите ваш email и ссылка для входа будет отправлена вам!
                                         </Alert>
                                     )}
+
                                     <div className="p-2">
                                         {loginError && (
                                             <Alert color="danger" style={{marginTop: "13px"}}>
@@ -115,22 +131,27 @@ const EmailLinkLoginPage = (props: any) => {
                                                 <Input
                                                     name="email"
                                                     className="form-control"
-                                                    placeholder="Enter email"
+                                                    placeholder="Введите email"
                                                     type="email"
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
                                                     value={validation.values.email || ""}
                                                     invalid={!!(validation.touched.email && validation.errors.email)}
                                                 />
-                                                {validation.touched.email && validation.errors.email ? (
-                                                    <FormFeedback
-                                                        type="invalid">{validation.errors.email}</FormFeedback>
-                                                ) : null}
+                                                {validation.touched.email && validation.errors.email && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.email}
+                                                    </FormFeedback>
+                                                )}
                                             </div>
 
                                             <div className="text-center mt-4">
-                                                <button className="btn btn-success w-100" type="submit">
-                                                    Send Reset Link
+                                                <button
+                                                    className="btn btn-success w-100"
+                                                    type="submit"
+                                                    disabled={isLoading}
+                                                >
+                                                    {isLoading ? "Отправка..." : "Отправить ссылку для входа"}
                                                 </button>
                                             </div>
                                         </Form>
@@ -140,12 +161,12 @@ const EmailLinkLoginPage = (props: any) => {
 
                             <div className="mt-4 text-center">
                                 <p className="mb-0">
-                                    Wait, I remember my password...{" "}
+                                    Постойте, я помню свой пароль...{" "}
                                     <Link
                                         to="/login"
                                         className="fw-semibold text-primary text-decoration-underline"
                                     >
-                                        Click here
+                                        Нажмите здесь
                                     </Link>
                                 </p>
                             </div>

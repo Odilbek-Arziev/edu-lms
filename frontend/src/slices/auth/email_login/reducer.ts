@@ -6,7 +6,6 @@ export const initialState = {
 };
 
 const emailLoginSlice = createSlice({
-
     name: "email_login",
     initialState,
     reducers: {
@@ -15,15 +14,25 @@ const emailLoginSlice = createSlice({
             state.loginError = null;
         },
         emailLoginError(state, action) {
-            console.log(action.payload)
-            state.loginError = action.payload?.non_field_errors?.[0] || action.payload?.detail || "Ошибка входа";
+            state.loginError =
+                action.payload?.non_field_errors?.[0] ||
+                action.payload?.detail ||
+                action.payload?.message ||
+                action.payload?.error ||
+                "Ошибка входа";
+            state.loginSuccessMsg = null;
         },
+        resetEmailLogin(state) {
+            state.loginSuccessMsg = null;
+            state.loginError = null;
+        }
     },
 });
 
 export const {
     emailLoginSuccess,
-    emailLoginError
-} = emailLoginSlice.actions
+    emailLoginError,
+    resetEmailLogin
+} = emailLoginSlice.actions;
 
 export default emailLoginSlice.reducer;
