@@ -62,3 +62,38 @@ def send_security_alert(email, login_success=False):
                 'footer': 'Если это были не вы, немедленно измените пароль.'
             }
         )
+
+
+def send_password_alert(email, timestamp, user_agent=None, ip=None):
+    ua_text = user_agent if user_agent else "Неизвестное устройство"
+    ip_text = ip if ip else "Неизвестный IP"
+
+    html_context = {
+        'title': 'Смена пароля',
+        'message': (
+            f"Ваш пароль был успешно изменён.<br>"
+            f"<br>"
+            f"<strong>Дата и время:</strong> {timestamp}<br>"
+            f"<strong>Устройство:</strong> {ua_text}<br>"
+            f"<strong>IP-адрес:</strong> {ip_text}<br>"
+        ),
+        'footer': (
+            "Если вы не выполняли это действие, немедленно войдите в свой аккаунт "
+            "и смените пароль вручную. "
+            "При необходимости обратитесь в службу поддержки."
+        )
+    }
+
+    send_to_mail(
+        email=email,
+        subject="Ваш пароль был изменён",
+        plain_message=(
+            "Ваш пароль был изменён.\n"
+            f"Дата и время: {timestamp}\n"
+            f"Устройство: {ua_text}\n"
+            f"IP: {ip_text}\n\n"
+            "Если это были не вы, срочно войдите в свой аккаунт и смените пароль вручную. "
+            "При необходимости обратитесь в поддержку."
+        ),
+        html_data=html_context
+    )

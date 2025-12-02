@@ -4,7 +4,7 @@
     <h2 style="color: #333333;">{{ title|default:"Уведомление" }}</h2>
 
     {% if message %}
-    <p style="color: #555555; line-height: 1.6;">{{ message|linebreaks }}</p>
+    <div style="color: #555555; line-height: 1.6;">{{ message|safe }}</div>
     {% endif %}
 
     {% if url %}

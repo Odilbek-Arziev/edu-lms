@@ -2,10 +2,12 @@ import hashlib
 
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+
 from users.models import EmailVerificationCode, CustomUser
+from users.services.email import send_password_alert
 
 
-def handle_reset_password(raw_token, password):
+def handle_reset_password(request, raw_token, password):
     token_hash = hashlib.sha3_256(raw_token.encode()).hexdigest()
     obj = EmailVerificationCode.objects.filter(
         token=token_hash,
@@ -23,6 +25,13 @@ def handle_reset_password(raw_token, password):
 
     user.set_password(password)
     user.save()
+
+    send_password_alert(
+        email=user.email,
+        timestamp=timezone.now().strftime("%Y-%m-%d %H:%M:%S"),
+        user_agent=request.META.get("HTTP_USER_AGENT"),
+        ip=request.META.get("REMOTE_ADDR")
+    )
 
     Session.objects.filter(expire_date__gte=timezone.now(), session_data__contains=user.id).delete()
 

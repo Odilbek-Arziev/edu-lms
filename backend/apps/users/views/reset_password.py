@@ -16,6 +16,6 @@ class ResetPasswordViewSet(viewsets.ViewSet):
         token = serializer.validated_data["token"]
         password = serializer.validated_data["password"]
 
-        response_data, status = handle_reset_password(token, password)
+        response_data, status = handle_reset_password(request, token, password)
 
         return Response(response_data, status=status)
