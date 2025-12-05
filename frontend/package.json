@@ -70,6 +70,7 @@
     "react-dual-listbox": "^6.0.0",
     "react-filepond": "^7.1.2",
     "react-flatpickr": "^4.0.11",
+    "react-google-recaptcha": "^3.1.0",
     "react-i18next": "^13.5.0",
     "react-masonry-component": "^6.3.0",
     "react-masonry-css": "^1.0.16",
@@ -125,6 +126,7 @@
     "autoprefixer": "10.4.5"
   },
   "devDependencies": {
-    "@types/feather-icons": "^4.29.4"
+    "@types/feather-icons": "^4.29.4",
+    "@types/react-google-recaptcha": "^2.1.9"
   }
 }

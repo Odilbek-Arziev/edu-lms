@@ -1,3 +1,4 @@
+import logging
 from axes.handlers.proxy import AxesProxyHandler
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -8,20 +9,24 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from users.models import CustomUser
 from users.utils.axes_helpers import prepare_axes_request
 from users.services.email import send_security_alert
-
-import logging
+from users.utils.recaptcha import verify_recaptcha
 
 User = get_user_model()
 axes_handler = AxesProxyHandler()
-logger = logging.getLogger(__name__)
 
 
 class CustomTokenObtainPairSerializer(serializers.Serializer):
     login = serializers.CharField()
     password = serializers.CharField(write_only=True)
+    captcha = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
         request = self.context['request']
+        captcha_token = attrs.get('captcha')
+
+        if not verify_recaptcha(captcha_token, request.META.get('REMOTE_ADDR')):
+            raise serializers.ValidationError({'captcha': 'Проверка reCAPTCHA не пройдена'})
+
         django_request = prepare_axes_request(request._request)
 
         login_field = attrs.get("login").lower()

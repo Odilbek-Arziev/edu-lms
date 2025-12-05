@@ -30,13 +30,21 @@ import logoLight from "../../assets/images/logo-light.png";
 import {createSelector} from 'reselect';
 import {HOST_API_URL} from "../../helpers/url_helper";
 import {setLoggedinUser} from "../../helpers/api_helper";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Swal = require("sweetalert2");
 
 const Login = (props: any) => {
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
+    const onCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token)
+    }
+
     const navigate = useNavigate()
     const dispatch = useDispatch<any>();
     const selectLayoutState = (state: any) => state;
+
     const loginpageData = createSelector(
         selectLayoutState,
         (state) => ({
@@ -103,7 +111,17 @@ const Login = (props: any) => {
             password: Yup.string().required("Please Enter Your Password"),
         }),
         onSubmit: (values) => {
-            login(values);
+            if (!captchaToken) {
+                Swal.fire('Ошибка', 'Подтвердите, что вы не робот', 'error');
+                return;
+            }
+
+            const payload = {
+                ...values,
+                captcha: captchaToken,
+            };
+
+            login(payload);
         }
     });
 
@@ -144,8 +162,8 @@ const Login = (props: any) => {
 
                 if (saved) {
                     setTimeout(() => {
-                    navigate("/dashboard", {replace: true});
-                }, 300);
+                        navigate("/dashboard", {replace: true});
+                    }, 300);
                 } else {
                     console.error("❌ Ошибка сохранения данных");
                 }
@@ -259,7 +277,12 @@ const Login = (props: any) => {
                                                         Sign In
                                                     </Button>
                                                 </div>
-
+                                                <div className="mt-4 d-flex justify-content-center">
+                                                    <ReCAPTCHA
+                                                        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                                                        onChange={onCaptchaChange}
+                                                    />
+                                                </div>
                                                 <div className="mt-4 text-center">
                                                     <div className="signin-other-title">
                                                         <h5 className="fs-13 mb-4 title">Sign In with</h5>

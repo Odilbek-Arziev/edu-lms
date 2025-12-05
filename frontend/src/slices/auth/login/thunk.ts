@@ -7,11 +7,7 @@ export const loginUser = (user: any, history: any) => async (dispatch: any) => {
     const api = new APIClient();
 
     try {
-        const response = await api.create("/users/auth/login/", {
-            login: user.login,
-            password: user.password,
-        });
-
+        const response = await api.create("/users/auth/login/", user)
         dispatch(loginSuccess(response));
         if (history) history("/");
         return response;

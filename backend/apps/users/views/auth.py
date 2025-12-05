@@ -7,14 +7,16 @@ from users.serializers.register import RegisterSerializer
 from users.serializers.auth import CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer
 from users.models import EmailVerificationCode
 from users.services.email import send_email_code
+from users.utils.throttles import CaptchaThrottle
 
 
 class AuthViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
+    throttle_classes = [CaptchaThrottle]
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def register(self, request):
-        serializer = RegisterSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 

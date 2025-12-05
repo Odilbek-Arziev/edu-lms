@@ -15,11 +15,7 @@ export const registerUser = (user: any) => async (dispatch: any) => {
     try {
         let response;
 
-        response = api.create("/users/auth/register/", {
-            email: user.email,
-            username: user.username,
-            password: user.password,
-        });
+        response = api.create("/users/auth/register/", user);
         return response
     } catch (error: any) {
         dispatch(registerUserFailed(error));

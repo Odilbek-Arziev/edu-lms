@@ -20,12 +20,20 @@ import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {createSelector} from "reselect";
 import {resetForgetPassword} from "../../slices/auth/forgetpwd/reducer";
+import ReCAPTCHA from "react-google-recaptcha";
+import {emailLinkLogin} from "../../slices/auth/email_login/thunk";
+
 
 const Swal = require("sweetalert2");
 
 const ForgetPasswordPage = (props: any) => {
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch<any>();
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
+    const onCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token)
+    }
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -38,9 +46,19 @@ const ForgetPasswordPage = (props: any) => {
                 .required("Пожалуйста, введите ваш email"),
         }),
         onSubmit: async (values) => {
+            if (!captchaToken) {
+                Swal.fire('Ошибка', 'Подтвердите, что вы не робот', 'error');
+                return;
+            }
+
             setIsLoading(true);
+
             try {
-                await dispatch(userForgetPassword(values, props.history));
+                const payload = {
+                    ...values,
+                    captcha: captchaToken,
+                };
+                await dispatch(userForgetPassword(payload, props.history));
             } finally {
                 setIsLoading(false);
             }
@@ -166,6 +184,12 @@ const ForgetPasswordPage = (props: any) => {
                                                 >
                                                     {isLoading ? "Отправка..." : "Отправить ссылку для сброса"}
                                                 </button>
+                                            </div>
+                                            <div className="mt-4 d-flex justify-content-center">
+                                                <ReCAPTCHA
+                                                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                                                    onChange={onCaptchaChange}
+                                                />
                                             </div>
                                         </Form>
                                     </div>

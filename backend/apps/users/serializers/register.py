@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from users.models import CustomUser
+from users.utils.recaptcha import verify_recaptcha
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -10,10 +11,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
     )
     password = serializers.CharField(write_only=True, min_length=6)
+    captcha = serializers.CharField(write_only=True)
 
-    class Meta:
-        model = CustomUser
-        fields = ['email', 'password', 'username']
+    def validate(self, attrs):
+        request = self.context['request']
+        captcha_token = attrs.get('captcha')
+
+        if not verify_recaptcha(captcha_token, request.META.get('REMOTE_ADDR')):
+            raise serializers.ValidationError({'captcha': 'Проверка reCAPTCHA не пройдена'})
+
+        return attrs
 
     def create(self, validated_data):
         return CustomUser.objects.create_user(
@@ -22,3 +29,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
             register_type='email'
         )
+
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'password', 'username', 'captcha']

@@ -14,7 +14,7 @@ class MagicLinkViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def send_magic_link(self, request):
         link_type = request.query_params.get('link_type', 'login')
-        serializer = EmailVerificationCodeSerializer(data=request.data)
+        serializer = EmailVerificationCodeSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
 

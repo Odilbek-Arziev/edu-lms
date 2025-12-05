@@ -20,7 +20,7 @@ const responseInterceptor = (response: any) =>
 const errorInterceptor = (error: any) => {
 
     if (error.response) {
-        console.error("Response data:", error.response.data);
+        // console.error("Response data:", error.response.data);
         console.error("Response status:", error.response.status);
         return Promise.reject(error);
     }

@@ -19,6 +19,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {registerUser} from "../../slices/thunks";
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Swal = require("sweetalert2");
 
@@ -26,6 +27,11 @@ const Register = () => {
     const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
+    const onCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token)
+    }
 
     const register = async (data: any) => {
         try {
@@ -94,7 +100,19 @@ const Register = () => {
                 .oneOf([Yup.ref("password")], "Passwords do not match")
                 .required("Please confirm your password"),
         }),
-        onSubmit: (values) => register(values),
+        onSubmit: (values) => {
+            if (!captchaToken) {
+                Swal.fire('Ошибка', 'Подтвердите, что вы не робот', 'error');
+                return;
+            }
+
+            const payload = {
+                ...values,
+                captcha: captchaToken,
+            };
+
+            register(payload);
+        }
     });
 
     document.title = "Basic SignUp | Velzon - React Admin & Dashboard Template";
@@ -226,6 +244,12 @@ const Register = () => {
                                                     )}
                                                     Sign Up
                                                 </Button>
+                                            </div>
+                                            <div className="mt-4 d-flex justify-content-center">
+                                                <ReCAPTCHA
+                                                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                                                    onChange={onCaptchaChange}
+                                                />
                                             </div>
                                         </Form>
                                     </div>
