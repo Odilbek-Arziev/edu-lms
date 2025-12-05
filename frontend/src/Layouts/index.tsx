@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import withRouter from '../Components/Common/withRouter';
 
@@ -23,8 +23,8 @@ import {
 } from "../slices/thunks";
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { createSelector } from 'reselect';
+import {useSelector, useDispatch} from "react-redux";
+import {createSelector} from 'reselect';
 
 
 const Layout = (props: any) => {
@@ -65,6 +65,7 @@ const Layout = (props: any) => {
     useEffect(() => {
         window.addEventListener("scroll", scrollNavigation, true);
     });
+
     function scrollNavigation() {
         var scrollup = document.documentElement.scrollTop;
         if (scrollup > 50) {
@@ -73,6 +74,7 @@ const Layout = (props: any) => {
             setHeaderClass("");
         }
     }
+
     /*
     layout settings
     */
@@ -136,13 +138,13 @@ const Layout = (props: any) => {
                 <Header
                     headerClass={headerClass}
                     layoutModeType={layoutModeType}
-                    onChangeLayoutMode={onChangeLayoutMode} />
-                <Sidebar layoutType={layoutType} />
+                    onChangeLayoutMode={onChangeLayoutMode}/>
+                <Sidebar layoutType={layoutType}/>
                 <div className="main-content">{props.children}
-                    <Footer />
+                    <Footer/>
                 </div>
             </div>
-            <RightSidebar />
+            <RightSidebar/>
         </React.Fragment>
 
     );

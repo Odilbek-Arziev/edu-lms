@@ -242,12 +242,14 @@ import SocialCallback from "../Components/Custom/SocialCallback";
 import EmailLinkLoginPage from "../pages/Authentication/EmailLinkLogin";
 import MagicLoginPage from "../pages/Authentication/MagicLoginPage";
 import ResetPasswordPage from "../pages/Authentication/ResetPassword";
+import Home from "../pages/Custom/Home";
 
 
 const authProtectedRoutes = [
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},
     {path: "/dashboard", element: <DashboardEcommerce/>},
+    {path: "/home", element: <Home/>},
     {path: "/index", element: <DashboardEcommerce/>},
     {path: "/dashboard-crypto", element: <DashboardCrypto/>},
     {path: "/dashboard-projects", element: <DashboardProject/>},
@@ -434,7 +436,7 @@ const authProtectedRoutes = [
     {
         path: "/",
         exact: true,
-        element: <Navigate to="/dashboard"/>,
+        element: <Navigate to="/home"/>,
     },
     {path: "*", element: <Navigate to="/dashboard"/>},
     //Job pages
