@@ -1,0 +1,1595 @@
+- model: app.Icon
+  pk: 1
+  fields:
+    name: "activity"
+    status: true
+
+- model: app.Icon
+  pk: 2
+  fields:
+    name: "airplay"
+    status: true
+
+- model: app.Icon
+  pk: 3
+  fields:
+    name: "alert-circle"
+    status: true
+
+- model: app.Icon
+  pk: 4
+  fields:
+    name: "alert-octagon"
+    status: true
+
+- model: app.Icon
+  pk: 5
+  fields:
+    name: "alert-triangle"
+    status: true
+
+- model: app.Icon
+  pk: 6
+  fields:
+    name: "align-center"
+    status: true
+
+- model: app.Icon
+  pk: 7
+  fields:
+    name: "align-justify"
+    status: true
+
+- model: app.Icon
+  pk: 8
+  fields:
+    name: "align-left"
+    status: true
+
+- model: app.Icon
+  pk: 9
+  fields:
+    name: "align-right"
+    status: true
+
+- model: app.Icon
+  pk: 10
+  fields:
+    name: "anchor"
+    status: true
+
+- model: app.Icon
+  pk: 11
+  fields:
+    name: "aperture"
+    status: true
+
+- model: app.Icon
+  pk: 12
+  fields:
+    name: "archive"
+    status: true
+
+- model: app.Icon
+  pk: 13
+  fields:
+    name: "arrow-down"
+    status: true
+
+- model: app.Icon
+  pk: 14
+  fields:
+    name: "arrow-down-circle"
+    status: true
+
+- model: app.Icon
+  pk: 15
+  fields:
+    name: "arrow-down-left"
+    status: true
+
+- model: app.Icon
+  pk: 16
+  fields:
+    name: "arrow-down-right"
+    status: true
+
+- model: app.Icon
+  pk: 17
+  fields:
+    name: "arrow-left"
+    status: true
+
+- model: app.Icon
+  pk: 18
+  fields:
+    name: "arrow-left-circle"
+    status: true
+
+- model: app.Icon
+  pk: 19
+  fields:
+    name: "arrow-right"
+    status: true
+
+- model: app.Icon
+  pk: 20
+  fields:
+    name: "arrow-right-circle"
+    status: true
+
+- model: app.Icon
+  pk: 21
+  fields:
+    name: "arrow-up"
+    status: true
+
+- model: app.Icon
+  pk: 22
+  fields:
+    name: "arrow-up-circle"
+    status: true
+
+- model: app.Icon
+  pk: 23
+  fields:
+    name: "arrow-up-left"
+    status: true
+
+- model: app.Icon
+  pk: 24
+  fields:
+    name: "arrow-up-right"
+    status: true
+
+- model: app.Icon
+  pk: 25
+  fields:
+    name: "at-sign"
+    status: true
+
+- model: app.Icon
+  pk: 26
+  fields:
+    name: "award"
+    status: true
+
+- model: app.Icon
+  pk: 27
+  fields:
+    name: "bar-chart"
+    status: true
+
+- model: app.Icon
+  pk: 28
+  fields:
+    name: "bar-chart-2"
+    status: true
+
+- model: app.Icon
+  pk: 29
+  fields:
+    name: "battery"
+    status: true
+
+- model: app.Icon
+  pk: 30
+  fields:
+    name: "battery-charging"
+    status: true
+
+- model: app.Icon
+  pk: 31
+  fields:
+    name: "bell"
+    status: true
+
+- model: app.Icon
+  pk: 32
+  fields:
+    name: "bell-off"
+    status: true
+
+- model: app.Icon
+  pk: 33
+  fields:
+    name: "bluetooth"
+    status: true
+
+- model: app.Icon
+  pk: 34
+  fields:
+    name: "bold"
+    status: true
+
+- model: app.Icon
+  pk: 35
+  fields:
+    name: "book"
+    status: true
+
+- model: app.Icon
+  pk: 36
+  fields:
+    name: "book-open"
+    status: true
+
+- model: app.Icon
+  pk: 37
+  fields:
+    name: "bookmark"
+    status: true
+
+- model: app.Icon
+  pk: 38
+  fields:
+    name: "box"
+    status: true
+
+- model: app.Icon
+  pk: 39
+  fields:
+    name: "briefcase"
+    status: true
+
+- model: app.Icon
+  pk: 40
+  fields:
+    name: "calendar"
+    status: true
+
+- model: app.Icon
+  pk: 41
+  fields:
+    name: "camera"
+    status: true
+
+- model: app.Icon
+  pk: 42
+  fields:
+    name: "camera-off"
+    status: true
+
+- model: app.Icon
+  pk: 43
+  fields:
+    name: "cast"
+    status: true
+
+- model: app.Icon
+  pk: 44
+  fields:
+    name: "check"
+    status: true
+
+- model: app.Icon
+  pk: 45
+  fields:
+    name: "check-circle"
+    status: true
+
+- model: app.Icon
+  pk: 46
+  fields:
+    name: "check-square"
+    status: true
+
+- model: app.Icon
+  pk: 47
+  fields:
+    name: "chevron-down"
+    status: true
+
+- model: app.Icon
+  pk: 48
+  fields:
+    name: "chevron-left"
+    status: true
+
+- model: app.Icon
+  pk: 49
+  fields:
+    name: "chevron-right"
+    status: true
+
+- model: app.Icon
+  pk: 50
+  fields:
+    name: "chevron-up"
+    status: true
+
+- model: app.Icon
+  pk: 51
+  fields:
+    name: "chevrons-down"
+    status: true
+
+- model: app.Icon
+  pk: 52
+  fields:
+    name: "chevrons-left"
+    status: true
+
+- model: app.Icon
+  pk: 53
+  fields:
+    name: "chevrons-right"
+    status: true
+
+- model: app.Icon
+  pk: 54
+  fields:
+    name: "chevrons-up"
+    status: true
+
+- model: app.Icon
+  pk: 55
+  fields:
+    name: "chrome"
+    status: true
+
+- model: app.Icon
+  pk: 56
+  fields:
+    name: "circle"
+    status: true
+
+- model: app.Icon
+  pk: 57
+  fields:
+    name: "clipboard"
+    status: true
+
+- model: app.Icon
+  pk: 58
+  fields:
+    name: "clock"
+    status: true
+
+- model: app.Icon
+  pk: 59
+  fields:
+    name: "cloud"
+    status: true
+
+- model: app.Icon
+  pk: 60
+  fields:
+    name: "cloud-drizzle"
+    status: true
+
+- model: app.Icon
+  pk: 61
+  fields:
+    name: "cloud-lightning"
+    status: true
+
+- model: app.Icon
+  pk: 62
+  fields:
+    name: "cloud-off"
+    status: true
+
+- model: app.Icon
+  pk: 63
+  fields:
+    name: "cloud-rain"
+    status: true
+
+- model: app.Icon
+  pk: 64
+  fields:
+    name: "cloud-snow"
+    status: true
+
+- model: app.Icon
+  pk: 65
+  fields:
+    name: "code"
+    status: true
+
+- model: app.Icon
+  pk: 66
+  fields:
+    name: "codepen"
+    status: true
+
+- model: app.Icon
+  pk: 67
+  fields:
+    name: "codesandbox"
+    status: true
+
+- model: app.Icon
+  pk: 68
+  fields:
+    name: "coffee"
+    status: true
+
+- model: app.Icon
+  pk: 69
+  fields:
+    name: "columns"
+    status: true
+
+- model: app.Icon
+  pk: 70
+  fields:
+    name: "command"
+    status: true
+
+- model: app.Icon
+  pk: 71
+  fields:
+    name: "compass"
+    status: true
+
+- model: app.Icon
+  pk: 72
+  fields:
+    name: "copy"
+    status: true
+
+- model: app.Icon
+  pk: 73
+  fields:
+    name: "corner-down-left"
+    status: true
+
+- model: app.Icon
+  pk: 74
+  fields:
+    name: "corner-down-right"
+    status: true
+
+- model: app.Icon
+  pk: 75
+  fields:
+    name: "corner-left-down"
+    status: true
+
+- model: app.Icon
+  pk: 76
+  fields:
+    name: "corner-left-up"
+    status: true
+
+- model: app.Icon
+  pk: 77
+  fields:
+    name: "corner-right-down"
+    status: true
+
+- model: app.Icon
+  pk: 78
+  fields:
+    name: "corner-right-up"
+    status: true
+
+- model: app.Icon
+  pk: 79
+  fields:
+    name: "corner-up-left"
+    status: true
+
+- model: app.Icon
+  pk: 80
+  fields:
+    name: "corner-up-right"
+    status: true
+
+- model: app.Icon
+  pk: 81
+  fields:
+    name: "cpu"
+    status: true
+
+- model: app.Icon
+  pk: 82
+  fields:
+    name: "credit-card"
+    status: true
+
+- model: app.Icon
+  pk: 83
+  fields:
+    name: "crop"
+    status: true
+
+- model: app.Icon
+  pk: 84
+  fields:
+    name: "crosshair"
+    status: true
+
+- model: app.Icon
+  pk: 85
+  fields:
+    name: "database"
+    status: true
+
+- model: app.Icon
+  pk: 86
+  fields:
+    name: "delete"
+    status: true
+
+- model: app.Icon
+  pk: 87
+  fields:
+    name: "disc"
+    status: true
+
+- model: app.Icon
+  pk: 88
+  fields:
+    name: "dollar-sign"
+    status: true
+
+- model: app.Icon
+  pk: 89
+  fields:
+    name: "download"
+    status: true
+
+- model: app.Icon
+  pk: 90
+  fields:
+    name: "download-cloud"
+    status: true
+
+- model: app.Icon
+  pk: 91
+  fields:
+    name: "droplet"
+    status: true
+
+- model: app.Icon
+  pk: 92
+  fields:
+    name: "edit"
+    status: true
+
+- model: app.Icon
+  pk: 93
+  fields:
+    name: "edit-2"
+    status: true
+
+- model: app.Icon
+  pk: 94
+  fields:
+    name: "edit-3"
+    status: true
+
+- model: app.Icon
+  pk: 95
+  fields:
+    name: "external-link"
+    status: true
+
+- model: app.Icon
+  pk: 96
+  fields:
+    name: "eye"
+    status: true
+
+- model: app.Icon
+  pk: 97
+  fields:
+    name: "eye-off"
+    status: true
+
+- model: app.Icon
+  pk: 98
+  fields:
+    name: "facebook"
+    status: true
+
+- model: app.Icon
+  pk: 99
+  fields:
+    name: "fast-forward"
+    status: true
+
+- model: app.Icon
+  pk: 100
+  fields:
+    name: "feather"
+    status: true
+
+- model: app.Icon
+  pk: 101
+  fields:
+    name: "figma"
+    status: true
+
+- model: app.Icon
+  pk: 102
+  fields:
+    name: "file"
+    status: true
+
+- model: app.Icon
+  pk: 103
+  fields:
+    name: "file-minus"
+    status: true
+
+- model: app.Icon
+  pk: 104
+  fields:
+    name: "file-plus"
+    status: true
+
+- model: app.Icon
+  pk: 105
+  fields:
+    name: "file-text"
+    status: true
+
+- model: app.Icon
+  pk: 106
+  fields:
+    name: "film"
+    status: true
+
+- model: app.Icon
+  pk: 107
+  fields:
+    name: "filter"
+    status: true
+
+- model: app.Icon
+  pk: 108
+  fields:
+    name: "flag"
+    status: true
+
+- model: app.Icon
+  pk: 109
+  fields:
+    name: "folder"
+    status: true
+
+- model: app.Icon
+  pk: 110
+  fields:
+    name: "folder-minus"
+    status: true
+
+- model: app.Icon
+  pk: 111
+  fields:
+    name: "folder-plus"
+    status: true
+
+- model: app.Icon
+  pk: 112
+  fields:
+    name: "framer"
+    status: true
+
+- model: app.Icon
+  pk: 113
+  fields:
+    name: "frown"
+    status: true
+
+- model: app.Icon
+  pk: 114
+  fields:
+    name: "gift"
+    status: true
+
+- model: app.Icon
+  pk: 115
+  fields:
+    name: "git-branch"
+    status: true
+
+- model: app.Icon
+  pk: 116
+  fields:
+    name: "git-commit"
+    status: true
+
+- model: app.Icon
+  pk: 117
+  fields:
+    name: "git-merge"
+    status: true
+
+- model: app.Icon
+  pk: 118
+  fields:
+    name: "git-pull-request"
+    status: true
+
+- model: app.Icon
+  pk: 119
+  fields:
+    name: "github"
+    status: true
+
+- model: app.Icon
+  pk: 120
+  fields:
+    name: "gitlab"
+    status: true
+
+- model: app.Icon
+  pk: 121
+  fields:
+    name: "globe"
+    status: true
+
+- model: app.Icon
+  pk: 122
+  fields:
+    name: "grid"
+    status: true
+
+- model: app.Icon
+  pk: 123
+  fields:
+    name: "hard-drive"
+    status: true
+
+- model: app.Icon
+  pk: 124
+  fields:
+    name: "hash"
+    status: true
+
+- model: app.Icon
+  pk: 125
+  fields:
+    name: "headphones"
+    status: true
+
+- model: app.Icon
+  pk: 126
+  fields:
+    name: "heart"
+    status: true
+
+- model: app.Icon
+  pk: 127
+  fields:
+    name: "help-circle"
+    status: true
+
+- model: app.Icon
+  pk: 128
+  fields:
+    name: "hexagon"
+    status: true
+
+- model: app.Icon
+  pk: 129
+  fields:
+    name: "home"
+    status: true
+
+- model: app.Icon
+  pk: 130
+  fields:
+    name: "image"
+    status: true
+
+- model: app.Icon
+  pk: 131
+  fields:
+    name: "inbox"
+    status: true
+
+- model: app.Icon
+  pk: 132
+  fields:
+    name: "info"
+    status: true
+
+- model: app.Icon
+  pk: 133
+  fields:
+    name: "instagram"
+    status: true
+
+- model: app.Icon
+  pk: 134
+  fields:
+    name: "italic"
+    status: true
+
+- model: app.Icon
+  pk: 135
+  fields:
+    name: "key"
+    status: true
+
+- model: app.Icon
+  pk: 136
+  fields:
+    name: "layers"
+    status: true
+
+- model: app.Icon
+  pk: 137
+  fields:
+    name: "layout"
+    status: true
+
+- model: app.Icon
+  pk: 138
+  fields:
+    name: "life-buoy"
+    status: true
+
+- model: app.Icon
+  pk: 139
+  fields:
+    name: "link"
+    status: true
+
+- model: app.Icon
+  pk: 140
+  fields:
+    name: "link-2"
+    status: true
+
+- model: app.Icon
+  pk: 141
+  fields:
+    name: "linkedin"
+    status: true
+
+- model: app.Icon
+  pk: 142
+  fields:
+    name: "list"
+    status: true
+
+- model: app.Icon
+  pk: 143
+  fields:
+    name: "loader"
+    status: true
+
+- model: app.Icon
+  pk: 144
+  fields:
+    name: "lock"
+    status: true
+
+- model: app.Icon
+  pk: 145
+  fields:
+    name: "log-in"
+    status: true
+
+- model: app.Icon
+  pk: 146
+  fields:
+    name: "log-out"
+    status: true
+
+- model: app.Icon
+  pk: 147
+  fields:
+    name: "mail"
+    status: true
+
+- model: app.Icon
+  pk: 148
+  fields:
+    name: "map"
+    status: true
+
+- model: app.Icon
+  pk: 149
+  fields:
+    name: "map-pin"
+    status: true
+
+- model: app.Icon
+  pk: 150
+  fields:
+    name: "maximize"
+    status: true
+
+- model: app.Icon
+  pk: 151
+  fields:
+    name: "maximize-2"
+    status: true
+
+- model: app.Icon
+  pk: 152
+  fields:
+    name: "meh"
+    status: true
+
+- model: app.Icon
+  pk: 153
+  fields:
+    name: "menu"
+    status: true
+
+- model: app.Icon
+  pk: 154
+  fields:
+    name: "message-circle"
+    status: true
+
+- model: app.Icon
+  pk: 155
+  fields:
+    name: "message-square"
+    status: true
+
+- model: app.Icon
+  pk: 156
+  fields:
+    name: "mic"
+    status: true
+
+- model: app.Icon
+  pk: 157
+  fields:
+    name: "mic-off"
+    status: true
+
+- model: app.Icon
+  pk: 158
+  fields:
+    name: "minimize"
+    status: true
+
+- model: app.Icon
+  pk: 159
+  fields:
+    name: "minimize-2"
+    status: true
+
+- model: app.Icon
+  pk: 160
+  fields:
+    name: "minus"
+    status: true
+
+- model: app.Icon
+  pk: 161
+  fields:
+    name: "minus-circle"
+    status: true
+
+- model: app.Icon
+  pk: 162
+  fields:
+    name: "minus-square"
+    status: true
+
+- model: app.Icon
+  pk: 163
+  fields:
+    name: "monitor"
+    status: true
+
+- model: app.Icon
+  pk: 164
+  fields:
+    name: "moon"
+    status: true
+
+- model: app.Icon
+  pk: 165
+  fields:
+    name: "more-horizontal"
+    status: true
+
+- model: app.Icon
+  pk: 166
+  fields:
+    name: "more-vertical"
+    status: true
+
+- model: app.Icon
+  pk: 167
+  fields:
+    name: "mouse-pointer"
+    status: true
+
+- model: app.Icon
+  pk: 168
+  fields:
+    name: "move"
+    status: true
+
+- model: app.Icon
+  pk: 169
+  fields:
+    name: "music"
+    status: true
+
+- model: app.Icon
+  pk: 170
+  fields:
+    name: "navigation"
+    status: true
+
+- model: app.Icon
+  pk: 171
+  fields:
+    name: "navigation-2"
+    status: true
+
+- model: app.Icon
+  pk: 172
+  fields:
+    name: "octagon"
+    status: true
+
+- model: app.Icon
+  pk: 173
+  fields:
+    name: "package"
+    status: true
+
+- model: app.Icon
+  pk: 174
+  fields:
+    name: "paperclip"
+    status: true
+
+- model: app.Icon
+  pk: 175
+  fields:
+    name: "pause"
+    status: true
+
+- model: app.Icon
+  pk: 176
+  fields:
+    name: "pause-circle"
+    status: true
+
+- model: app.Icon
+  pk: 177
+  fields:
+    name: "pen-tool"
+    status: true
+
+- model: app.Icon
+  pk: 178
+  fields:
+    name: "percent"
+    status: true
+
+- model: app.Icon
+  pk: 179
+  fields:
+    name: "phone"
+    status: true
+
+- model: app.Icon
+  pk: 180
+  fields:
+    name: "phone-call"
+    status: true
+
+- model: app.Icon
+  pk: 181
+  fields:
+    name: "phone-forwarded"
+    status: true
+
+- model: app.Icon
+  pk: 182
+  fields:
+    name: "phone-incoming"
+    status: true
+
+- model: app.Icon
+  pk: 183
+  fields:
+    name: "phone-missed"
+    status: true
+
+- model: app.Icon
+  pk: 184
+  fields:
+    name: "phone-off"
+    status: true
+
+- model: app.Icon
+  pk: 185
+  fields:
+    name: "phone-outgoing"
+    status: true
+
+- model: app.Icon
+  pk: 186
+  fields:
+    name: "pie-chart"
+    status: true
+
+- model: app.Icon
+  pk: 187
+  fields:
+    name: "play"
+    status: true
+
+- model: app.Icon
+  pk: 188
+  fields:
+    name: "play-circle"
+    status: true
+
+- model: app.Icon
+  pk: 189
+  fields:
+    name: "plus"
+    status: true
+
+- model: app.Icon
+  pk: 190
+  fields:
+    name: "plus-circle"
+    status: true
+
+- model: app.Icon
+  pk: 191
+  fields:
+    name: "plus-square"
+    status: true
+
+- model: app.Icon
+  pk: 192
+  fields:
+    name: "pocket"
+    status: true
+
+- model: app.Icon
+  pk: 193
+  fields:
+    name: "power"
+    status: true
+
+- model: app.Icon
+  pk: 194
+  fields:
+    name: "printer"
+    status: true
+
+- model: app.Icon
+  pk: 195
+  fields:
+    name: "radio"
+    status: true
+
+- model: app.Icon
+  pk: 196
+  fields:
+    name: "refresh-ccw"
+    status: true
+
+- model: app.Icon
+  pk: 197
+  fields:
+    name: "refresh-cw"
+    status: true
+
+- model: app.Icon
+  pk: 198
+  fields:
+    name: "repeat"
+    status: true
+
+- model: app.Icon
+  pk: 199
+  fields:
+    name: "rewind"
+    status: true
+
+- model: app.Icon
+  pk: 200
+  fields:
+    name: "rotate-ccw"
+    status: true
+
+- model: app.Icon
+  pk: 201
+  fields:
+    name: "rotate-cw"
+    status: true
+
+- model: app.Icon
+  pk: 202
+  fields:
+    name: "rss"
+    status: true
+
+- model: app.Icon
+  pk: 203
+  fields:
+    name: "save"
+    status: true
+
+- model: app.Icon
+  pk: 204
+  fields:
+    name: "scissors"
+    status: true
+
+- model: app.Icon
+  pk: 205
+  fields:
+    name: "search"
+    status: true
+
+- model: app.Icon
+  pk: 206
+  fields:
+    name: "send"
+    status: true
+
+- model: app.Icon
+  pk: 207
+  fields:
+    name: "server"
+    status: true
+
+- model: app.Icon
+  pk: 208
+  fields:
+    name: "settings"
+    status: true
+
+- model: app.Icon
+  pk: 209
+  fields:
+    name: "share"
+    status: true
+
+- model: app.Icon
+  pk: 210
+  fields:
+    name: "share-2"
+    status: true
+
+- model: app.Icon
+  pk: 211
+  fields:
+    name: "shield"
+    status: true
+
+- model: app.Icon
+  pk: 212
+  fields:
+    name: "shield-off"
+    status: true
+
+- model: app.Icon
+  pk: 213
+  fields:
+    name: "shopping-bag"
+    status: true
+
+- model: app.Icon
+  pk: 214
+  fields:
+    name: "shopping-cart"
+    status: true
+
+- model: app.Icon
+  pk: 215
+  fields:
+    name: "shuffle"
+    status: true
+
+- model: app.Icon
+  pk: 216
+  fields:
+    name: "sidebar"
+    status: true
+
+- model: app.Icon
+  pk: 217
+  fields:
+    name: "skip-back"
+    status: true
+
+- model: app.Icon
+  pk: 218
+  fields:
+    name: "skip-forward"
+    status: true
+
+- model: app.Icon
+  pk: 219
+  fields:
+    name: "slack"
+    status: true
+
+- model: app.Icon
+  pk: 220
+  fields:
+    name: "slash"
+    status: true
+
+- model: app.Icon
+  pk: 221
+  fields:
+    name: "sliders"
+    status: true
+
+- model: app.Icon
+  pk: 222
+  fields:
+    name: "smartphone"
+    status: true
+
+- model: app.Icon
+  pk: 223
+  fields:
+    name: "smile"
+    status: true
+
+- model: app.Icon
+  pk: 224
+  fields:
+    name: "speaker"
+    status: true
+
+- model: app.Icon
+  pk: 225
+  fields:
+    name: "square"
+    status: true
+
+- model: app.Icon
+  pk: 226
+  fields:
+    name: "star"
+    status: true
+
+- model: app.Icon
+  pk: 227
+  fields:
+    name: "stop-circle"
+    status: true
+
+- model: app.Icon
+  pk: 228
+  fields:
+    name: "sun"
+    status: true
+
+- model: app.Icon
+  pk: 229
+  fields:
+    name: "sunrise"
+    status: true
+
+- model: app.Icon
+  pk: 230
+  fields:
+    name: "sunset"
+    status: true
+
+- model: app.Icon
+  pk: 231
+  fields:
+    name: "tablet"
+    status: true
+
+- model: app.Icon
+  pk: 232
+  fields:
+    name: "tag"
+    status: true
+
+- model: app.Icon
+  pk: 233
+  fields:
+    name: "target"
+    status: true
+
+- model: app.Icon
+  pk: 234
+  fields:
+    name: "terminal"
+    status: true
+
+- model: app.Icon
+  pk: 235
+  fields:
+    name: "thermometer"
+    status: true
+
+- model: app.Icon
+  pk: 236
+  fields:
+    name: "thumbs-down"
+    status: true
+
+- model: app.Icon
+  pk: 237
+  fields:
+    name: "thumbs-up"
+    status: true
+
+- model: app.Icon
+  pk: 238
+  fields:
+    name: "toggle-left"
+    status: true
+
+- model: app.Icon
+  pk: 239
+  fields:
+    name: "toggle-right"
+    status: true
+
+- model: app.Icon
+  pk: 240
+  fields:
+    name: "tool"
+    status: true
+
+- model: app.Icon
+  pk: 241
+  fields:
+    name: "trash"
+    status: true
+
+- model: app.Icon
+  pk: 242
+  fields:
+    name: "trash-2"
+    status: true
+
+- model: app.Icon
+  pk: 243
+  fields:
+    name: "trello"
+    status: true
+
+- model: app.Icon
+  pk: 244
+  fields:
+    name: "trending-down"
+    status: true
+
+- model: app.Icon
+  pk: 245
+  fields:
+    name: "trending-up"
+    status: true
+
+- model: app.Icon
+  pk: 246
+  fields:
+    name: "triangle"
+    status: true
+
+- model: app.Icon
+  pk: 247
+  fields:
+    name: "truck"
+    status: true
+
+- model: app.Icon
+  pk: 248
+  fields:
+    name: "tv"
+    status: true
+
+- model: app.Icon
+  pk: 249
+  fields:
+    name: "twitch"
+    status: true
+
+- model: app.Icon
+  pk: 250
+  fields:
+    name: "twitter"
+    status: true
+
+- model: app.Icon
+  pk: 251
+  fields:
+    name: "type"
+    status: true
+
+- model: app.Icon
+  pk: 252
+  fields:
+    name: "umbrella"
+    status: true
+
+- model: app.Icon
+  pk: 253
+  fields:
+    name: "underline"
+    status: true
+
+- model: app.Icon
+  pk: 254
+  fields:
+    name: "unlock"
+    status: true
+
+- model: app.Icon
+  pk: 255
+  fields:
+    name: "upload"
+    status: true
+
+- model: app.Icon
+  pk: 256
+  fields:
+    name: "upload-cloud"
+    status: true
+
+- model: app.Icon
+  pk: 257
+  fields:
+    name: "user"
+    status: true
+
+- model: app.Icon
+  pk: 258
+  fields:
+    name: "user-check"
+    status: true
+
+- model: app.Icon
+  pk: 259
+  fields:
+    name: "user-minus"
+    status: true
+
+- model: app.Icon
+  pk: 260
+  fields:
+    name: "user-plus"
+    status: true
+
+- model: app.Icon
+  pk: 261
+  fields:
+    name: "user-x"
+    status: true
+
+- model: app.Icon
+  pk: 262
+  fields:
+    name: "users"
+    status: true
+
+- model: app.Icon
+  pk: 263
+  fields:
+    name: "video"
+    status: true
+
+- model: app.Icon
+  pk: 264
+  fields:
+    name: "video-off"
+    status: true
+
+- model: app.Icon
+  pk: 265
+  fields:
+    name: "voicemail"
+    status: true
+
+- model: app.Icon
+  pk: 266
+  fields:
+    name: "volume"
+    status: true

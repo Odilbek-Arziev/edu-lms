@@ -120,3 +120,9 @@ class SubmissionReviewAdmin(admin.ModelAdmin):
         return ", ".join(g.name for g in obj.groups.all())
 
     show_groups.short_description = "Groups"
+
+
+@admin.register(Icon)
+class SubmissionReviewAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", 'status')
+    search_fields = ('name',)
