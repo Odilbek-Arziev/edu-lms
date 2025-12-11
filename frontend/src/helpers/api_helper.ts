@@ -1,8 +1,9 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import config from "../config";
+import {logoutUser} from "../slices/auth/login/thunk";
+import {store} from "../index";
 
 const {api} = config;
-
 
 const defaultConfig = {
     baseURL: api.API_URL,
@@ -20,8 +21,18 @@ const responseInterceptor = (response: any) =>
 const errorInterceptor = (error: any) => {
 
     if (error.response) {
-        // console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
+        const status = error.response.status;
+
+        if (status === 401) {
+            console.warn('Токен истек - выполняем logout')
+
+            clearAuth()
+            store.dispatch(logoutUser())
+            window.location.href = '/login'
+
+            return;
+        }
+
         return Promise.reject(error);
     }
 

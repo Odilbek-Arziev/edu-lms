@@ -69,7 +69,8 @@ import JobReducer from "./jobs/reducer";
 
 // API Key
 import APIKeyReducer from "./apiKey/reducer";
-import menuReducer from "./custom/menu/reducer";
+import MenuReducer from "./menu/reducer";
+import RolesReducer from "./roles/reducer";
 
 const rootReducer = combineReducers({
     Layout: LayoutReducer,
@@ -99,7 +100,8 @@ const rootReducer = combineReducers({
     Todos: TodosReducer,
     Jobs: JobReducer,
     APIKey: APIKeyReducer,
-    menu: menuReducer
+    Menu: MenuReducer,
+    Roles: RolesReducer
 });
 
 export default rootReducer;

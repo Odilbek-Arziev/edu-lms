@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 //Import Icons
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchMenu} from "../slices/custom/menu/thunk";
+import {fetchMenu} from "../slices/menu/thunk";
 
 const Navdata = () => {
     const history = useNavigate();
@@ -16,7 +16,7 @@ const Navdata = () => {
         dispatch(fetchMenu())
     }, [])
 
-    const menu = useSelector((state: any) => state.menu.items);
+    const menu = useSelector((state: any) => state.Menu.items);
 
     const createUniqueId = (item: any, parentId: string = '') => {
         const baseId = item.title.toLowerCase().replace(/\s+/g, '_');

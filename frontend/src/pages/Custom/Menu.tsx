@@ -1,26 +1,41 @@
 import React, {useEffect} from "react";
 import {Button, Container, Table} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchRoles} from "../../slices/roles/thunk";
+import {useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 
 
-const Home = () => {
-    const dispatch = useDispatch<any>();
+const Menu = () => {
+    const menu = useSelector((state: any) => state.Menu.items);
 
-    const roles = useSelector((state: any) => state.Roles.items);
+    const flattenMenu = (items: any[], parent: string | null = null): any[] => {
+        let result: any[] = [];
 
-    useEffect(() => {
-        dispatch(fetchRoles())
-    }, [])
+        items.forEach((item) => {
+            result.push({
+                title: item.title,
+                url_path: item.url_path,
+                status: item.status,
+                parent: parent
+            })
+
+            if (item?.children && item.children?.length > 0) {
+                result = result.concat(flattenMenu(item.children, item.title))
+            }
+        })
+
+        return result
+    }
+
+    const tableData = flattenMenu(menu)
 
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
+
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Roles" pageTitle="Dashboards"/>
+                    <BreadCrumb title="Menu" pageTitle="Dashboards"/>
                     <div className="d-flex justify-content-end my-2">
                         <Button className='btn btn-success d-flex gap-1 align-items-center'>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
@@ -31,15 +46,24 @@ const Home = () => {
                         <thead>
                         <tr>
                             <th>№</th>
-                            <th>Name</th>
+                            <th>Title</th>
+                            <th>Parent</th>
+                            <th>Path</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {roles ? roles.map((row: any, idx: number) => (
+                        {tableData ? tableData.map((row, idx) => (
                             <tr>
                                 <td>{idx + 1}</td>
-                                <td>{row.name}</td>
+                                <td>{row.title}</td>
+                                <td>{row.parent ?? '-'}</td>
+                                <td>{row.url_path}</td>
+                                <td>{row.status
+                                    ? <span className='badge bg-success'>active</span>
+                                    : <span className='badge bg-danger'>passive</span>}
+                                </td>
                                 <td className='d-flex gap-1'>
                                     <Button className='btn btn-info btn-sm editBtn'>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
@@ -58,4 +82,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Menu;

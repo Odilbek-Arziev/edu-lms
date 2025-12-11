@@ -1,5 +1,5 @@
 import {menuSuccess, menuError} from './reducer'
-import {APIClient} from "../../../helpers/api_helper";
+import {APIClient} from "../../helpers/api_helper";
 
 export const fetchMenu = () => async (dispatch: any) => {
     const api = new APIClient();

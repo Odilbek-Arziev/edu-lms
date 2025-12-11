@@ -34,7 +34,7 @@ const AuthProtected = (props: any) => {
     }
 
     if (!userProfile && !token) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/login" replace/>;
     }
 
     return <>{props.children}</>;
