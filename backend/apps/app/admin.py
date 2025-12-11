@@ -1,10 +1,5 @@
 from django.contrib import admin
-from .models import (
-    Course, Module, Category, Enrollment,
-    Lesson, LiveSession, Material,
-    Homework, HomeworkCriterion, HomeworkSubmission,
-    SubmissionCriterionResult, SubmissionReview
-)
+from .models import *
 
 
 @admin.register(Course)
@@ -114,3 +109,14 @@ class SubmissionCriterionResultAdmin(admin.ModelAdmin):
 
     criterion_text.admin_order_field = "criterion__text"
     criterion_text.short_description = "Criterion"
+
+
+@admin.register(Menu)
+class SubmissionReviewAdmin(admin.ModelAdmin):
+    list_display = ("title", "url_path", "status", "icon_id", "parent_id", "show_groups")
+    search_fields = ('title',)
+
+    def show_groups(self, obj):
+        return ", ".join(g.name for g in obj.groups.all())
+
+    show_groups.short_description = "Groups"

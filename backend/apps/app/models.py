@@ -267,3 +267,29 @@ class SubmissionCriterionResult(BaseModel):
         constraints = [
             models.UniqueConstraint(fields=['review', 'criterion'], name='unique_review_criterion')
         ]
+
+
+class Menu(BaseModel):
+    title = models.CharField(max_length=255)
+    url_path = models.CharField(max_length=255)
+    status = models.BooleanField(default=True)
+
+    icon_id = models.ForeignKey('app.Icon', on_delete=models.CASCADE, null=True, blank=True)
+    parent_id = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
+    groups = models.ManyToManyField('auth.Group', blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['title', 'url_path'], name='unique_menu')
+        ]
+
+    def __str__(self):
+        return self.title
+
+
+class Icon(BaseModel):
+    name = models.CharField(max_length=255)
+    status = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name

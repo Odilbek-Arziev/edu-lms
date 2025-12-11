@@ -3,7 +3,7 @@ import {Container} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 
 
-const Home = () => {
+const Roles = () => {
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
 
     return (
@@ -17,4 +17,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Roles;

@@ -62,7 +62,7 @@ const gallery = [
     {
         id: 5,
         img: smallImage5,
-        title: "Working from home little spot",
+        title: "Working from menu little spot",
         auther: "Henry Baird",
         likes: "2.2K",
         comments: "1.3K",
@@ -711,7 +711,7 @@ const SearchGallery = [
     {
         id: 5,
         img: smallImage5,
-        title: "Working from home little spot",
+        title: "Working from menu little spot",
         auther: "Henry Baird",
         likes: "2.2K",
         comments: "1.3K"

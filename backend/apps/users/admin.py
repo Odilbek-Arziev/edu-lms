@@ -1,14 +1,13 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
-
 from .models import *
-
-admin.site.unregister(Group)
-
 
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
-    fields = ('email', 'first_name', 'last_name', 'username', 'is_active', 'register_type')
+    fields = (
+        'email', 'first_name', 'last_name',
+        'username', 'is_active', 'register_type',
+        'groups',
+    )
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'register_type')
 
 

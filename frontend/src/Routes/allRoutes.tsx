@@ -243,13 +243,15 @@ import EmailLinkLoginPage from "../pages/Authentication/EmailLinkLogin";
 import MagicLoginPage from "../pages/Authentication/MagicLoginPage";
 import ResetPasswordPage from "../pages/Authentication/ResetPassword";
 import Home from "../pages/Custom/Home";
+import Roles from "../pages/Custom/Roles";
 
 
 const authProtectedRoutes = [
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},
     {path: "/dashboard", element: <DashboardEcommerce/>},
-    {path: "/home", element: <Home/>},
+    {path: "/menu", element: <Home/>},
+    {path: "/roles", element: <Roles/>},
     {path: "/index", element: <DashboardEcommerce/>},
     {path: "/dashboard-crypto", element: <DashboardCrypto/>},
     {path: "/dashboard-projects", element: <DashboardProject/>},

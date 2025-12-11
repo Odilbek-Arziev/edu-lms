@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 
 // Front
 import LayoutReducer from "./layouts/reducer";
@@ -69,6 +69,7 @@ import JobReducer from "./jobs/reducer";
 
 // API Key
 import APIKeyReducer from "./apiKey/reducer";
+import menuReducer from "./custom/menu/reducer";
 
 const rootReducer = combineReducers({
     Layout: LayoutReducer,
@@ -97,7 +98,8 @@ const rootReducer = combineReducers({
     FileManager: FileManagerReducer,
     Todos: TodosReducer,
     Jobs: JobReducer,
-    APIKey: APIKeyReducer
+    APIKey: APIKeyReducer,
+    menu: menuReducer
 });
 
 export default rootReducer;

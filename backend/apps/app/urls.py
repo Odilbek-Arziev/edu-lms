@@ -10,6 +10,7 @@ from .views.homework_submission import HomeworkSubmissionViewSet
 from .views.lesson import LessonViewSet
 from .views.live_session import LiveSessionViewSet
 from .views.material import MaterialViewSet
+from .views.menu import MenuViewSet
 from .views.module import ModuleViewSet
 from .views.submission_criterion import SubmissionCriterionViewSet
 from .views.submission_review import SubmissionReviewViewSet
@@ -28,6 +29,7 @@ router.register(r"homework_criterion", HomeworkCriterionViewSet, basename='homew
 router.register(r"homework_submissions", HomeworkSubmissionViewSet, basename='homework_submission')
 router.register(r"submission_criterion_results", SubmissionCriterionViewSet, basename='submission_criterion')
 router.register(r"submission_reviews", SubmissionReviewViewSet, basename='submission_review')
+router.register(r"menu", MenuViewSet, basename='menu')
 
 urlpatterns = [
     path("", include(router.urls)),
