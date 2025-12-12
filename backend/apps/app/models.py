@@ -274,8 +274,8 @@ class Menu(BaseModel):
     url_path = models.CharField(max_length=255)
     status = models.BooleanField(default=True)
 
-    icon_id = models.ForeignKey('app.Icon', on_delete=models.CASCADE, null=True, blank=True)
-    parent_id = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
+    icon = models.ForeignKey('app.Icon', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     groups = models.ManyToManyField('auth.Group', blank=True)
 
     class Meta:

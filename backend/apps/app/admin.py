@@ -113,7 +113,7 @@ class SubmissionCriterionResultAdmin(admin.ModelAdmin):
 
 @admin.register(Menu)
 class SubmissionReviewAdmin(admin.ModelAdmin):
-    list_display = ("title", "url_path", "status", "icon_id", "parent_id", "show_groups")
+    list_display = ("title", "url_path", "status", "icon", "parent", "show_groups")
     search_fields = ('title',)
 
     def show_groups(self, obj):

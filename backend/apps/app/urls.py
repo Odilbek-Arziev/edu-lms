@@ -7,6 +7,7 @@ from .views.enrollment import EnrollmentViewSet
 from .views.homework import HomeworkViewSet
 from .views.homework_criterion import HomeworkCriterionViewSet
 from .views.homework_submission import HomeworkSubmissionViewSet
+from .views.icon import IconViewSet
 from .views.lesson import LessonViewSet
 from .views.live_session import LiveSessionViewSet
 from .views.material import MaterialViewSet
@@ -32,6 +33,7 @@ router.register(r"submission_criterion_results", SubmissionCriterionViewSet, bas
 router.register(r"submission_reviews", SubmissionReviewViewSet, basename='submission_review')
 router.register(r"menu", MenuViewSet, basename='menu')
 router.register(r"roles", RoleViewSet, basename='roles')
+router.register(r"icons", IconViewSet, basename='icons')
 
 urlpatterns = [
     path("", include(router.urls)),

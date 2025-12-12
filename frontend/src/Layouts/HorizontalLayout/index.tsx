@@ -134,7 +134,10 @@ const HorizontalLayout = (props: any) => {
                                                                 <Col lg={4}>
                                                                     <ul className="nav nav-sm flex-column">
                                                                         <li className="nav-item">
-                                                                            <Link to={item.subItems[key].link} className="nav-link">{item.subItems[key].label}</Link>
+                                                                            <Link to={item.subItems[key].link} className="nav-link">
+                                                                                {item.subItems[key].icon && <span className="me-2">{item.subItems[key].icon}</span>}
+                                                                                {item.subItems[key].label}
+                                                                            </Link>
                                                                         </li>
                                                                     </ul>
                                                                 </Col>
@@ -142,7 +145,10 @@ const HorizontalLayout = (props: any) => {
                                                                 <Col lg={4}>
                                                                     <ul className="nav nav-sm flex-column">
                                                                         <li className="nav-item">
-                                                                            <Link to={item.subItems[key].link} className="nav-link">{item.subItems[key].label}</Link>
+                                                                            <Link to={item.subItems[key].link} className="nav-link">
+                                                                                {item.subItems[key].icon && <span className="me-2">{item.subItems[key].icon}</span>}
+                                                                                {item.subItems[key].label}
+                                                                            </Link>
                                                                         </li>
                                                                     </ul>
                                                                 </Col>
@@ -163,6 +169,7 @@ const HorizontalLayout = (props: any) => {
                                                                     to={subItem.link ? subItem.link : "/#"}
                                                                     className="nav-link"
                                                                 >
+                                                                    {subItem.icon && <span className="me-2">{subItem.icon}</span>}
                                                                     {props.t(subItem.label)}
                                                                 </Link>
                                                             </li>
@@ -173,7 +180,9 @@ const HorizontalLayout = (props: any) => {
                                                                     className="nav-link"
                                                                     to="/#"
                                                                     data-bs-toggle="collapse"
-                                                                > {props.t(subItem.label)}
+                                                                >
+                                                                    {subItem.icon && <span className="me-2">{subItem.icon}</span>}
+                                                                    {props.t(subItem.label)}
                                                                 </Link>
                                                                 <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id="sidebarEcommerce">
                                                                     <ul className="nav nav-sm flex-column">
@@ -187,6 +196,7 @@ const HorizontalLayout = (props: any) => {
                                                                                                 to={subChildItem.link ? subChildItem.link : "/#"}
                                                                                                 className="nav-link"
                                                                                             >
+                                                                                                {subChildItem.icon && <span className="me-2">{subChildItem.icon}</span>}
                                                                                                 {props.t(subChildItem.label)}
                                                                                             </Link>
                                                                                         </li>
@@ -197,7 +207,9 @@ const HorizontalLayout = (props: any) => {
                                                                                                 className="nav-link"
                                                                                                 to="/#"
                                                                                                 data-bs-toggle="collapse"
-                                                                                            > {props.t(subChildItem.label)}
+                                                                                            >
+                                                                                                {subChildItem.icon && <span className="me-2">{subChildItem.icon}</span>}
+                                                                                                {props.t(subChildItem.label)}
                                                                                             </Link>
                                                                                             <Collapse className="menu-dropdown" isOpen={subChildItem.stateVariables} id="sidebarEcommerce">
                                                                                                 <ul className="nav nav-sm flex-column">
@@ -208,6 +220,7 @@ const HorizontalLayout = (props: any) => {
                                                                                                                 <Link
                                                                                                                     to={subSubChildItem.link ? subSubChildItem.link : "/#"}
                                                                                                                     className="nav-link">
+                                                                                                                    {subSubChildItem.icon && <span className="me-2">{subSubChildItem.icon}</span>}
                                                                                                                     {props.t(subSubChildItem.label)}
                                                                                                                 </Link>
                                                                                                             </li>

@@ -1,33 +1,30 @@
 import React, {useEffect} from "react";
 import {Button, Container, Table} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
+import {useModal} from "../../Components/Hooks/useModal";
+import MenuCreate from "../../Components/Custom/MenuCreate";
+import {flattenMenu} from "../../utils/flatten";
+import {fetchIcons} from "../../slices/icons/thunk";
+import {fetchRoles} from "../../slices/roles/thunk";
 
 
 const Menu = () => {
     const menu = useSelector((state: any) => state.Menu.items);
+    const dispatch = useDispatch<any>();
 
-    const flattenMenu = (items: any[], parent: string | null = null): any[] => {
-        let result: any[] = [];
-
-        items.forEach((item) => {
-            result.push({
-                title: item.title,
-                url_path: item.url_path,
-                status: item.status,
-                parent: parent
-            })
-
-            if (item?.children && item.children?.length > 0) {
-                result = result.concat(flattenMenu(item.children, item.title))
-            }
-        })
-
-        return result
-    }
-
+    const [showCreate, hideCreate] = useModal(
+        <MenuCreate onSuccess={() => {
+            hideCreate()
+        }} onCancel={() => hideCreate()}/>,
+    )
     const tableData = flattenMenu(menu)
+
+    useEffect(() => {
+        dispatch(fetchRoles())
+        dispatch(fetchIcons())
+    }, [dispatch])
 
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
 
@@ -37,7 +34,7 @@ const Menu = () => {
                 <Container fluid>
                     <BreadCrumb title="Menu" pageTitle="Dashboards"/>
                     <div className="d-flex justify-content-end my-2">
-                        <Button className='btn btn-success d-flex gap-1 align-items-center'>
+                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
                             Create
                         </Button>

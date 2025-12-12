@@ -11,6 +11,6 @@ class MenuViewSet(BaseModelViewSet):
 
         return Menu.objects.filter(
             status=True,
-            parent_id=None,
+            parent=None,
             groups__in=user.groups.all()
         ).distinct()
