@@ -10,6 +10,10 @@ const menuSlice = createSlice({
     name: 'menu',
     initialState,
     reducers: {
+        menuRequest(state) {
+            state.loading = true;
+            state.error = "";
+        },
         menuSuccess(state, action) {
             state.items = action.payload;
             state.loading = false;
@@ -22,6 +26,6 @@ const menuSlice = createSlice({
     }
 })
 
-export const {menuSuccess, menuError} = menuSlice.actions
+export const { menuRequest, menuSuccess, menuError } = menuSlice.actions
 
 export default menuSlice.reducer

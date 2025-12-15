@@ -1,10 +1,12 @@
-import {menuSuccess, menuError} from './reducer'
+import {menuSuccess, menuError, menuRequest} from './reducer'
 import {APIClient} from "../../helpers/api_helper";
 
 const URL = '/menu/'
 
 export const fetchMenu = () => async (dispatch: any) => {
     const api = new APIClient();
+
+    dispatch(menuRequest());
 
     try {
         const response = await api.get(URL)
@@ -23,6 +25,18 @@ export const createMenu = (data: any) => async (dispatch: any) => {
     try {
         let response;
         response = api.create("/menu/", data);
+        return response
+    } catch (error: any) {
+        dispatch(menuError(error));
+    }
+};
+
+export const deleteMenu = (id: number) => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        let response;
+        response = api.delete(`/menu/${id}/`);
         return response
     } catch (error: any) {
         dispatch(menuError(error));

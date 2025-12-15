@@ -9,6 +9,9 @@ class MenuViewSet(BaseModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
+        if self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            return Menu.objects.all()
+
         return Menu.objects.filter(
             status=True,
             parent=None,

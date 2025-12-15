@@ -9,10 +9,13 @@ import {flattenMenu} from "../../utils/flatten";
 import {fetchIcons} from "../../slices/icons/thunk";
 import {fetchRoles} from "../../slices/roles/thunk";
 import {fetchMenu} from "../../slices/menu/thunk";
+import MenuDelete from "../../Components/Custom/MenuDelete";
 
+
+const Swal = require("sweetalert2");
 
 const Menu = () => {
-    const menu = useSelector((state: any) => state.Menu.items);
+    const {items: menu, loading} = useSelector((state: any) => state.Menu);
     const dispatch = useDispatch<any>();
 
     const [showCreate, hideCreate] = useModal(
@@ -21,12 +24,42 @@ const Menu = () => {
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <MenuDelete
+                {...props}
+                onSuccess={() => {
+                    dispatch(fetchMenu());
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
+
     const tableData = flattenMenu(menu)
 
     useEffect(() => {
         dispatch(fetchRoles())
         dispatch(fetchIcons())
     }, [dispatch])
+
+    useEffect(() => {
+        if (loading) {
+            Swal.fire({
+                title: 'Загрузка меню',
+                text: 'Пожалуйста, подождите...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        } else {
+            Swal.close();
+        }
+    }, [loading]);
 
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
 
@@ -67,7 +100,8 @@ const Menu = () => {
                                     <Button className='btn btn-info btn-sm editBtn'>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
                                     </Button>
-                                    <Button className='btn btn-danger btn-sm editBtn'>
+                                    <Button className='btn btn-danger btn-sm editBtn'
+                                            onClick={() => showDelete({id: row.id})}>
                                         <FeatherIcon color="white" size={12} icon="trash"/>
                                     </Button>
                                 </td>

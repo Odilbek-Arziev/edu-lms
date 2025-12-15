@@ -112,8 +112,8 @@ class SubmissionCriterionResultAdmin(admin.ModelAdmin):
 
 
 @admin.register(Menu)
-class SubmissionReviewAdmin(admin.ModelAdmin):
-    list_display = ("title", "url_path", "status", "icon", "parent", "show_groups")
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "url_path", "status", "icon", "parent", "show_groups")
     search_fields = ('title',)
 
     def show_groups(self, obj):
@@ -123,6 +123,6 @@ class SubmissionReviewAdmin(admin.ModelAdmin):
 
 
 @admin.register(Icon)
-class SubmissionReviewAdmin(admin.ModelAdmin):
+class IconAdmin(admin.ModelAdmin):
     list_display = ("id", "name", 'status')
     search_fields = ('name',)
