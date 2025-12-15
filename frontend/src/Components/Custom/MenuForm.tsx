@@ -28,14 +28,14 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues}: Me
             parent: null,
             url_path: '',
             icon: null,
-            groups: []
+            groups_ids: []
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Please Enter Title"),
-            parent: Yup.number().optional(),
+            parent: Yup.number().nullable(),
             url_path: Yup.string().optional(),
             icon: Yup.string().required("Please select icon"),
-            groups: Yup.array()
+            groups_ids: Yup.array()
                 .of(Yup.number())
                 .min(1, "Please select at least 1 role")
         }),
@@ -86,13 +86,14 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues}: Me
                 <Label htmlFor="parent" className="form-label">Parent</Label>
                 <Select
                     options={parentOptions}
+                    isClearable
                     value={
                         parentOptions.find(
                             (opt: any) => opt.value === validation.values.parent
                         ) || null
                     }
                     onChange={(opt: any) =>
-                        validation.setFieldValue('parent', opt?.value)
+                        validation.setFieldValue('parent', opt?.value ?? null)
                     }
                 />
                 {validation.touched.parent && validation.errors.parent && (
@@ -122,6 +123,7 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues}: Me
                 <Label htmlFor="icon" className="form-label">Icon</Label>
                 <Select
                     options={iconOptions}
+                    isClearable
                     value={
                         iconOptions.find(
                             (opt: any) => opt.value === validation.values.icon
@@ -140,20 +142,21 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues}: Me
                 <Label htmlFor="roles" className="form-label">Roles</Label>
                 <Select
                     isMulti
+                    isClearable
                     options={rolesOptions}
                     value={rolesOptions.filter((opt: any) =>
-                        validation.values.groups.includes(opt.value)
+                        (validation.values.groups_ids || []).includes(opt.value)
                     )}
                     onChange={(selected: any) =>
                         validation.setFieldValue(
-                            'groups',
+                            'groups_ids',
                             selected ? selected.map((opt: any) => opt.value) : []
                         )
                     }
-                    onBlur={() => validation.setFieldTouched('groups', true)}
+                    onBlur={() => validation.setFieldTouched('groups_ids', true)}
                 />
-                {validation.touched.groups && validation.errors.groups && (
-                    <FormFeedback>{validation.errors.groups}</FormFeedback>
+                {validation.touched.groups_ids && validation.errors.groups_ids && (
+                    <FormFeedback>{validation.errors.groups_ids}</FormFeedback>
                 )}
             </div>
             <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>

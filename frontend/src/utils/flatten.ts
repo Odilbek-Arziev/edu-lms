@@ -7,7 +7,8 @@ export const flattenMenu = (items: any[], parent: string | null = null): any[] =
             title: item.title,
             url_path: item.url_path,
             status: item.status,
-            parent: parent
+            parent: parent,
+            roles: item.groups
         })
 
         if (item?.children && item.children?.length > 0) {
