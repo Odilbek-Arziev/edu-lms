@@ -8,8 +8,9 @@ import MenuCreate from "../../Components/Custom/MenuCreate";
 import {flattenMenu} from "../../utils/flatten";
 import {fetchIcons} from "../../slices/icons/thunk";
 import {fetchRoles} from "../../slices/roles/thunk";
-import {fetchMenu} from "../../slices/menu/thunk";
+import {fetchMenu, getMenuItem} from "../../slices/menu/thunk";
 import MenuDelete from "../../Components/Custom/MenuDelete";
+import MenuEdit from "../../Components/Custom/MenuEdit";
 
 
 const Swal = require("sweetalert2");
@@ -17,6 +18,11 @@ const Swal = require("sweetalert2");
 const Menu = () => {
     const {items: menu, loading} = useSelector((state: any) => state.Menu);
     const dispatch = useDispatch<any>();
+
+    type EditModalProps = {
+        id: number;
+        initialValues: any;
+    };
 
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
@@ -38,12 +44,36 @@ const Menu = () => {
         )
     );
 
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <MenuEdit
+                {...props}
+                onSuccess={() => {
+                    dispatch(fetchMenu());
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
     const tableData = flattenMenu(menu)
 
     useEffect(() => {
         dispatch(fetchRoles())
         dispatch(fetchIcons())
     }, [dispatch])
+
+    async function getData(id: number) {
+        const response = await dispatch(getMenuItem(id));
+        if (response) {
+            console.log(response);
+            showEdit({
+                id: id,
+                initialValues: response
+            })
+        }
+    }
 
     useEffect(() => {
         if (loading) {
@@ -97,7 +127,7 @@ const Menu = () => {
                                     : <span className='badge bg-danger'>passive</span>}
                                 </td>
                                 <td className='d-flex gap-1'>
-                                    <Button className='btn btn-info btn-sm editBtn'>
+                                    <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
                                     </Button>
                                     <Button className='btn btn-danger btn-sm editBtn'
