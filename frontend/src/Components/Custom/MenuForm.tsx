@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import {useSelector} from "react-redux";
 import {flattenMenu} from "../../utils/flatten";
 import FeatherIcon from "feather-icons-react";
+import Select from "react-select"
+
 
 interface MenuFormProps {
     onSubmit: (data: any, actions: any) => Promise<void>
@@ -19,16 +21,44 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
 
     const validation: any = useFormik({
         enableReinitialize: true,
-        initialValues: {},
+        initialValues: {
+            title: '',
+            parent: null,
+            urlPath: '',
+            icon: null,
+            roles: []
+        },
         validationSchema: Yup.object({
             title: Yup.string().required("Please Enter Title"),
             parent: Yup.number().optional(),
             urlPath: Yup.string().optional(),
             icon: Yup.string().required("Please select icon"),
-            roles: Yup.number().required("Please select at least 1 role")
+            roles: Yup.array()
+                .of(Yup.number())
+                .min(1, "Please select at least 1 role")
         }),
         onSubmit: onSubmit
     });
+
+    const iconOptions = icons.map((item: any) => ({
+        value: item.name,
+        label: (
+            <div className="d-flex align-items-center gap-2">
+                <FeatherIcon icon={item.name} size={14}/>
+                <span>{item.name}</span>
+            </div>
+        )
+    }))
+
+    const parentOptions = menuItems.map((item: any) => ({
+        value: item.id,
+        label: item.title,
+    }))
+
+    const rolesOptions = roles.map((item: any) => ({
+        value: item.id,
+        label: item.name,
+    }))
 
     return (
         <Form>
@@ -52,19 +82,12 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
 
             <div className="mb-3">
                 <Label htmlFor="parent" className="form-label">Parent</Label>
-                <Input
-                    type="select"
-                    name="parent"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.parent || ""}
-                    invalid={!!(validation.touched.parent && validation.errors.parent)}
-                >
-                    <option value="">Select parent</option>
-                    {menuItems.map((item: any) => (
-                        <option value={item.id}> {item.title}</option>
-                    ))}
-                </Input>
+                <Select
+                    options={parentOptions}
+                    onChange={(opt: any) =>
+                        validation.setFieldValue('parent', opt?.value)
+                    }
+                />
                 {validation.touched.parent && validation.errors.parent && (
                     <FormFeedback>{validation.errors.parent}</FormFeedback>
                 )}
@@ -90,22 +113,12 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
 
             <div className="mb-3">
                 <Label htmlFor="icon" className="form-label">Icon</Label>
-                <Input
-                    type="select"
-                    name="icon"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.icon || ""}
-                    invalid={!!(validation.touched.icon && validation.errors.icon)}
-                >
-                    <option value="">Select icon</option>
-                    {icons.map((item: any) => (
-                        <option value={item.name}>
-                            <FeatherIcon icon={item.name} size={12}/>
-                            {item.name}
-                        </option>
-                    ))}
-                </Input>
+                <Select
+                    options={iconOptions}
+                    onChange={(opt: any) =>
+                        validation.setFieldValue('icon', opt?.value)
+                    }
+                />
                 {validation.touched.icon && validation.errors.icon && (
                     <FormFeedback>{validation.errors.icon}</FormFeedback>
                 )}
@@ -113,20 +126,20 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
 
             <div className="mb-3">
                 <Label htmlFor="roles" className="form-label">Roles</Label>
-                <Input
-                    type="select"
-                    multiple
-                    name="roles"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.roles || ""}
-                    invalid={!!(validation.touched.roles && validation.errors.roles)}
-                >
-                    <option value="">Select role</option>
-                    {roles.map((item: any) => (
-                        <option value={item.id}>{item.name}</option>
-                    ))}
-                </Input>
+                <Select
+                    isMulti
+                    options={rolesOptions}
+                    value={rolesOptions.filter((opt: any) =>
+                        validation.values.roles.includes(opt.value)
+                    )}
+                    onChange={(selected: any) =>
+                        validation.setFieldValue(
+                            'roles',
+                            selected ? selected.map((opt: any) => opt.value) : []
+                        )
+                    }
+                    onBlur={() => validation.setFieldTouched('roles', true)}
+                />
                 {validation.touched.roles && validation.errors.roles && (
                     <FormFeedback>{validation.errors.roles}</FormFeedback>
                 )}
