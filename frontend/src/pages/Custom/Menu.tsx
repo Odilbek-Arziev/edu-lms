@@ -8,6 +8,7 @@ import MenuCreate from "../../Components/Custom/MenuCreate";
 import {flattenMenu} from "../../utils/flatten";
 import {fetchIcons} from "../../slices/icons/thunk";
 import {fetchRoles} from "../../slices/roles/thunk";
+import {fetchMenu} from "../../slices/menu/thunk";
 
 
 const Menu = () => {
@@ -16,6 +17,7 @@ const Menu = () => {
 
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
+            dispatch(fetchMenu())
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )

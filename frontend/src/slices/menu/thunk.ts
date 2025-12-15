@@ -16,3 +16,15 @@ export const fetchMenu = () => async (dispatch: any) => {
         return null;
     }
 }
+
+export const createMenu = (data: any) => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        let response;
+        response = api.create("/menu/", data);
+        return response
+    } catch (error: any) {
+        dispatch(menuError(error));
+    }
+};

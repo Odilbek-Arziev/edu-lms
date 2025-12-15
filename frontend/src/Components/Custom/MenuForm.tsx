@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Form, FormFeedback, Input, Label} from "reactstrap";
+import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useSelector} from "react-redux";
@@ -10,10 +10,11 @@ import Select from "react-select"
 
 interface MenuFormProps {
     onSubmit: (data: any, actions: any) => Promise<void>
-    onCancel: () => void
+    onCancel: () => void,
+    loader: boolean
 }
 
-export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
+export default function MenuForm({onSubmit, onCancel, loader}: MenuFormProps) {
     const menu = useSelector((state: any) => state.Menu.items);
     const roles = useSelector((state: any) => state.Roles.items);
     const icons = useSelector((state: any) => state.Icons.items);
@@ -24,16 +25,16 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
         initialValues: {
             title: '',
             parent: null,
-            urlPath: '',
+            url_path: '',
             icon: null,
-            roles: []
+            groups: []
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Please Enter Title"),
             parent: Yup.number().optional(),
-            urlPath: Yup.string().optional(),
+            url_path: Yup.string().optional(),
             icon: Yup.string().required("Please select icon"),
-            roles: Yup.array()
+            groups: Yup.array()
                 .of(Yup.number())
                 .min(1, "Please select at least 1 role")
         }),
@@ -61,7 +62,7 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
     }))
 
     return (
-        <Form>
+        <Form onSubmit={validation.handleSubmit}>
             <div className="mb-3">
                 <Label htmlFor="title" className="form-label"> Title</Label>
                 <Input
@@ -94,20 +95,20 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="path" className="form-label">Url path</Label>
+                <Label htmlFor="url_path" className="form-label">Url path</Label>
                 <Input
-                    name="path"
+                    name="url_path"
                     className="form-control"
                     placeholder="Enter path"
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={validation.values.urlPath || ""}
-                    invalid={!!(validation.touched.urlPath && validation.errors.urlPath)}
+                    value={validation.values.url_path || ""}
+                    invalid={!!(validation.touched.url_path && validation.errors.url_path)}
                 />
-                {validation.touched.urlPath && validation.errors.urlPath ? (
+                {validation.touched.url_path && validation.errors.url_path ? (
                     <FormFeedback
-                        type="invalid">{validation.errors.urlPath}</FormFeedback>
+                        type="invalid">{validation.errors.url_path}</FormFeedback>
                 ) : null}
             </div>
 
@@ -130,21 +131,26 @@ export default function MenuForm({onSubmit, onCancel}: MenuFormProps) {
                     isMulti
                     options={rolesOptions}
                     value={rolesOptions.filter((opt: any) =>
-                        validation.values.roles.includes(opt.value)
+                        validation.values.groups.includes(opt.value)
                     )}
                     onChange={(selected: any) =>
                         validation.setFieldValue(
-                            'roles',
+                            'groups',
                             selected ? selected.map((opt: any) => opt.value) : []
                         )
                     }
-                    onBlur={() => validation.setFieldTouched('roles', true)}
+                    onBlur={() => validation.setFieldTouched('groups', true)}
                 />
-                {validation.touched.roles && validation.errors.roles && (
-                    <FormFeedback>{validation.errors.roles}</FormFeedback>
+                {validation.touched.groups && validation.errors.groups && (
+                    <FormFeedback>{validation.errors.groups}</FormFeedback>
                 )}
             </div>
-            <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit'>
+            <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>
+                {loader && (
+                    <Spinner size="sm" className="me-2">
+                        Loading...
+                    </Spinner>
+                )}
                 <FeatherIcon icon="plus" size={12}/>
                 Submit
             </Button>
