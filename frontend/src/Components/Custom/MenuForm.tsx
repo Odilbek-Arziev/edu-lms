@@ -11,10 +11,11 @@ import Select from "react-select"
 interface MenuFormProps {
     onSubmit: (data: any, actions: any) => Promise<void>
     onCancel: () => void,
-    loader: boolean
+    loader: boolean,
+    initialValues?: any
 }
 
-export default function MenuForm({onSubmit, onCancel, loader}: MenuFormProps) {
+export default function MenuForm({onSubmit, onCancel, loader, initialValues}: MenuFormProps) {
     const menu = useSelector((state: any) => state.Menu.items);
     const roles = useSelector((state: any) => state.Roles.items);
     const icons = useSelector((state: any) => state.Icons.items);
@@ -22,7 +23,7 @@ export default function MenuForm({onSubmit, onCancel, loader}: MenuFormProps) {
 
     const validation: any = useFormik({
         enableReinitialize: true,
-        initialValues: {
+        initialValues: initialValues ?? {
             title: '',
             parent: null,
             url_path: '',
@@ -85,6 +86,11 @@ export default function MenuForm({onSubmit, onCancel, loader}: MenuFormProps) {
                 <Label htmlFor="parent" className="form-label">Parent</Label>
                 <Select
                     options={parentOptions}
+                    value={
+                        parentOptions.find(
+                            (opt: any) => opt.value === validation.values.parent
+                        ) || null
+                    }
                     onChange={(opt: any) =>
                         validation.setFieldValue('parent', opt?.value)
                     }
@@ -116,8 +122,13 @@ export default function MenuForm({onSubmit, onCancel, loader}: MenuFormProps) {
                 <Label htmlFor="icon" className="form-label">Icon</Label>
                 <Select
                     options={iconOptions}
+                    value={
+                        iconOptions.find(
+                            (opt: any) => opt.value === validation.values.icon
+                        ) || null
+                    }
                     onChange={(opt: any) =>
-                        validation.setFieldValue('icon', opt?.value)
+                        validation.setFieldValue('icon', opt ? opt.value : null)
                     }
                 />
                 {validation.touched.icon && validation.errors.icon && (

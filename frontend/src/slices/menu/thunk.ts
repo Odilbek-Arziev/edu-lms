@@ -42,3 +42,27 @@ export const deleteMenu = (id: number) => async (dispatch: any) => {
         dispatch(menuError(error));
     }
 };
+
+export const getMenuItem = (id: number) => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        let response;
+        response = api.get(`/menu/${id}/`);
+        return response
+    } catch (error: any) {
+        dispatch(menuError(error));
+    }
+};
+
+export const editMenu = (id: number, data: any) => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        let response;
+        response = api.update(`/menu/${id}/`, data);
+        return response
+    } catch (error: any) {
+        dispatch(menuError(error));
+    }
+};
