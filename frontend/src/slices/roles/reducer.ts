@@ -10,6 +10,10 @@ const rolesSlice = createSlice({
     name: 'roles',
     initialState,
     reducers: {
+        rolesRequest(state) {
+            state.loading = true;
+            state.error = "";
+        },
         rolesSuccess(state, action) {
             state.items = action.payload;
             state.loading = false;
@@ -22,6 +26,6 @@ const rolesSlice = createSlice({
     }
 })
 
-export const {rolesSuccess, rolesError} = rolesSlice.actions
+export const {rolesRequest, rolesSuccess, rolesError} = rolesSlice.actions
 
 export default rolesSlice.reducer

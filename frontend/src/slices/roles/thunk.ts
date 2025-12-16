@@ -14,3 +14,15 @@ export const fetchRoles = () => async (dispatch: any) => {
         return null;
     }
 }
+
+export const createRole = (data: any) => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        let response;
+        response = api.create("/roles/", data);
+        return response
+    } catch (error: any) {
+        dispatch(rolesError(error));
+    }
+};

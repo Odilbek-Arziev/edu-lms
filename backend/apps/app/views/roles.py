@@ -4,5 +4,13 @@ from app.serializers.roles import RoleSerializer
 
 
 class RoleViewSet(BaseModelViewSet):
-    queryset = Group.objects.all()
     serializer_class = RoleSerializer
+
+    def get_queryset(self):
+        qs = Group.objects.all()
+
+        search = self.request.query_params.get('search')
+        if search:
+            qs = qs.filter(name__icontains=search)
+
+        return qs
