@@ -2,13 +2,19 @@ import React, {useEffect, useState} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchRoles} from "../../slices/roles/thunk";
+import {fetchRoles, getRoleItem} from "../../slices/roles/thunk";
 import FeatherIcon from "feather-icons-react";
 import {useModal} from "../../Components/Hooks/useModal";
-import MenuCreate from "../../Components/Custom/Menu/MenuCreate";
-import {fetchMenu} from "../../slices/menu/thunk";
+import {fetchMenu, getMenuItem} from "../../slices/menu/thunk";
 import RoleCreate from "../../Components/Custom/Roles/RoleCreate";
+import RoleDelete from "../../Components/Custom/Roles/RoleDelete";
+import MenuEdit from "../../Components/Custom/Menu/MenuEdit";
+import RoleEdit from "../../Components/Custom/Roles/RoleEdit";
 
+type EditModalProps = {
+    id: number;
+    initialValues: any;
+};
 
 const Home = () => {
     const [search, setSearch] = useState<string>('');
@@ -22,6 +28,44 @@ const Home = () => {
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <RoleDelete
+                {...props}
+                onSuccess={() => {
+                    dispatch(fetchRoles());
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
+
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <RoleEdit
+                {...props}
+                onSuccess={() => {
+                    dispatch(fetchRoles());
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    async function getData(id: number) {
+        const response = await dispatch(getRoleItem(id));
+        if (response) {
+            showEdit({
+                id: id,
+                initialValues: {
+                    name: response.name
+                }
+            });
+        }
+    }
 
     useEffect(() => {
         dispatch(fetchRoles())
@@ -69,10 +113,11 @@ const Home = () => {
                                 <td>{idx + 1}</td>
                                 <td>{row.name}</td>
                                 <td className='d-flex gap-1'>
-                                    <Button className='btn btn-info btn-sm editBtn'>
+                                    <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
                                     </Button>
-                                    <Button className='btn btn-danger btn-sm editBtn'>
+                                    <Button className='btn btn-danger btn-sm editBtn'
+                                            onClick={() => showDelete({id: row.id})}>
                                         <FeatherIcon color="white" size={12} icon="trash"/>
                                     </Button>
                                     <Button
