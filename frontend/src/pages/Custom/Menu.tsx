@@ -1,29 +1,33 @@
 import React, {useEffect} from "react";
-import {Button, Container, Table} from "reactstrap";
+import {Button, Container, Input, Table} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 import {useModal} from "../../Components/Hooks/useModal";
-import MenuCreate from "../../Components/Custom/MenuCreate";
+import MenuCreate from "../../Components/Custom/Menu/MenuCreate";
 import {flattenMenu} from "../../utils/flatten";
 import {fetchIcons} from "../../slices/icons/thunk";
 import {fetchRoles} from "../../slices/roles/thunk";
 import {fetchMenu, getMenuItem} from "../../slices/menu/thunk";
-import MenuDelete from "../../Components/Custom/MenuDelete";
-import MenuEdit from "../../Components/Custom/MenuEdit";
+import MenuDelete from "../../Components/Custom/Menu/MenuDelete";
+import MenuEdit from "../../Components/Custom/Menu/MenuEdit";
 import {roleTypeColors} from "../../utils/rolesMap";
-
+import Select from "react-select";
 
 const Swal = require("sweetalert2");
+type EditModalProps = {
+    id: number;
+    initialValues: any;
+};
 
 const Menu = () => {
     const {items: menu, loading} = useSelector((state: any) => state.Menu);
+    const roles = useSelector((state: any) => state.Roles.items);
+    const rolesOptions = roles.map((item: any) => ({
+        value: item.id,
+        label: item.name,
+    }))
     const dispatch = useDispatch<any>();
-
-    type EditModalProps = {
-        id: number;
-        initialValues: any;
-    };
 
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
@@ -60,11 +64,6 @@ const Menu = () => {
 
     const tableData = flattenMenu(menu)
 
-    useEffect(() => {
-        dispatch(fetchRoles())
-        dispatch(fetchIcons())
-    }, [dispatch])
-
     async function getData(id: number) {
         const response = await dispatch(getMenuItem(id));
         if (response) {
@@ -77,6 +76,11 @@ const Menu = () => {
             });
         }
     }
+
+    useEffect(() => {
+        dispatch(fetchRoles())
+        dispatch(fetchIcons())
+    }, [dispatch])
 
     useEffect(() => {
         if (loading) {
@@ -101,7 +105,22 @@ const Menu = () => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title="Menu" pageTitle="Dashboards"/>
-                    <div className="d-flex justify-content-end my-2">
+                    <div className="d-flex justify-content-between my-2">
+                        <div className='d-flex gap-1'>
+                            <div className="search-box">
+                                    <input type="text" className="form-control" placeholder="Search..." />
+                                    <i className="ri-search-line search-icon"/>
+                                </div>
+                            <Select
+                                styles={{container: (provided: any) => ({...provided, width: '20vw'})}}
+                                isClearable
+                                options={rolesOptions}
+                            />
+                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'>
+                                <FeatherIcon color="white" size={12} icon="trash"/>
+                                Clear
+                            </Button>
+                        </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
                             Create

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import MenuForm from "./MenuForm";
 import {useDispatch} from "react-redux";
-import {editMenu} from "../../slices/menu/thunk";
+import {editMenu} from "../../../slices/menu/thunk";
 
 interface MenuEditProps {
     onCancel: () => void;

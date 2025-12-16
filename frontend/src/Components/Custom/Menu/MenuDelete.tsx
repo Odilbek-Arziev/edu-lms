@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
-import {deleteMenu} from "../../slices/menu/thunk";
 import {Spinner} from "reactstrap";
+import {deleteMenu} from "../../../slices/menu/thunk";
 
 interface MenuDeleteProps {
     onCancel: () => void;

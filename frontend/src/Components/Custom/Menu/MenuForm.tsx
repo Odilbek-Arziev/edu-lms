@@ -3,9 +3,9 @@ import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useSelector} from "react-redux";
-import {flattenMenu} from "../../utils/flatten";
 import FeatherIcon from "feather-icons-react";
 import Select from "react-select"
+import {flattenMenu} from "../../../utils/flatten";
 
 
 interface MenuFormProps {

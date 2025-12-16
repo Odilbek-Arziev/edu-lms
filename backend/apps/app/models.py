@@ -14,6 +14,7 @@ from app.querysets.homework_submission import HomeworkSubmissionQuerySet
 from app.querysets.homework_criterion import HomeworkCriterionQuerySet
 from app.querysets.submission_criterion import SubmissionCriterionResultQuerySet
 from app.querysets.submission_review import SubmissionReviewQueryset
+from app.querysets.menu import MenuQuerySet
 
 LEVEL_CHOICES = [
     ('beginner', 'Beginner'),
@@ -273,6 +274,7 @@ class Menu(BaseModel):
     title = models.CharField(max_length=255)
     url_path = models.CharField(max_length=255)
     status = models.BooleanField(default=True)
+    objects = MenuQuerySet.as_manager()
 
     icon = models.ForeignKey('app.Icon', on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
