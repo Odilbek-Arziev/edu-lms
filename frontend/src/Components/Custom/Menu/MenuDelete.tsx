@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
 import {deleteMenu} from "../../../slices/menu/thunk";
+import {useApiHandler} from "../../../hooks/useApiHandler";
 
 interface MenuDeleteProps {
     onCancel: () => void;
@@ -9,48 +10,17 @@ interface MenuDeleteProps {
     id: number;
 }
 
-const Swal = require("sweetalert2");
 
 export default function MenuDelete({onCancel, onSuccess, id}: MenuDeleteProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
+    const {handleRequest} = useApiHandler(setLoader);
 
     async function onDelete() {
-        try {
-            setLoader(true);
-            const result: any = await dispatch(deleteMenu(id));
-
-            if (result?.non_field_errors) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: result.non_field_errors[0],
-                    icon: "error",
-                });
-                return;
-            }
-
-            onSuccess()
-        } catch (e: any) {
-            const result = e.response.data
-
-            const fieldErrors = Object.keys(result || {}).map(key => {
-                if (Array.isArray(result[key])) {
-                    return `${key}: ${result[key].join(", ")}`;
-                }
-                return null;
-            }).filter(Boolean);
-
-            if (fieldErrors.length > 0) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: fieldErrors.join("\n"),
-                    icon: "error",
-                });
-                return;
-            }
-        } finally {
-            setLoader(false);
-        }
+        await handleRequest(
+            () => dispatch(deleteMenu(id)),
+            {onSuccess}
+        )
     }
 
     return (
