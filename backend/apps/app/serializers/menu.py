@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Group
 from app.models import Menu, Icon
-
-from app.serializers.roles import RoleSerializer
+from app.serializers.roles import RoleListSerializer
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -16,7 +15,7 @@ class MenuSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True
     )
-    groups = RoleSerializer(many=True, read_only=True)
+    groups = RoleListSerializer(many=True, read_only=True)
     groups_ids = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(),
         many=True,

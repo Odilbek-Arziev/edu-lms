@@ -1,14 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchRoles, getRoleItem} from "../../slices/roles/thunk";
 import FeatherIcon from "feather-icons-react";
 import {useModal} from "../../Components/Hooks/useModal";
-import {fetchMenu, getMenuItem} from "../../slices/menu/thunk";
 import RoleCreate from "../../Components/Custom/Roles/RoleCreate";
 import RoleDelete from "../../Components/Custom/Roles/RoleDelete";
-import MenuEdit from "../../Components/Custom/Menu/MenuEdit";
 import RoleEdit from "../../Components/Custom/Roles/RoleEdit";
 
 type EditModalProps = {
@@ -55,6 +53,19 @@ const Home = () => {
         )
     );
 
+    const tableData = useMemo(() => {
+        let roleItems = roles;
+
+        if (search) {
+            const searchLower = search.toLowerCase();
+            roleItems = roleItems.filter((item: any) =>
+                item.name?.toLowerCase().includes(searchLower)
+            );
+        }
+        return roleItems;
+
+    }, [search, roles]);
+
     async function getData(id: number) {
         const response = await dispatch(getRoleItem(id));
         if (response) {
@@ -89,7 +100,8 @@ const Home = () => {
                                 />
                                 <i className="ri-search-line search-icon"/>
                             </div>
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'>
+                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'
+                                    onClick={() => setSearch('')}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
                                 Clear
                             </Button>
@@ -108,7 +120,7 @@ const Home = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {roles ? roles.map((row: any, idx: number) => (
+                        {tableData ? tableData.map((row: any, idx: number) => (
                             <tr>
                                 <td>{idx + 1}</td>
                                 <td>{row.name}</td>
