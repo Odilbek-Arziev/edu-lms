@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState, useMemo} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
@@ -15,12 +15,16 @@ import {roleTypeColors} from "../../utils/rolesMap";
 import Select from "react-select";
 
 const Swal = require("sweetalert2");
+
 type EditModalProps = {
     id: number;
     initialValues: any;
 };
 
 const Menu = () => {
+    const [search, setSearch] = useState<string>('');
+    const [role, setRole] = useState<any>(null);
+
     const {items: menu, loading} = useSelector((state: any) => state.Menu);
     const roles = useSelector((state: any) => state.Roles.items);
     const rolesOptions = roles.map((item: any) => ({
@@ -62,7 +66,28 @@ const Menu = () => {
         )
     );
 
-    const tableData = flattenMenu(menu)
+    const tableData = useMemo(() => {
+        if (!menu) return [];
+
+        let flattened = flattenMenu(menu);
+
+        if (search) {
+            const searchLower = search.toLowerCase();
+            flattened = flattened.filter((item: any) =>
+                item.title?.toLowerCase().includes(searchLower) ||
+                item.url_path?.toLowerCase().includes(searchLower)
+            );
+        }
+
+        if (role) {
+            flattened = flattened.filter((item: any) => {
+                return item.roles?.some((r: any) => r.id === role);
+            });
+        }
+
+        return flattened;
+
+    }, [menu, search, role]);
 
     async function getData(id: number) {
         const response = await dispatch(getMenuItem(id));
@@ -77,7 +102,13 @@ const Menu = () => {
         }
     }
 
+    function clearFilter() {
+        setRole(null)
+        setSearch('')
+    }
+
     useEffect(() => {
+        dispatch(fetchMenu());
         dispatch(fetchRoles())
         dispatch(fetchIcons())
     }, [dispatch])
@@ -108,15 +139,28 @@ const Menu = () => {
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
                             <div className="search-box">
-                                    <input type="text" className="form-control" placeholder="Search..." />
-                                    <i className="ri-search-line search-icon"/>
-                                </div>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                                <i className="ri-search-line search-icon"/>
+                            </div>
                             <Select
-                                styles={{container: (provided: any) => ({...provided, width: '20vw'})}}
-                                isClearable
+                                value={rolesOptions.find((option: any) => option.value === role) || null}
                                 options={rolesOptions}
+                                isClearable
+                                placeholder="Select role..."
+                                styles={{
+                                    container: (provided: any) => ({...provided, width: '20vw'})
+                                }}
+                                onChange={(selectedOption: any) => {
+                                    setRole(selectedOption?.value || null);
+                                }}
                             />
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'>
+                            <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
                                 Clear
                             </Button>
@@ -139,8 +183,8 @@ const Menu = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {tableData ? tableData.map((row, idx) => (
-                            <tr key={idx}>
+                        {tableData && tableData.length > 0 ? tableData.map((row, idx) => (
+                            <tr key={row.id || idx}>
                                 <td>{idx + 1}</td>
                                 <td>{row.title}</td>
                                 <td>{row.parent ?? '-'}</td>
@@ -150,14 +194,14 @@ const Menu = () => {
                                     : <span className='badge bg-danger'>passive</span>}
                                 </td>
                                 <td>
-                                    {row.roles.map((item: any) => (
+                                    {row.roles && row.roles.length > 0 ? row.roles.map((item: any) => (
                                         <span
                                             key={item.id}
                                             className={`badge ${roleTypeColors[item.name] ?? 'bg-secondary'} me-1`}
                                         >
                                             {item.name}
                                         </span>
-                                    ))}
+                                    )) : '-'}
                                 </td>
                                 <td className='d-flex gap-1'>
                                     <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
@@ -169,7 +213,11 @@ const Menu = () => {
                                     </Button>
                                 </td>
                             </tr>
-                        )) : null}
+                        )) : (
+                            <tr>
+                                <td colSpan={7} className="text-center">No data found</td>
+                            </tr>
+                        )}
                         </tbody>
                     </Table>
                 </Container>
