@@ -1,40 +1,33 @@
 import PropTypes from "prop-types";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form} from "reactstrap";
 
-//redux
 import {useSelector, useDispatch} from "react-redux";
 
 import {Link} from "react-router-dom";
 import withRouter from "../../Components/Common/withRouter";
 
-// Formik Validation
 import * as Yup from "yup";
 import {useFormik} from "formik";
 
-// action
 import {userForgetPassword} from "../../slices/thunks";
 
-// import images
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {createSelector} from "reselect";
 import {resetForgetPassword} from "../../slices/auth/forgetpwd/reducer";
 import ReCAPTCHA from "react-google-recaptcha";
-import {emailLinkLogin} from "../../slices/auth/email_login/thunk";
+import {useRecaptchaSubmit} from "../../hooks/useRecaptchaSubmit";
 
-
-const Swal = require("sweetalert2");
 
 const ForgetPasswordPage = (props: any) => {
-    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch<any>();
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
-
-    const onCaptchaChange = (token: string | null) => {
-        setCaptchaToken(token)
-    }
-
+    const {handleSubmit, isLoading, recaptchaRef} = useRecaptchaSubmit({
+        onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
+        onSuccess: () => validation.resetForm(),
+        loadingTitle: "Отправка письма...",
+        loadingText: "Пожалуйста, подождите"
+    });
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -45,24 +38,7 @@ const ForgetPasswordPage = (props: any) => {
                 .email("Введите корректный email")
                 .required("Пожалуйста, введите ваш email"),
         }),
-        onSubmit: async (values) => {
-            if (!captchaToken) {
-                Swal.fire('Ошибка', 'Подтвердите, что вы не робот', 'error');
-                return;
-            }
-
-            setIsLoading(true);
-
-            try {
-                const payload = {
-                    ...values,
-                    captcha: captchaToken,
-                };
-                await dispatch(userForgetPassword(payload, props.history));
-            } finally {
-                setIsLoading(false);
-            }
-        },
+        onSubmit: handleSubmit
     });
 
     const selectLayoutProperties = createSelector(
@@ -75,31 +51,11 @@ const ForgetPasswordPage = (props: any) => {
 
     const {forgetError, forgetSuccessMsg} = useSelector(selectLayoutProperties);
 
-    // Очищаем состояние при размонтировании компонента
     useEffect(() => {
         return () => {
             dispatch(resetForgetPassword());
         };
     }, [dispatch]);
-
-    useEffect(() => {
-        if (isLoading) {
-            Swal.fire({
-                title: "Отправка письма...",
-                text: "Пожалуйста, подождите",
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-        } else {
-            Swal.close();
-            // Сбрасываем форму только при успешной отправке
-            if (forgetSuccessMsg) {
-                validation.resetForm();
-            }
-        }
-    }, [isLoading, forgetSuccessMsg]);
 
     document.title = "Сброс пароля | Velzon";
 
@@ -187,8 +143,9 @@ const ForgetPasswordPage = (props: any) => {
                                             </div>
                                             <div className="mt-4 d-flex justify-content-center">
                                                 <ReCAPTCHA
+                                                    ref={recaptchaRef}
                                                     sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
-                                                    onChange={onCaptchaChange}
+                                                    size="invisible"
                                                 />
                                             </div>
                                         </Form>

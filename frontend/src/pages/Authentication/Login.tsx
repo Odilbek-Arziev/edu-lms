@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
     Card,
     CardBody,
@@ -24,22 +24,19 @@ import * as Yup from "yup";
 import {useFormik} from "formik";
 
 // actions
-import {loginUser, socialLogin, resetLoginFlag} from "../../slices/thunks";
+import {loginUser, resetLoginFlag} from "../../slices/thunks";
 
 import logoLight from "../../assets/images/logo-light.png";
 import {createSelector} from 'reselect';
 import {HOST_API_URL} from "../../helpers/url_helper";
 import {setLoggedinUser} from "../../helpers/api_helper";
 import ReCAPTCHA from "react-google-recaptcha";
+import {useRecaptcha} from "../../hooks/useRecaptcha";
 
 const Swal = require("sweetalert2");
 
-const Login = (props: any) => {
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
-
-    const onCaptchaChange = (token: string | null) => {
-        setCaptchaToken(token)
-    }
+const Login = () => {
+    const {recaptchaRef, executeRecaptcha} = useRecaptcha();
 
     const navigate = useNavigate()
     const dispatch = useDispatch<any>();
@@ -110,15 +107,14 @@ const Login = (props: any) => {
             login: Yup.string().required("Please Enter Your Email or Username"),
             password: Yup.string().required("Please Enter Your Password"),
         }),
-        onSubmit: (values) => {
-            if (!captchaToken) {
-                Swal.fire('Ошибка', 'Подтвердите, что вы не робот', 'error');
-                return;
-            }
+        onSubmit: async (values) => {
+            const token = await executeRecaptcha();
+
+            if (!token) return;
 
             const payload = {
                 ...values,
-                captcha: captchaToken,
+                captcha: token,
             };
 
             login(payload);
@@ -279,8 +275,9 @@ const Login = (props: any) => {
                                                 </div>
                                                 <div className="mt-4 d-flex justify-content-center">
                                                     <ReCAPTCHA
+                                                        ref={recaptchaRef}
                                                         sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
-                                                        onChange={onCaptchaChange}
+                                                        size="invisible"
                                                     />
                                                 </div>
                                                 <div className="mt-4 text-center">

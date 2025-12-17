@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import {Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form} from "reactstrap";
 import {useSelector, useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
@@ -12,17 +12,18 @@ import {createSelector} from "reselect";
 import {emailLinkLogin} from "../../slices/auth/email_login/thunk";
 import {resetEmailLogin} from "../../slices/auth/email_login/reducer";
 import ReCAPTCHA from "react-google-recaptcha";
+import {useRecaptchaSubmit} from "../../hooks/useRecaptchaSubmit";
 
-const Swal = require("sweetalert2");
 
 const EmailLinkLoginPage = (props: any) => {
-    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch<any>();
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
-    const onCaptchaChange = (token: string | null) => {
-        setCaptchaToken(token)
-    }
+    const {handleSubmit, isLoading, recaptchaRef} = useRecaptchaSubmit({
+        onSubmit: (payload) => dispatch(emailLinkLogin(payload, props.history)),
+        onSuccess: () => validation.resetForm(),
+        loadingTitle: "Отправка письма...",
+        loadingText: "Пожалуйста, подождите"
+    });
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -32,24 +33,7 @@ const EmailLinkLoginPage = (props: any) => {
                 .email("Введите корректный email")
                 .required("Пожалуйста, введите ваш email"),
         }),
-        onSubmit: async (values) => {
-            if (!captchaToken) {
-                Swal.fire('Ошибка', 'Подтвердите, что вы не робот', 'error');
-                return;
-            }
-
-            setIsLoading(true);
-
-            try {
-                const payload = {
-                    ...values,
-                    captcha: captchaToken,
-                };
-                await dispatch(emailLinkLogin(payload, props.history));
-            } finally {
-                setIsLoading(false);
-            }
-        },
+        onSubmit: handleSubmit
     });
 
     const selectEmailLoginState = createSelector(
@@ -62,31 +46,11 @@ const EmailLinkLoginPage = (props: any) => {
 
     const {loginError, loginSuccessMsg} = useSelector(selectEmailLoginState);
 
-    // Очищаем состояние при размонтировании компонента
     useEffect(() => {
         return () => {
             dispatch(resetEmailLogin());
         };
     }, [dispatch]);
-
-    useEffect(() => {
-        if (isLoading) {
-            Swal.fire({
-                title: "Отправка письма...",
-                text: "Пожалуйста, подождите",
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-        } else {
-            Swal.close();
-            // Сбрасываем форму только при успешной отправке
-            if (loginSuccessMsg) {
-                validation.resetForm();
-            }
-        }
-    }, [isLoading, loginSuccessMsg]);
 
     document.title = "Вход через Email | Velzon";
 
@@ -172,8 +136,9 @@ const EmailLinkLoginPage = (props: any) => {
                                             </div>
                                             <div className="mt-4 d-flex justify-content-center">
                                                 <ReCAPTCHA
+                                                    ref={recaptchaRef}
                                                     sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
-                                                    onChange={onCaptchaChange}
+                                                    size="invisible"
                                                 />
                                             </div>
                                         </Form>
