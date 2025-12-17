@@ -12,10 +12,11 @@ interface MenuFormProps {
     onSubmit: (data: any, actions: any) => Promise<void>
     onCancel: () => void,
     loader: boolean,
-    initialValues?: any
+    initialValues?: any,
+    title: string
 }
 
-export default function MenuForm({onSubmit, onCancel, loader, initialValues}: MenuFormProps) {
+export default function MenuForm({onSubmit, onCancel, loader, initialValues, title}: MenuFormProps) {
     const menu = useSelector((state: any) => state.Menu.items);
     const roles = useSelector((state: any) => state.Roles.items);
     const icons = useSelector((state: any) => state.Icons.items);
@@ -64,6 +65,7 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues}: Me
 
     return (
         <Form onSubmit={validation.handleSubmit}>
+            <p className="fw-bold fs-5">{title}</p>
             <div className="mb-3">
                 <Label htmlFor="title" className="form-label"> Title</Label>
                 <Input

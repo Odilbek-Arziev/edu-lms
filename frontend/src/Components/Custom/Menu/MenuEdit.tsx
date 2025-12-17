@@ -28,14 +28,12 @@ export default function MenuEdit({onCancel, onSuccess, id, initialValues}: MenuE
     }
 
     return (
-        <div>
-            <b>Отредактировать меню</b><br/><br/>
-
-            <MenuForm
-                initialValues={initialValues}
-                loader={loader}
-                onSubmit={onSubmit}
-                onCancel={onCancel}/>
-        </div>
+        <MenuForm
+            initialValues={initialValues}
+            loader={loader}
+            onSubmit={onSubmit}
+            onCancel={onCancel}
+            title='Отредактировать меню'
+        />
     )
 }

@@ -242,8 +242,9 @@ import SocialCallback from "../Components/Custom/SocialCallback";
 import EmailLinkLoginPage from "../pages/Authentication/EmailLinkLogin";
 import MagicLoginPage from "../pages/Authentication/MagicLoginPage";
 import ResetPasswordPage from "../pages/Authentication/ResetPassword";
-import Roles from "../pages/Custom/Roles";
-import Menu from "../pages/Custom/Menu";
+import Roles from "../pages/Custom/Roles/Roles";
+import Menu from "../pages/Custom/Menu/Menu";
+import RolePermissions from "../pages/Custom/Roles/RolePermissions";
 
 
 const authProtectedRoutes = [
@@ -252,6 +253,7 @@ const authProtectedRoutes = [
     {path: "/dashboard", element: <DashboardEcommerce/>},
     {path: "/menu", element: <Menu/>},
     {path: "/roles", element: <Roles/>},
+    {path: "/role-permissions/:id", element: <RolePermissions/>},
     {path: "/index", element: <DashboardEcommerce/>},
     {path: "/dashboard-crypto", element: <DashboardCrypto/>},
     {path: "/dashboard-projects", element: <DashboardProject/>},
@@ -438,7 +440,7 @@ const authProtectedRoutes = [
     {
         path: "/",
         exact: true,
-        element: <Navigate to="/home"/>,
+        element: <Navigate to="/dashboard"/>,
     },
     {path: "*", element: <Navigate to="/dashboard"/>},
     //Job pages

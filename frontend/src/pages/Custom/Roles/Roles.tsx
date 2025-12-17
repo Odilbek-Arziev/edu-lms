@@ -1,24 +1,27 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
-import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchRoles, getRoleItem} from "../../slices/roles/thunk";
 import FeatherIcon from "feather-icons-react";
-import {useModal} from "../../Components/Hooks/useModal";
-import RoleCreate from "../../Components/Custom/Roles/RoleCreate";
-import RoleDelete from "../../Components/Custom/Roles/RoleDelete";
-import RoleEdit from "../../Components/Custom/Roles/RoleEdit";
+import {useModal} from "../../../Components/Hooks/useModal";
+import RoleCreate from "../../../Components/Custom/Roles/RoleCreate";
+import {fetchRoles, getRoleItem} from "../../../slices/roles/thunk";
+import RoleDelete from "../../../Components/Custom/Roles/RoleDelete";
+import RoleEdit from "../../../Components/Custom/Roles/RoleEdit";
+import BreadCrumb from "../../../Components/Common/BreadCrumb";
+import {Link} from "react-router-dom";
 
 type EditModalProps = {
     id: number;
     initialValues: any;
 };
 
+const Swal = require("sweetalert2");
+
 const Home = () => {
     const [search, setSearch] = useState<string>('');
     const dispatch = useDispatch<any>();
 
-    const roles = useSelector((state: any) => state.Roles.items);
+    const {items: roles, loading} = useSelector((state: any) => state.Roles);
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {
@@ -82,6 +85,22 @@ const Home = () => {
         dispatch(fetchRoles())
     }, [])
 
+    useEffect(() => {
+        if (loading) {
+            Swal.fire({
+                title: 'Загрузка меню',
+                text: 'Пожалуйста, подождите...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        } else {
+            Swal.close();
+        }
+    }, [loading]);
+
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
     return (
         <React.Fragment>
@@ -132,11 +151,12 @@ const Home = () => {
                                             onClick={() => showDelete({id: row.id})}>
                                         <FeatherIcon color="white" size={12} icon="trash"/>
                                     </Button>
-                                    <Button
-                                        className='btn btn-success btn-sm permissionsBtn d-flex gap-1 align-items-center'>
+                                    <Link
+                                        className='btn btn-success btn-sm permissionsBtn d-flex gap-1 align-items-center'
+                                        to={`/role-permissions/${row.id}`}>
                                         <FeatherIcon color="white" size={12} icon="list"/>
                                         Permissions
-                                    </Button>
+                                    </Link>
                                 </td>
                             </tr>
                         )) : null}

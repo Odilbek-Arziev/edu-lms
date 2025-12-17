@@ -26,11 +26,9 @@ export default function RoleDelete({onCancel, onSuccess, id}: RoleDeleteProps) {
         <div>
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
-                <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                    <p className="text-muted mx-4 mb-0">
-                        Вы уверены что хотите удалить эту роль?
-                    </p>
-                </div>
+                <p className="fw-bold fs-5">
+                    Вы уверены что хотите удалить эту роль?
+                </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
                 <button

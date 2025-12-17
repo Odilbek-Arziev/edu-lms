@@ -9,10 +9,11 @@ interface RoleFormProps {
     onSubmit: (data: any, actions: any) => Promise<void>
     onCancel: () => void,
     loader: boolean,
-    initialValues?: any
+    initialValues?: any,
+    title: string
 }
 
-export default function RoleForm({onSubmit, onCancel, loader, initialValues}: RoleFormProps) {
+export default function RoleForm({onSubmit, onCancel, loader, initialValues, title}: RoleFormProps) {
     const validation: any = useFormik({
         enableReinitialize: true,
         initialValues: initialValues ?? {
@@ -26,6 +27,7 @@ export default function RoleForm({onSubmit, onCancel, loader, initialValues}: Ro
 
     return (
         <Form onSubmit={validation.handleSubmit}>
+            <p className="fw-bold fs-5">{title}</p>
             <div className="mb-3">
                 <Label htmlFor="name" className="form-label">Name</Label>
                 <Input

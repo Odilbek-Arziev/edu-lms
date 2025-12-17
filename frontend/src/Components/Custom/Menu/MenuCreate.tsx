@@ -25,13 +25,10 @@ export default function MenuCreate({onCancel, onSuccess}: MenuCreateProps) {
     }
 
     return (
-        <div>
-            <b>Добавить новое меню</b><br/><br/>
-
-            <MenuForm
-                loader={loader}
-                onSubmit={onSubmit}
-                onCancel={onCancel}/>
-        </div>
+        <MenuForm
+            loader={loader}
+            onSubmit={onSubmit}
+            onCancel={onCancel}
+            title='Добавить новое меню'/>
     )
 }

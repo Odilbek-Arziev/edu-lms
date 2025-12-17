@@ -25,13 +25,11 @@ export default function RoleCreate({onCancel, onSuccess}: RoleCreateProps) {
     }
 
     return (
-        <div>
-            <b>Добавить новую роль</b><br/><br/>
 
-            <RoleForm
-                loader={loader}
-                onSubmit={onSubmit}
-                onCancel={onCancel}/>
-        </div>
+        <RoleForm
+            loader={loader}
+            onSubmit={onSubmit}
+            onCancel={onCancel}
+            title="Добавить новую роль"/>
     )
 }

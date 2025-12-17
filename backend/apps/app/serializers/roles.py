@@ -16,10 +16,22 @@ class RoleDetailSerializer(serializers.ModelSerializer):
         return list(obj.permissions.values_list('id', flat=True))
 
     def get_permissions(self, obj):
-        return PermissionSerializer(
-            Permission.objects.select_related('content_type'),
-            many=True
-        ).data
+
+        permissions = Permission.objects.select_related('content_type').order_by(
+            'content_type__app_label', 'codename'
+        )
+
+        grouped = {}
+
+        for perm in permissions:
+            app_label = perm.content_type.app_label
+
+            if app_label not in grouped:
+                grouped[app_label] = []
+
+            grouped[app_label].append(PermissionSerializer(perm).data)
+
+        return grouped
 
 
 class RoleListSerializer(serializers.ModelSerializer):

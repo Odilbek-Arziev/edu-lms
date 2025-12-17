@@ -27,14 +27,11 @@ export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleE
     }
 
     return (
-        <div>
-            <b>Отредактировать роль</b><br/><br/>
-
-            <RoleForm
-                initialValues={initialValues}
-                loader={loader}
-                onSubmit={onSubmit}
-                onCancel={onCancel}/>
-        </div>
+        <RoleForm
+            initialValues={initialValues}
+            loader={loader}
+            onSubmit={onSubmit}
+            onCancel={onCancel}
+            title='Отредактировать роль'/>
     )
 }

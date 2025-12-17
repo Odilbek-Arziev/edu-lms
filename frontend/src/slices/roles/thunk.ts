@@ -1,8 +1,10 @@
-import {rolesSuccess, rolesError} from './reducer'
+import {rolesSuccess, rolesError, rolesRequest, setCurrentRole} from './reducer'
 import {APIClient} from "../../helpers/api_helper";
 
 export const fetchRoles = () => async (dispatch: any) => {
     const api = new APIClient();
+
+    dispatch(rolesRequest());
 
     try {
         const response = await api.get('/roles/')
@@ -43,11 +45,13 @@ export const getRoleItem = (id: number) => async (dispatch: any) => {
     const api = new APIClient();
 
     try {
-        let response;
-        response = api.get(`/roles/${id}/`);
-        return response
+        const response = await api.get(`/roles/${id}/`);
+        dispatch(setCurrentRole(response));
+        return response;
     } catch (error: any) {
-        dispatch(rolesError(error));
+        const message = error.response?.data || 'Ошибка загрузки роли';
+        dispatch(rolesError(message));
+        return null;
     }
 };
 
