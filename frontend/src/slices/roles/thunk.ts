@@ -55,12 +55,12 @@ export const getRoleItem = (id: number) => async (dispatch: any) => {
     }
 };
 
-export const editRole = (id: number, data: any) => async (dispatch: any) => {
+export const editRole = (id: number, data: any, permissions: boolean = false) => async (dispatch: any) => {
     const api = new APIClient();
 
     try {
         let response;
-        response = api.update(`/roles/${id}/`, data);
+        response = api.update(`/roles/${id}/${permissions ? 'permissions/' : ''}`, data);
         return response
     } catch (error: any) {
         dispatch(rolesError(error));

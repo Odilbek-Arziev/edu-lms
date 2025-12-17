@@ -1,13 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import {Container, Input, Label, Spinner} from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import {Link, useParams} from "react-router-dom";
-import {getRoleItem} from "../../../slices/roles/thunk";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {editRole, getRoleItem} from "../../../slices/roles/thunk";
 import {useDispatch, useSelector} from "react-redux";
+
+const Swal = require("sweetalert2");
 
 const RolePermissions = () => {
     const [loader, setLoader] = useState(false);
+    const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
     const {id} = useParams();
+    let navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const {currentRole, loading, error} = useSelector((state: any) => state.Roles);
 
@@ -21,6 +25,50 @@ const RolePermissions = () => {
         }
     }, [id]);
 
+    useEffect(() => {
+        if (currentRole?.role_permissions) {
+            setSelectedPermissions(currentRole.role_permissions);
+        }
+    }, [currentRole]);
+
+    const handlePermissionToggle = (permissionId: number) => {
+        setSelectedPermissions(prev => {
+            if (prev.includes(permissionId)) {
+                return prev.filter(id => id !== permissionId);
+            } else {
+                return [...prev, permissionId];
+            }
+        });
+    };
+
+    const onPermissionsUpdate = async () => {
+        setLoader(true);
+        try {
+            const roleId = Number(id);
+
+            await dispatch(editRole(
+                roleId,
+                {permissions: selectedPermissions},
+                true
+            ));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Успешно!',
+                text: 'Права роли обновлены',
+            }).then(() => navigate('/roles'))
+
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ошибка!',
+                text: 'Не удалось обновить права',
+            });
+        } finally {
+            setLoader(false);
+        }
+    };
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -29,7 +77,7 @@ const RolePermissions = () => {
 
                     <div className="mt-4">
                         <div className="row g-4">
-                            {Object.entries(currentRole.permissions).map(([groupKey, permissions]) => {
+                            {currentRole ? Object.entries(currentRole.permissions).map(([groupKey, permissions]) => {
                                 const groupTitle = groupKey.charAt(0).toUpperCase() + groupKey.slice(1);
 
                                 return (
@@ -45,7 +93,8 @@ const RolePermissions = () => {
                                                             className="form-check-input"
                                                             role="switch"
                                                             id={`perm-${perm.id}`}
-                                                            checked={currentRole.role_permissions.includes(perm.id)}
+                                                            checked={selectedPermissions.includes(perm.id)}
+                                                            onChange={() => handlePermissionToggle(perm.id)}
                                                         />
                                                         <Label className="form-check-label" htmlFor={`perm-${perm.id}`}>
                                                             {perm.name}
@@ -56,7 +105,7 @@ const RolePermissions = () => {
                                         </div>
                                     </div>
                                 );
-                            })}
+                            }) : null}
                         </div>
                     </div>
                     <div className="d-flex gap-2 mt-4 mb-2">
@@ -64,7 +113,7 @@ const RolePermissions = () => {
                             type="button"
                             className="btn w-md btn-success"
                             id="delete-record"
-                            // onClick={onPermissionsUpdate}
+                            onClick={onPermissionsUpdate}
                             disabled={loader}
                         >
                             {loader && (
