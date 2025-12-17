@@ -245,6 +245,7 @@ import ResetPasswordPage from "../pages/Authentication/ResetPassword";
 import Roles from "../pages/Custom/Roles/Roles";
 import Menu from "../pages/Custom/Menu/Menu";
 import RolePermissions from "../pages/Custom/Roles/RolePermissions";
+import Users from "../pages/Custom/Users/Users";
 
 
 const authProtectedRoutes = [
@@ -253,6 +254,7 @@ const authProtectedRoutes = [
     {path: "/dashboard", element: <DashboardEcommerce/>},
     {path: "/menu", element: <Menu/>},
     {path: "/roles", element: <Roles/>},
+    {path: "/users", element: <Users/>},
     {path: "/role-permissions/:id", element: <RolePermissions/>},
     {path: "/index", element: <DashboardEcommerce/>},
     {path: "/dashboard-crypto", element: <DashboardCrypto/>},

@@ -13,6 +13,12 @@ import {fetchRoles} from "../../../slices/roles/thunk";
 import {fetchIcons} from "../../../slices/icons/thunk";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {roleTypeColors} from "../../../utils/rolesMap";
+import {
+    UncontrolledDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem
+} from "reactstrap";
 
 const Swal = require("sweetalert2");
 
@@ -170,7 +176,7 @@ const Menu = () => {
                             Create
                         </Button>
                     </div>
-                    <Table className='table table-striped table-nowrap table-bordered align-middle mb-0'>
+                    <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>
                             <th>№</th>
@@ -203,7 +209,7 @@ const Menu = () => {
                                         </span>
                                     )) : '-'}
                                 </td>
-                                <td className='d-flex gap-1'>
+                                <td className='d-flex gap-1 justify-content-center'>
                                     <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
                                     </Button>

@@ -72,6 +72,7 @@ import APIKeyReducer from "./apiKey/reducer";
 import MenuReducer from "./menu/reducer";
 import RolesReducer from "./roles/reducer";
 import IconsReducer from "./icons/reducer";
+import UsersReducer from "./users/reducer";
 
 const rootReducer = combineReducers({
     Layout: LayoutReducer,
@@ -104,6 +105,7 @@ const rootReducer = combineReducers({
     Menu: MenuReducer,
     Roles: RolesReducer,
     Icons: IconsReducer,
+    Users: UsersReducer
 });
 
 export default rootReducer;
