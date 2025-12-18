@@ -6,7 +6,7 @@ class UserAdmin(admin.ModelAdmin):
     fields = (
         'email', 'first_name', 'last_name',
         'username', 'is_active', 'register_type',
-        'groups',
+        'groups', 'phone_number', 'telegram_link'
     )
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'register_type')
 

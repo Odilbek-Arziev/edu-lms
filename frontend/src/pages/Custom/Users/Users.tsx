@@ -62,6 +62,8 @@ const Users = () => {
                             <th>Email</th>
                             <th>Roles</th>
                             <th>Status</th>
+                            <th>Phone</th>
+                            <th>Telegram Link</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -85,6 +87,20 @@ const Users = () => {
                                 <td>{user.is_active
                                     ? <span className='badge bg-success'>active</span>
                                     : <span className='badge bg-danger'>passive</span>}
+                                </td>
+                                <td>{user.phone_number ? user.phone_number : '-'}</td>
+                                <td>
+                                    {user.telegram_link ? (
+                                        <a
+                                            href={`https://t.me/${user.telegram_link}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Telegram
+                                        </a>
+                                    ) : (
+                                        '-'
+                                    )}
                                 </td>
                                 <td className="text-center">
                                     <UncontrolledDropdown>

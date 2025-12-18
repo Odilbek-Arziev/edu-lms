@@ -16,4 +16,14 @@ class UserAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'is_staff', 'is_active', 'register_type', 'groups']
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'is_staff',
+            'is_active',
+            'register_type',
+            'groups',
+            'phone_number',
+            'telegram_link'
+        ]

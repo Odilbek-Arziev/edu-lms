@@ -27,6 +27,8 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=255, choices=ROLE_CHOICES)
     is_active = models.BooleanField(default=False)
     register_type = models.CharField(max_length=255, choices=REGISTRATION_TYPE_CHOICES, null=True)
+    phone_number = models.CharField(max_length=16, null=True, blank=True)
+    telegram_link = models.CharField(max_length=255, null=True, blank=True)
 
     def is_student(self):
         return self.role == self.STUDENT
