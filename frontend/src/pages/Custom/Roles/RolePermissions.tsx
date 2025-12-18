@@ -4,8 +4,8 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {editRole, getRoleItem} from "../../../slices/roles/thunk";
 import {useDispatch, useSelector} from "react-redux";
+import {showError, showSuccess} from "../../../utils/swal";
 
-const Swal = require("sweetalert2");
 
 const RolePermissions = () => {
     const [loader, setLoader] = useState(false);
@@ -43,6 +43,7 @@ const RolePermissions = () => {
 
     const onPermissionsUpdate = async () => {
         setLoader(true);
+
         try {
             const roleId = Number(id);
 
@@ -52,18 +53,11 @@ const RolePermissions = () => {
                 true
             ));
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Успешно!',
-                text: 'Права роли обновлены',
-            }).then(() => navigate('/roles'))
+            showSuccess('Успешно!', 'Права роли обновлены')
+                .then(() => navigate('/roles'))
 
         } catch (err) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Ошибка!',
-                text: 'Не удалось обновить права',
-            });
+            await showError('Ошибка!', 'Не удалось обновить права')
         } finally {
             setLoader(false);
         }

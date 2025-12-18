@@ -1,7 +1,6 @@
 import {useRef} from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-
-const Swal = require('sweetalert2');
+import {showError} from "../utils/swal";
 
 export const useRecaptcha = () => {
     const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -9,7 +8,7 @@ export const useRecaptcha = () => {
     const executeRecaptcha = async (): Promise<string | null> => {
         try {
             if (!recaptchaRef.current) {
-                await Swal.fire('Ошибка', 'reCAPTCHA не инициализирована', 'error');
+                await showError('Ошибка', 'reCAPTCHA не инициализирована')
                 return null;
             }
 
@@ -20,13 +19,13 @@ export const useRecaptcha = () => {
             }
 
             if (!token) {
-                await Swal.fire('Ошибка', 'Не удалось проверить капчу', 'error');
+                await showError('Ошибка', 'Не удалось проверить капчу')
                 return null;
             }
 
             return token;
         } catch (e) {
-            await Swal.fire('Ошибка', 'Ошибка проверки капчи', 'error');
+            await showError('Ошибка', 'Ошибка проверки капчи')
             return null;
         }
     };

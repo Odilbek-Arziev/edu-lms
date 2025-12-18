@@ -13,14 +13,8 @@ import {fetchRoles} from "../../../slices/roles/thunk";
 import {fetchIcons} from "../../../slices/icons/thunk";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {roleTypeColors} from "../../../utils/rolesMap";
-import {
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
-} from "reactstrap";
+import {closeLoading, showLoading} from "../../../utils/swal";
 
-const Swal = require("sweetalert2");
 
 type EditModalProps = {
     id: number;
@@ -121,17 +115,9 @@ const Menu = () => {
 
     useEffect(() => {
         if (loading) {
-            Swal.fire({
-                title: 'Загрузка меню',
-                text: 'Пожалуйста, подождите...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            showLoading('Загрузка меню', 'Пожалуйста, подождите...');
         } else {
-            Swal.close();
+            closeLoading()
         }
     }, [loading]);
 

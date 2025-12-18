@@ -14,8 +14,8 @@ import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUsers} from "../../../slices/users/thunk";
 import {roleTypeColors} from "../../../utils/rolesMap";
+import {closeLoading, showLoading} from "../../../utils/swal";
 
-const Swal = require("sweetalert2");
 
 const Users = () => {
     const dispatch = useDispatch<any>();
@@ -28,20 +28,12 @@ const Users = () => {
 
     useEffect(() => {
         if (loading) {
-            Swal.fire({
-                title: 'Загрузка меню',
-                text: 'Пожалуйста, подождите...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            showLoading()
         } else {
-            Swal.close();
+            closeLoading()
         }
     }, [loading]);
-    console.log(users)
+
     return (
         <React.Fragment>
             <div className="page-content">

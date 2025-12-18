@@ -1,8 +1,8 @@
 import {useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
+import {showError} from "../../utils/swal";
 
-const Swal = require("sweetalert2");
 
 const MagicLoginPage = () => {
     const navigate = useNavigate();
@@ -30,11 +30,7 @@ const MagicLoginPage = () => {
                 }
             })
             .catch(() => {
-                Swal.fire({
-                    title: "Error",
-                    text: 'Link expired or already used',
-                    icon: "error",
-                });
+                showError("Error", 'Link expired or already used')
                 navigate("/login");
             });
     }, [location.search, navigate]);

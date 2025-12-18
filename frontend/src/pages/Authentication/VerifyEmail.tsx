@@ -9,8 +9,8 @@ import {useDispatch} from "react-redux";
 import {useApiHandler} from "../../hooks/useApiHandler";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
 import ReCAPTCHA from "react-google-recaptcha";
+import {closeLoading, showLoading, showSuccess} from "../../utils/swal";
 
-const Swal = require("sweetalert2");
 
 const VerifyEmail = () => {
     let verifyEmail = localStorage.getItem('verifyEmail')
@@ -43,14 +43,7 @@ const VerifyEmail = () => {
     }, [resend])
 
     const handleSubmit = async () => {
-        Swal.fire({
-            title: 'Загрузка...',
-            html: 'Пожалуйста, подождите',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            },
-        });
+        showLoading()
 
         const otp =
             getInputElement(1).value +
@@ -62,15 +55,10 @@ const VerifyEmail = () => {
             () => dispatch(verifyUser({code: otp, email: verifyEmail})),
             {
                 onSuccess: async (result: any) => {
-                    Swal.close();
+                    closeLoading()
 
                     if (result?.msg === 'Email confirmed') {
-                        await Swal.fire({
-                            title: "Аккаунт подтвержден",
-                            text: `Ваш аккаунт был успешно подтвержден!`,
-                            icon: "success",
-                            confirmButtonText: "Ок",
-                        });
+                        await showSuccess("Аккаунт подтвержден", "Ваш аккаунт был успешно подтвержден!")
                         localStorage.removeItem("verifyEmail");
                         navigate('/login');
                     }
@@ -78,24 +66,17 @@ const VerifyEmail = () => {
             }
         );
 
-        Swal.close();
+        closeLoading()
         clearInputs();
     };
 
     const handleResend = async () => {
-        Swal.fire({
-            title: 'Отправка кода...',
-            html: 'Пожалуйста, подождите',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            },
-        });
+        showLoading('Отправка кода...', 'Пожалуйста, подождите')
 
         const token = await executeRecaptcha();
 
         if (!token) {
-            Swal.close();
+            closeLoading()
             return;
         }
 
@@ -105,15 +86,13 @@ const VerifyEmail = () => {
             () => dispatch(resendCode({email, captcha: token})),
             {
                 onSuccess: async (result: any) => {
-                    Swal.close();
+                    closeLoading()
 
                     if (result?.msg === 'Code sent successfully') {
-                        await Swal.fire({
-                            title: "Код отправлен повторно",
-                            text: `На почту ${email} отправлен код для подтверждения аккаунта`,
-                            icon: "success",
-                            confirmButtonText: "Ок",
-                        });
+                        await showSuccess(
+                            "Код отправлен повторно",
+                            `На почту ${email} отправлен код для подтверждения аккаунта`
+                        )
 
                         setResend(false);
                         setSeconds(initialTime);
@@ -122,7 +101,7 @@ const VerifyEmail = () => {
             }
         );
 
-        Swal.close();
+        closeLoading()
     };
 
     const getInputElement = (index: number): HTMLInputElement => {

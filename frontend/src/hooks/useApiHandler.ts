@@ -1,6 +1,7 @@
 import {useCallback} from "react";
 import Swal from 'sweetalert2'
 import {useNavigate} from "react-router-dom";
+import {showError} from "../utils/swal";
 
 export function useApiHandler(setLoader: (loading: boolean) => void) {
     const navigate = useNavigate();
@@ -18,11 +19,7 @@ export function useApiHandler(setLoader: (loading: boolean) => void) {
 
             if (result?.non_field_errors) {
                 const errorMessage = result.non_field_errors[0];
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: errorMessage,
-                    icon: "error",
-                });
+                await showError("Ошибка", errorMessage)
 
                 if (errorMessage === "Превышено количество попыток, пользователь удалён") {
                     localStorage.removeItem("verifyEmail");
@@ -50,11 +47,7 @@ export function useApiHandler(setLoader: (loading: boolean) => void) {
             }).filter(Boolean);
 
             if (fieldErrors.length > 0) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: fieldErrors.join("\n"),
-                    icon: "error",
-                });
+                await showError("Ошибка", fieldErrors.join("\n"))
                 return;
             }
         } finally {

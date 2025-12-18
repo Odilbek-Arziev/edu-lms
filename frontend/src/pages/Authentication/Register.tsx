@@ -22,8 +22,8 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
 import {useApiHandler} from "../../hooks/useApiHandler";
+import {showSuccess} from "../../utils/swal";
 
-const Swal = require("sweetalert2");
 
 const Register = () => {
     const [loader, setLoader] = useState(false);
@@ -63,12 +63,10 @@ const Register = () => {
                 {
                     onSuccess: async (result: any) => {
                         if (result?.msg === 'created') {
-                            await Swal.fire({
-                                title: "Подтвердите аккаунт",
-                                text: `На почту ${result.user.email} отправлен код для подтвердения аккаунта`,
-                                icon: "success",
-                                confirmButtonText: "Ок",
-                            });
+                            await showSuccess(
+                                "Подтвердите аккаунт",
+                                `На почту ${result.user.email} отправлен код для подтвердения аккаунта`
+                            )
 
                             localStorage.setItem("verifyEmail", result.user.email);
                             navigate("/verify-email");

@@ -9,13 +9,12 @@ import RoleDelete from "../../../Components/Custom/Roles/RoleDelete";
 import RoleEdit from "../../../Components/Custom/Roles/RoleEdit";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {Link} from "react-router-dom";
+import {closeLoading, showLoading} from "../../../utils/swal";
 
 type EditModalProps = {
     id: number;
     initialValues: any;
 };
-
-const Swal = require("sweetalert2");
 
 const Home = () => {
     const [search, setSearch] = useState<string>('');
@@ -87,17 +86,9 @@ const Home = () => {
 
     useEffect(() => {
         if (loading) {
-            Swal.fire({
-                title: 'Загрузка меню',
-                text: 'Пожалуйста, подождите...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            showLoading()
         } else {
-            Swal.close();
+            closeLoading()
         }
     }, [loading]);
 

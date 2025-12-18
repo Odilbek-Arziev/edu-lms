@@ -2,16 +2,13 @@ import React, {useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Button, Card, CardBody, Col, Container, Row, Form, Input, Label, FormFeedback} from 'reactstrap';
 import logoLight from "../../assets/images/logo-light.png";
-
-//formik
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {useDispatch} from "react-redux";
 import {resetPassword} from "../../slices/auth/reset/thunk";
 import {useApiHandler} from "../../hooks/useApiHandler";
-
-const Swal = require("sweetalert2");
+import {showSuccess} from "../../utils/swal";
 
 const ResetPasswordPage = () => {
     const [passwordShow, setPasswordShow] = useState<boolean>(false);
@@ -49,13 +46,7 @@ const ResetPasswordPage = () => {
                 {
                     onSuccess: async (result: any) => {
                         if (result?.status === "ok") {
-                            await Swal.fire({
-                                title: "Успех",
-                                text: "Пароль успешно изменён. Пожалуйста, войдите снова.",
-                                icon: "success",
-                                confirmButtonText: "Ок",
-                            });
-
+                            await showSuccess("Успех", "Пароль успешно изменён. Пожалуйста, войдите снова.")
                             navigate("/login");
                         }
                     }

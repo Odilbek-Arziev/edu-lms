@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecaptcha } from './useRecaptcha';
 import { useApiHandler } from './useApiHandler';
-import Swal from 'sweetalert2';
+import {closeLoading, showLoading} from "../utils/swal";
 
 interface UseRecaptchaSubmitOptions {
     onSubmit: (payload: any) => Promise<any>;
@@ -26,21 +26,14 @@ export const useRecaptchaSubmit = ({
 
     const handleSubmit = async (values: any, actions?: any) => {
         if (showLoadingModal) {
-            Swal.fire({
-                title: loadingTitle,
-                text: loadingText,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+            showLoading(loadingTitle, loadingText);
         }
 
         try {
             const token = await executeRecaptcha();
 
             if (!token) {
-                if (showLoadingModal) Swal.close();
+                if (showLoadingModal) closeLoading();
                 return;
             }
 
@@ -57,9 +50,9 @@ export const useRecaptchaSubmit = ({
                 }
             );
 
-            if (showLoadingModal) Swal.close();
+             if (showLoadingModal) closeLoading();
         } catch (error) {
-            if (showLoadingModal) Swal.close();
+             if (showLoadingModal) closeLoading();
         }
     };
 
