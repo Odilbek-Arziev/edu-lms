@@ -1,5 +1,9 @@
+import logging
+
 from django.utils.timezone import now
 from users.models import CustomUser
+
+logger = logging.getLogger(__name__)
 
 
 def handle_user_verification(verification, code_input):
@@ -8,6 +12,9 @@ def handle_user_verification(verification, code_input):
     if verification.code != code_input:
         verification.attempt_left = max(verification.attempt_left - 1, 0)
         verification.save(update_fields=["attempt_left"])
+
+        logger.info('настоящий код: ', verification.code)
+        logger.info('присланный код: ', code_input)
 
         if verification.attempt_left == 0:
             if user and not user.is_active:

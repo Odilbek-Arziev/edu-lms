@@ -22,13 +22,13 @@ export const registerUser = (user: any) => async (dispatch: any) => {
     }
 };
 
-export const resendCode = (email: string) => async (dispatch: any) => {
+export const resendCode = (data: any) => async (dispatch: any) => {
     const api = new APIClient();
 
     try {
         let response;
 
-        response = api.create("/users/code/send_verification_code/", {email});
+        response = api.create("/users/code/send_verification_code/", data);
         return response
     } catch (error: any) {
         dispatch(registerUserFailed(error));

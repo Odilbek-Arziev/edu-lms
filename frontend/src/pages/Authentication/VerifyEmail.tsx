@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {Card, CardBody, Col, Container, Row, Button} from 'reactstrap';
-
-//import images
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {maskEmail} from "../../helpers/maskEmail";
 import {resendCode, verifyUser} from "../../slices/auth/register/thunk";
 import {useDispatch} from "react-redux";
+import {useApiHandler} from "../../hooks/useApiHandler";
+import {useRecaptcha} from "../../hooks/useRecaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Swal = require("sweetalert2");
 
@@ -17,9 +18,12 @@ const VerifyEmail = () => {
     const initialTime = 90
     const [resend, setResend] = useState(false)
     const [seconds, setSeconds] = useState(initialTime)
+    const [loader, setLoader] = useState(false)
 
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
+    const {handleRequest} = useApiHandler(setLoader);
+    const {recaptchaRef, executeRecaptcha} = useRecaptcha();
 
     useEffect(() => {
         if (seconds === 0) return
@@ -39,107 +43,86 @@ const VerifyEmail = () => {
     }, [resend])
 
     const handleSubmit = async () => {
-        try {
-            Swal.fire({
-                title: 'Загрузка...',
-                html: 'Пожалуйста, подождите',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+        Swal.fire({
+            title: 'Загрузка...',
+            html: 'Пожалуйста, подождите',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
 
-            const otp =
-                getInputElement(1).value +
-                getInputElement(2).value +
-                getInputElement(3).value +
-                getInputElement(4).value;
+        const otp =
+            getInputElement(1).value +
+            getInputElement(2).value +
+            getInputElement(3).value +
+            getInputElement(4).value;
 
-            const result: any = await dispatch(verifyUser({code: otp, email: verifyEmail}));
-            Swal.close()
+        await handleRequest(
+            () => dispatch(verifyUser({code: otp, email: verifyEmail})),
+            {
+                onSuccess: async (result: any) => {
+                    Swal.close();
 
-            if (result?.msg === 'Email confirmed') {
-                await Swal.fire({
-                    title: "Аккаунт подтвержден",
-                    text: `Ваш аккаунт был успешно подтвержден!`,
-                    icon: "success",
-                    confirmButtonText: "Ок",
-                });
-                localStorage.removeItem("verifyEmail");
-                navigate('/login')
+                    if (result?.msg === 'Email confirmed') {
+                        await Swal.fire({
+                            title: "Аккаунт подтвержден",
+                            text: `Ваш аккаунт был успешно подтвержден!`,
+                            icon: "success",
+                            confirmButtonText: "Ок",
+                        });
+                        localStorage.removeItem("verifyEmail");
+                        navigate('/login');
+                    }
+                }
             }
-            if (result?.non_field_errors) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: result.non_field_errors[0],
-                    icon: "error",
-                });
-                clearInputs();
-                return;
-            }
-        } catch (e: any) {
-            console.log(e);
+        );
 
-            const errorMessage = e.response?.data?.non_field_errors?.[0] || "Ошибка. Попробуйте снова";
-
-            await Swal.fire({
-                title: "Ошибка",
-                text: errorMessage,
-                icon: "error",
-            });
-            clearInputs();
-        }
+        Swal.close();
+        clearInputs();
     };
 
     const handleResend = async () => {
-        try {
-            Swal.fire({
-                title: 'Отправка кода...',
-                html: 'Пожалуйста, подождите',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
+        Swal.fire({
+            title: 'Отправка кода...',
+            html: 'Пожалуйста, подождите',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
 
-            let email = localStorage.getItem('verifyEmail') ?? '';
+        const token = await executeRecaptcha();
 
-            const result: any = await dispatch(resendCode(email));
-
-            if (result?.msg === 'Code sent successfully') {
-                await Swal.fire({
-                    title: "Код отправлен повторно",
-                    text: `На почту ${email} отправлен код для подтверждения аккаунта`,
-                    icon: "success",
-                    confirmButtonText: "Ок",
-                });
-
-                setResend(false);
-                setSeconds(initialTime);
-            }
-        } catch (e: any) {
+        if (!token) {
             Swal.close();
-            const result = e.response.data
-
-            const fieldErrors = Object.keys(result || {}).map(key => {
-                if (Array.isArray(result[key])) {
-                    return `${key}: ${result[key].join(", ")}`;
-                }
-                return null;
-            }).filter(Boolean);
-
-
-            if (fieldErrors.length > 0) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: fieldErrors.join("\n"),
-                    icon: "error",
-                });
-                return;
-            }
-        } finally {
-             Swal.close();
+            return;
         }
+
+        let email = localStorage.getItem('verifyEmail') ?? '';
+
+        await handleRequest(
+            () => dispatch(resendCode({email, captcha: token})),
+            {
+                onSuccess: async (result: any) => {
+                    Swal.close();
+
+                    if (result?.msg === 'Code sent successfully') {
+                        await Swal.fire({
+                            title: "Код отправлен повторно",
+                            text: `На почту ${email} отправлен код для подтверждения аккаунта`,
+                            icon: "success",
+                            confirmButtonText: "Ок",
+                        });
+
+                        setResend(false);
+                        setSeconds(initialTime);
+                    }
+                }
+            }
+        );
+
+        Swal.close();
     };
 
     const getInputElement = (index: number): HTMLInputElement => {
@@ -148,10 +131,14 @@ const VerifyEmail = () => {
 
     const clearInputs = () => {
         for (let i = 1; i <= 4; i++) {
-            const input = document.getElementById(`digit${i}-input`) as HTMLInputElement;
+            const input = document.getElementById(`digit${i}-input`) as HTMLInputElement | null;
             if (input) input.value = "";
         }
-        getInputElement(1).focus();
+
+        const first = document.getElementById('digit1-input') as HTMLInputElement | null;
+        if (first && !first.disabled) {
+            first.focus();
+        }
     };
 
     const moveToNext = (index: any) => {
@@ -224,7 +211,9 @@ const VerifyEmail = () => {
                                                                 <input type="text"
                                                                        className="form-control form-control-lg bg-light border-light text-center"
                                                                        maxLength={1}
-                                                                       id="digit1-input" onKeyUp={() => moveToNext(1)}/>
+                                                                       id="digit1-input"
+                                                                       onKeyUp={() => moveToNext(1)}
+                                                                       disabled={loader}/>
                                                             </div>
                                                         </Col>
 
@@ -235,7 +224,9 @@ const VerifyEmail = () => {
                                                                 <input type="text"
                                                                        className="form-control form-control-lg bg-light border-light text-center"
                                                                        maxLength={1}
-                                                                       id="digit2-input" onKeyUp={() => moveToNext(2)}/>
+                                                                       id="digit2-input"
+                                                                       onKeyUp={() => moveToNext(2)}
+                                                                       disabled={loader}/>
                                                             </div>
                                                         </Col>
 
@@ -246,7 +237,9 @@ const VerifyEmail = () => {
                                                                 <input type="text"
                                                                        className="form-control form-control-lg bg-light border-light text-center"
                                                                        maxLength={1}
-                                                                       id="digit3-input" onKeyUp={() => moveToNext(3)}/>
+                                                                       id="digit3-input"
+                                                                       onKeyUp={() => moveToNext(3)}
+                                                                       disabled={loader}/>
                                                             </div>
                                                         </Col>
 
@@ -257,13 +250,30 @@ const VerifyEmail = () => {
                                                                 <input type="text"
                                                                        className="form-control form-control-lg bg-light border-light text-center"
                                                                        maxLength={1}
-                                                                       id="digit4-input" onKeyUp={() => moveToNext(4)}/>
+                                                                       id="digit4-input"
+                                                                       onKeyUp={() => moveToNext(4)}
+                                                                       disabled={loader}/>
                                                             </div>
                                                         </Col>
                                                     </Row>
                                                 </form>
                                                 <div className="mt-3">
-                                                    <Button color="success" className="w-100">Confirm</Button>
+                                                    <Button
+                                                        color="success"
+                                                        className="w-100"
+                                                        onClick={handleSubmit}
+                                                        disabled={loader}
+                                                    >
+                                                        {loader ? 'Проверка...' : 'Confirm'}
+                                                    </Button>
+                                                </div>
+
+                                                <div className="mt-4 d-flex justify-content-center">
+                                                    <ReCAPTCHA
+                                                        ref={recaptchaRef}
+                                                        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                                                        size="invisible"
+                                                    />
                                                 </div>
                                             </div>
                                         </CardBody>

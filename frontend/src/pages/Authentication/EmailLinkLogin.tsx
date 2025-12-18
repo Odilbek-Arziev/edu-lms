@@ -20,9 +20,10 @@ const EmailLinkLoginPage = (props: any) => {
 
     const {handleSubmit, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(emailLinkLogin(payload, props.history)),
-        onSuccess: () => validation.resetForm(),
+        onResetForm: () => validation.resetForm(),
         loadingTitle: "Отправка письма...",
-        loadingText: "Пожалуйста, подождите"
+        loadingText: "Пожалуйста, подождите",
+        showLoadingModal: true
     });
 
     const validation = useFormik({

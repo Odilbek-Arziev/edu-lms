@@ -9,58 +9,19 @@ import * as Yup from 'yup';
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {useDispatch} from "react-redux";
 import {resetPassword} from "../../slices/auth/reset/thunk";
+import {useApiHandler} from "../../hooks/useApiHandler";
 
 const Swal = require("sweetalert2");
 
 const ResetPasswordPage = () => {
-    const navigate = useNavigate()
-    const location = useLocation();
-    let token = location.state?.token
-
-    const dispatch = useDispatch<any>();
     const [passwordShow, setPasswordShow] = useState<boolean>(false);
     const [confrimPasswordShow, setConfrimPasswordShow] = useState<boolean>(false);
     const [loader, setLoader] = useState<boolean>(false);
-
-    const resetPasswordHandler = async (data: any) => {
-        setLoader(true);
-
-        try {
-            const result: any = await dispatch(resetPassword({...data, token}, navigate));
-
-            if (result?.status === "ok") {
-                await Swal.fire({
-                    title: "Успех",
-                    text: "Пароль успешно изменён. Пожалуйста, войдите снова.",
-                    icon: "success",
-                    confirmButtonText: "Ок",
-                });
-
-                navigate("/login");
-            }
-
-            if (result?.non_field_errors) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: result.non_field_errors[0],
-                    icon: "error",
-                });
-                return;
-            }
-        } catch (e: any) {
-            console.log(e);
-
-            const errorMessage = e.response?.data?.non_field_errors?.[0] || "Ошибка. Попробуйте снова";
-
-            await Swal.fire({
-                title: "Ошибка",
-                text: errorMessage,
-                icon: "error",
-            });
-        } finally {
-            setLoader(false);
-        }
-    };
+    const {handleRequest} = useApiHandler(setLoader);
+    const navigate = useNavigate()
+    const location = useLocation();
+    const dispatch = useDispatch<any>();
+    let token = location.state?.token
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -80,10 +41,29 @@ const ResetPasswordPage = () => {
                 .oneOf([Yup.ref('password'), ""],)
                 .required('Confirm Password is required')
         }),
-        onSubmit: (values) => {
-            resetPasswordHandler(values)
+        onSubmit: async (values) => {
+            const payload = {...values, token};
+
+            await handleRequest(
+                () => dispatch(resetPassword(payload, navigate)),
+                {
+                    onSuccess: async (result: any) => {
+                        if (result?.status === "ok") {
+                            await Swal.fire({
+                                title: "Успех",
+                                text: "Пароль успешно изменён. Пожалуйста, войдите снова.",
+                                icon: "success",
+                                confirmButtonText: "Ок",
+                            });
+
+                            navigate("/login");
+                        }
+                    }
+                }
+            );
         }
     });
+
     return (
         <ParticlesAuth>
             <div className="auth-page-content">
@@ -112,7 +92,13 @@ const ResetPasswordPage = () => {
                                     </div>
 
                                     <div className="p-2">
-                                        <Form onSubmit={validation.handleSubmit} action="/auth-signin-basic">
+                                        <Form
+                                            onSubmit={(e) => {
+                                                e.preventDefault();
+                                                validation.handleSubmit();
+                                                return false;
+                                            }}
+                                        >
                                             <div className="mb-3">
                                                 <Label className="form-label" htmlFor="password-input">Password</Label>
                                                 <div className="position-relative auth-pass-inputgroup">
@@ -126,6 +112,7 @@ const ResetPasswordPage = () => {
                                                         onBlur={validation.handleBlur}
                                                         onChange={validation.handleChange}
                                                         invalid={validation.errors.password && validation.touched.password ? true : false}
+                                                        disabled={loader}
                                                     />
                                                     {validation.errors.password && validation.touched.password ? (
                                                         <FormFeedback
@@ -156,6 +143,7 @@ const ResetPasswordPage = () => {
                                                         onBlur={validation.handleBlur}
                                                         onChange={validation.handleChange}
                                                         invalid={validation.errors.confirm_password && validation.touched.confirm_password ? true : false}
+                                                        disabled={loader}
                                                     />
                                                     {validation.errors.confirm_password && validation.touched.confirm_password ? (
                                                         <FormFeedback
@@ -189,8 +177,14 @@ const ResetPasswordPage = () => {
                                             </div>
 
                                             <div className="mt-4">
-                                                <Button color="success" className="w-100" type="submit">Reset
-                                                    Password</Button>
+                                                <Button
+                                                    color="success"
+                                                    className="w-100"
+                                                    type="submit"
+                                                    disabled={loader}
+                                                >
+                                                    {loader ? 'Resetting...' : 'Reset Password'}
+                                                </Button>
                                             </div>
                                         </Form>
                                     </div>

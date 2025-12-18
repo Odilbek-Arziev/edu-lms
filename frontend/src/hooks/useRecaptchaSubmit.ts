@@ -1,42 +1,46 @@
-import {useState} from 'react';
-import {useRecaptcha} from './useRecaptcha';
-
-const Swal = require('sweetalert2');
+import { useState } from 'react';
+import { useRecaptcha } from './useRecaptcha';
+import { useApiHandler } from './useApiHandler';
+import Swal from 'sweetalert2';
 
 interface UseRecaptchaSubmitOptions {
     onSubmit: (payload: any) => Promise<any>;
     onSuccess?: () => void;
+    onResetForm?: () => void;
     loadingTitle?: string;
     loadingText?: string;
+    showLoadingModal?: boolean;
 }
 
 export const useRecaptchaSubmit = ({
-                                       onSubmit,
-                                       onSuccess,
-                                       loadingTitle = "Отправка...",
-                                       loadingText = "Пожалуйста, подождите"
-                                   }: UseRecaptchaSubmitOptions) => {
+    onSubmit,
+    onSuccess,
+    onResetForm,
+    loadingTitle = "Отправка...",
+    loadingText = "Пожалуйста, подождите",
+    showLoadingModal = false
+}: UseRecaptchaSubmitOptions) => {
     const [isLoading, setIsLoading] = useState(false);
-    const {recaptchaRef, executeRecaptcha} = useRecaptcha();
+    const { recaptchaRef, executeRecaptcha } = useRecaptcha();
+    const { handleRequest } = useApiHandler(setIsLoading);
 
-    const handleSubmit = async (values: any) => {
-        setIsLoading(true);
-
-        Swal.fire({
-            title: loadingTitle,
-            text: loadingText,
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            },
-        });
+    const handleSubmit = async (values: any, actions?: any) => {
+        if (showLoadingModal) {
+            Swal.fire({
+                title: loadingTitle,
+                text: loadingText,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        }
 
         try {
             const token = await executeRecaptcha();
 
             if (!token) {
-                Swal.close();
-                setIsLoading(false);
+                if (showLoadingModal) Swal.close();
                 return;
             }
 
@@ -45,20 +49,19 @@ export const useRecaptchaSubmit = ({
                 captcha: token,
             };
 
-            await onSubmit(payload);
+            await handleRequest(
+                () => onSubmit(payload),
+                {
+                    onSuccess,
+                    onResetForm: onResetForm || (() => actions?.resetForm())
+                }
+            );
 
-            Swal.close();
-
-            if (onSuccess) {
-                onSuccess();
-            }
+            if (showLoadingModal) Swal.close();
         } catch (error) {
-            Swal.close();
-            throw error;
-        } finally {
-            setIsLoading(false);
+            if (showLoadingModal) Swal.close();
         }
     };
 
-    return {handleSubmit, isLoading, recaptchaRef};
+    return { handleSubmit, isLoading, recaptchaRef };
 };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Card,
     CardBody,
@@ -32,16 +32,18 @@ import {HOST_API_URL} from "../../helpers/url_helper";
 import {setLoggedinUser} from "../../helpers/api_helper";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
-
-const Swal = require("sweetalert2");
+import {useApiHandler} from "../../hooks/useApiHandler";
 
 const Login = () => {
     const {recaptchaRef, executeRecaptcha} = useRecaptcha();
-
+    const [userLogin, setUserLogin] = useState<any>([]);
+    const [passwordShow, setPasswordShow] = useState<boolean>(false);
+    const [loader, setLoader] = useState<boolean>(false);
+    const {handleRequest} = useApiHandler(setLoader);
     const navigate = useNavigate()
     const dispatch = useDispatch<any>();
-    const selectLayoutState = (state: any) => state;
 
+    const selectLayoutState = (state: any) => state;
     const loginpageData = createSelector(
         selectLayoutState,
         (state) => ({
@@ -50,52 +52,8 @@ const Login = () => {
             errorMsg: state.Login.errorMsg,
         })
     );
-    // Inside your component
-    const {
-        user, error, errorMsg
-    } = useSelector(loginpageData);
 
-    const [userLogin, setUserLogin] = useState<any>([]);
-    const [passwordShow, setPasswordShow] = useState<boolean>(false);
-    const [loader, setLoader] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (user && user) {
-            const updatedUserData = process.env.REACT_APP_DEFAULTAUTH === "firebase" ? user.multiFactor.user.email : user.email;
-            const updatedUserPassword = process.env.REACT_APP_DEFAULTAUTH === "firebase" ? "" : user.confirm_password;
-            setUserLogin({
-                email: updatedUserData,
-                password: updatedUserPassword
-            });
-        }
-    }, [user]);
-
-    const login = async (data: any) => {
-        setLoader(true);
-        try {
-            const result: any = await dispatch(loginUser(data, navigate));
-            if (result?.non_field_errors) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: result.non_field_errors[0],
-                    icon: "error",
-                });
-                return;
-            }
-        } catch (e: any) {
-            console.log(e);
-
-            const errorMessage = e.response?.data?.non_field_errors?.[0] || "Ошибка. Попробуйте снова";
-
-            await Swal.fire({
-                title: "Ошибка",
-                text: errorMessage,
-                icon: "error",
-            });
-        } finally {
-            setLoader(false);
-        }
-    };
+    const {user, error, errorMsg} = useSelector(loginpageData);
 
     const validation: any = useFormik({
         enableReinitialize: true,
@@ -109,15 +67,11 @@ const Login = () => {
         }),
         onSubmit: async (values) => {
             const token = await executeRecaptcha();
-
             if (!token) return;
 
-            const payload = {
-                ...values,
-                captcha: token,
-            };
+            const payload = {...values, captcha: token};
 
-            login(payload);
+            await handleRequest(() => dispatch(loginUser(payload, navigate)));
         }
     });
 
@@ -167,6 +121,17 @@ const Login = () => {
         };
 
     }, []);
+
+    useEffect(() => {
+        if (user && user) {
+            const updatedUserData = process.env.REACT_APP_DEFAULTAUTH === "firebase" ? user.multiFactor.user.email : user.email;
+            const updatedUserPassword = process.env.REACT_APP_DEFAULTAUTH === "firebase" ? "" : user.confirm_password;
+            setUserLogin({
+                email: updatedUserData,
+                password: updatedUserPassword
+            });
+        }
+    }, [user]);
 
     document.title = "Basic SignIn | Velzon - React Admin & Dashboard Template";
     return (

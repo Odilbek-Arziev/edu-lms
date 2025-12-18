@@ -24,10 +24,12 @@ const ForgetPasswordPage = (props: any) => {
     const dispatch = useDispatch<any>();
     const {handleSubmit, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
-        onSuccess: () => validation.resetForm(),
+        onResetForm: () => validation.resetForm(),
         loadingTitle: "Отправка письма...",
-        loadingText: "Пожалуйста, подождите"
+        loadingText: "Пожалуйста, подождите",
+        showLoadingModal: true
     });
+
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {

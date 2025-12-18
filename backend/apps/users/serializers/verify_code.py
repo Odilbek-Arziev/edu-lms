@@ -13,7 +13,7 @@ class VerifyCodeSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        verification = EmailVerificationCode.objects.filter(email=attrs["email"].lower(), is_used=False).first()
+        verification = EmailVerificationCode.objects.filter(email=attrs["email"].lower(), is_used=False).last()
 
         if not verification:
             raise serializers.ValidationError({"non_field_errors": ["Код не найден или истек"]})

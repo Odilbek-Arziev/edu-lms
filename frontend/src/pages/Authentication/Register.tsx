@@ -21,6 +21,7 @@ import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
+import {useApiHandler} from "../../hooks/useApiHandler";
 
 const Swal = require("sweetalert2");
 
@@ -29,57 +30,7 @@ const Register = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const {recaptchaRef, executeRecaptcha} = useRecaptcha();
-
-    const register = async (data: any) => {
-        try {
-            setLoader(true);
-            const result: any = await dispatch(registerUser(data));
-
-            if (result?.non_field_errors) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: result.non_field_errors[0],
-                    icon: "error",
-                });
-                return;
-            }
-
-            if (result?.msg === 'created') {
-                await Swal.fire({
-                    title: "Подтвердите аккаунт",
-                    text: `На почту ${result.user.email} отправлен код для подтвердения аккаунта`,
-                    icon: "success",
-                    confirmButtonText: "Ок",
-                });
-
-                localStorage.setItem("verifyEmail", result.user.email);
-                navigate("/verify-email");
-            } else {
-                throw new Error("Ошибка регистрации");
-            }
-        } catch (e: any) {
-            const result = e.response.data
-
-            const fieldErrors = Object.keys(result || {}).map(key => {
-                if (Array.isArray(result[key])) {
-                    return `${key}: ${result[key].join(", ")}`;
-                }
-                return null;
-            }).filter(Boolean);
-
-
-            if (fieldErrors.length > 0) {
-                await Swal.fire({
-                    title: "Ошибка",
-                    text: fieldErrors.join("\n"),
-                    icon: "error",
-                });
-                return;
-            }
-        } finally {
-            setLoader(false);
-        }
-    };
+    const {handleRequest} = useApiHandler(setLoader);
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -107,7 +58,24 @@ const Register = () => {
                 captcha: token,
             };
 
-            register(payload);
+            await handleRequest(
+                () => dispatch(registerUser(payload)),
+                {
+                    onSuccess: async (result: any) => {
+                        if (result?.msg === 'created') {
+                            await Swal.fire({
+                                title: "Подтвердите аккаунт",
+                                text: `На почту ${result.user.email} отправлен код для подтвердения аккаунта`,
+                                icon: "success",
+                                confirmButtonText: "Ок",
+                            });
+
+                            localStorage.setItem("verifyEmail", result.user.email);
+                            navigate("/verify-email");
+                        }
+                    }
+                }
+            );
         }
     });
 
