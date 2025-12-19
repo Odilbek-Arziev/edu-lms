@@ -12,15 +12,65 @@ import {
 } from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUsers} from "../../../slices/users/thunk";
+import {fetchUsers, getUser} from "../../../slices/users/thunk";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
+import {useModal} from "../../../Components/Hooks/useModal";
+import UserDelete from "../../../Components/Custom/Users/UserDelete";
+import UserEdit from "../../../Components/Custom/Users/UserEdit";
+
+type EditModalProps = {
+    id: number;
+    initialValues: any;
+};
 
 
 const Users = () => {
     const dispatch = useDispatch<any>();
-
     const {users, loading} = useSelector((state: any) => state.Users);
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <UserDelete
+                {...props}
+                onSuccess={() => {
+                    dispatch(fetchUsers());
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
+
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <UserEdit
+                {...props}
+                onSuccess={() => {
+                    dispatch(fetchUsers());
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    async function getData(id: number) {
+        const response = await dispatch(getUser(id));
+        if (response) {
+            showEdit({
+                id: id,
+                initialValues: {
+                    first_name: response.first_name,
+                    last_name: response.last_name,
+                    email: response.email,
+                    is_staff: response.is_staff,
+                    phone_number: response.phone_number,
+                    telegram_link: response.telegram_link,
+                }
+            });
+        }
+    }
 
     useEffect(() => {
         dispatch(fetchUsers())
@@ -96,7 +146,7 @@ const Users = () => {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            Telegram
+                                            https://t.me/{user.telegram_link}
                                         </a>
                                     ) : (
                                         '-'
@@ -113,6 +163,14 @@ const Users = () => {
                                         </DropdownToggle>
 
                                         <DropdownMenu end className="dropdown-menu-end">
+                                            <DropdownItem
+                                                className="d-flex align-items-center gap-2 text-warning"
+                                                onClick={() => getData(user.id)}
+                                            >
+                                                <FeatherIcon icon="edit" size={14}/>
+                                                Редактировать
+                                            </DropdownItem>
+
                                             <DropdownItem>
                                                 {user.is_active ?
                                                     (
@@ -128,15 +186,10 @@ const Users = () => {
                                                         </span>
                                                     )}
                                             </DropdownItem>
-                                            <DropdownItem
-                                                className="d-flex align-items-center gap-2 text-warning"
-                                            >
-                                                <FeatherIcon icon="edit" size={14}/>
-                                                Редактировать
-                                            </DropdownItem>
 
                                             <DropdownItem
                                                 className="text-danger d-flex align-items-center gap-2"
+                                                onClick={() => showDelete({id: user.id})}
                                             >
                                                 <FeatherIcon icon="trash-2" size={14}/>
                                                 Удалить

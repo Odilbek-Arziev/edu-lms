@@ -1,24 +1,24 @@
 import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {useApiHandler} from "../../../hooks/useApiHandler";
-import RoleForm from "./RoleForm";
-import {editRole} from "../../../slices/roles/thunk";
+import {editUser} from "../../../slices/users/thunk";
+import UserForm from "./UserForm";
 
-interface RoleEditProps {
+interface UserEditProps {
     onCancel: () => void;
     onSuccess: () => void;
     id: number,
     initialValues: any
 }
 
-export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleEditProps) {
+export default function UserEdit({onCancel, onSuccess, id, initialValues}: UserEditProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
 
     async function onSubmit(data: any, actions: any) {
         await handleRequest(
-            () => dispatch(editRole(id, data)),
+            () => dispatch(editUser(id, data)),
             {
                 onSuccess,
                 onResetForm: () => actions.resetForm()
@@ -27,11 +27,12 @@ export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleE
     }
 
     return (
-        <RoleForm
+        <UserForm
             initialValues={initialValues}
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Отредактировать роль'/>
+            title='Отредактировать пользователя'
+        />
     )
 }
