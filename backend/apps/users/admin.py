@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import *
 
+
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     fields = (
@@ -21,3 +22,9 @@ class UserAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     fields = ('user', 'ip_address', 'user_agent')
     list_display = ('user', 'ip_address', 'user_agent')
+
+
+@admin.register(RegisterType)
+class RegisterTypeAdmin(admin.ModelAdmin):
+    fields = ('name',)
+    list_display = ('name',)

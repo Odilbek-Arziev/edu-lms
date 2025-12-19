@@ -1,45 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 from core.models import BaseModel
+
 from users.managers.email import EmailVerificationCodeManager
 from users.querysets.user import UserQuerySet
 
 
 class CustomUser(AbstractUser):
-    STUDENT = 'student'
-    TEACHER = 'teacher'
-    ADMIN = 'admin'
-
-    OAUTH = 'oauth'
-    EMAIL = 'email'
-
-    ROLE_CHOICES = [
-        (STUDENT, 'Student'),
-        (TEACHER, 'Teacher'),
-        (ADMIN, 'Admin')
-    ]
-
-    REGISTRATION_TYPE_CHOICES = [
-        (EMAIL, "Email/Password"),
-        (OAUTH, "OAuth"),
-    ]
-
-    role = models.CharField(max_length=255, choices=ROLE_CHOICES)
-    is_active = models.BooleanField(default=False)
-    register_type = models.CharField(max_length=255, choices=REGISTRATION_TYPE_CHOICES, null=True)
     phone_number = models.CharField(max_length=16, null=True, blank=True)
     telegram_link = models.CharField(max_length=255, null=True, blank=True)
+    register_type = models.ForeignKey('users.RegisterType', on_delete=models.SET_NULL, null=True, blank=True)
     objects = UserQuerySet.as_manager()
-
-    def is_student(self):
-        return self.role == self.STUDENT
-
-    def is_teacher(self):
-        return self.role == self.TEACHER
-
-    def is_admin(self):
-        return self.role == self.ADMIN
 
     def __str__(self):
         return self.username
@@ -76,3 +47,10 @@ class TrustedDevice(BaseModel):
 
     class Meta:
         unique_together = ('user', 'ip_address', 'user_agent')
+
+
+class RegisterType(BaseModel):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

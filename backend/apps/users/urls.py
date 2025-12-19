@@ -6,14 +6,16 @@ from users.views.social_auth import SocialLoginViewSet
 from users.views.magic_link import MagicLinkViewSet
 from users.views.reset_password import ResetPasswordViewSet
 from users.views.user import UserViewSet
+from users.views.register_type import RegisterTypeViewSet
 
 router = DefaultRouter()
-router.register("", UserViewSet, basename="users")
+router.register("register_types", RegisterTypeViewSet, basename="register_types")
 router.register("auth", AuthViewSet, basename="auth")
 router.register("code", CodeViewSet, basename="code")
 router.register("magic_link", MagicLinkViewSet, basename="magic_link")
 router.register("social", SocialLoginViewSet, basename="social")
 router.register("password", ResetPasswordViewSet, basename="password")
+router.register("", UserViewSet, basename="users")
 
 urlpatterns = [
     path("", include(router.urls)),

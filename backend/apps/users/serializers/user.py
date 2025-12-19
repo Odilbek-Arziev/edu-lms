@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from users.models import CustomUser
-
+from users.serializers.register_type import RegisterTypeSerializer
 from app.serializers.roles import RoleListSerializer
 
 
@@ -13,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserAdminSerializer(serializers.ModelSerializer):
     groups = RoleListSerializer(read_only=True, many=True)
+    register_type = RegisterTypeSerializer(read_only=True)
 
     class Meta:
         model = CustomUser

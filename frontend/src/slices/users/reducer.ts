@@ -2,6 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 export const initialState = {
     users: [],
+    registerTypes: [],
     loading: false,
     error: ''
 };
@@ -13,6 +14,9 @@ const usersSlice = createSlice({
         usersRequest(state) {
             state.loading = true;
             state.error = "";
+        },
+        setRegisterTypes: (state, action) => {
+            state.registerTypes = action.payload;
         },
         usersSuccess(state, action) {
             state.users = action.payload;
@@ -26,6 +30,6 @@ const usersSlice = createSlice({
     }
 })
 
-export const {usersRequest, usersSuccess, usersError} = usersSlice.actions
+export const {usersRequest, setRegisterTypes, usersSuccess, usersError} = usersSlice.actions
 
 export default usersSlice.reducer

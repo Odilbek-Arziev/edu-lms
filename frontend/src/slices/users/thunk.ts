@@ -1,5 +1,5 @@
 import {APIClient} from "../../helpers/api_helper";
-import {usersError, usersRequest, usersSuccess} from "./reducer";
+import {setRegisterTypes, usersError, usersRequest, usersSuccess} from "./reducer";
 
 export const fetchUsers = () => async (dispatch: any) => {
     const api = new APIClient();
@@ -36,6 +36,20 @@ export const getUser = (id: number) => async (dispatch: any) => {
         return await api.get(`/users/${id}/`);
     } catch (error: any) {
         const message = error.response?.data || 'Ошибка загрузки пользователя';
+        dispatch(usersError(message));
+        return null;
+    }
+};
+
+export const getRegisterTypes = () => async (dispatch: any) => {
+    const api = new APIClient();
+
+    try {
+        const response = await api.get('/users/register_types/');
+        dispatch(setRegisterTypes(response));
+        return response;
+    } catch (error: any) {
+        const message = error.response?.data || 'Ошибка загрузки';
         dispatch(usersError(message));
         return null;
     }

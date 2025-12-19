@@ -1,5 +1,5 @@
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Container,
@@ -12,12 +12,15 @@ import {
 } from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import {editUser, fetchUsers, getUser} from "../../../slices/users/thunk";
+import {editUser, fetchUsers, getRegisterTypes, getUser} from "../../../slices/users/thunk";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
 import UserDelete from "../../../Components/Custom/Users/UserDelete";
 import UserEdit from "../../../Components/Custom/Users/UserEdit";
+import Select from "react-select";
+import {fetchRoles} from "../../../slices/roles/thunk";
+
 
 type EditModalProps = {
     id: number;
@@ -25,8 +28,32 @@ type EditModalProps = {
 };
 
 const Users = () => {
+    const [role, setRole] = useState<any>(null);
+    const [registerType, setRegisterType] = useState<any>(null);
+    const [status, setStatus] = useState<any>(null);
+
     const dispatch = useDispatch<any>();
-    const {users, loading} = useSelector((state: any) => state.Users);
+    const {users, loading, registerTypes} = useSelector((state: any) => state.Users);
+    const roles = useSelector((state: any) => state.Roles.items);
+
+    const rolesOptions = [
+        ...roles.map((item: any) => ({
+            value: item.id,
+            label: item.name,
+        }))
+    ];
+
+    const regTypesOptions = [
+        ...registerTypes.map((item: any) => ({
+            value: item.id,
+            label: item.name,
+        }))
+    ];
+
+    const statusTypes = [
+        {value: 'active', label: 'active'},
+        {value: 'passive', label: 'passive'}
+    ]
 
     const [showDelete, hideDelete] = useModal<{ id: number }>(
         (props: { id: number }) => (
@@ -78,6 +105,8 @@ const Users = () => {
 
     useEffect(() => {
         dispatch(fetchUsers())
+        dispatch(fetchRoles())
+        dispatch(getRegisterTypes())
     }, [])
 
     useEffect(() => {
@@ -102,6 +131,42 @@ const Users = () => {
                             />
                             <i className="ri-search-line search-icon"/>
                         </div>
+                        <Select
+                            value={rolesOptions.find((option: any) => option.value === role) || null}
+                            options={rolesOptions}
+                            isClearable
+                            placeholder="Select role..."
+                            styles={{
+                                container: (provided: any) => ({...provided, width: '15vw'})
+                            }}
+                            onChange={(selectedOption: any) => {
+                                setRole(selectedOption?.value || null);
+                            }}
+                        />
+                        <Select
+                            value={regTypesOptions.find((option: any) => option.value === registerType) || null}
+                            options={regTypesOptions}
+                            isClearable
+                            placeholder="Select register type..."
+                            styles={{
+                                container: (provided: any) => ({...provided, width: '15vw'})
+                            }}
+                            onChange={(selectedOption: any) => {
+                                setRegisterType(selectedOption?.value || null);
+                            }}
+                        />
+                        <Select
+                            value={statusTypes.find((option: any) => option.value === status) || null}
+                            options={statusTypes}
+                            isClearable
+                            placeholder="Select status..."
+                            styles={{
+                                container: (provided: any) => ({...provided, width: '15vw'})
+                            }}
+                            onChange={(selectedOption: any) => {
+                                setStatus(selectedOption?.value || null);
+                            }}
+                        />
                         <Button className='btn btn-secondary d-flex gap-1 align-items-center'>
                             <FeatherIcon color="white" size={12} icon="trash"/>
                             Clear
@@ -129,7 +194,7 @@ const Users = () => {
                                 <td>{user.first_name.length ? user.first_name : '-'}</td>
                                 <td>{user.last_name.length ? user.last_name : '-'}</td>
                                 <td>{user.email}</td>
-                                <td>via {user.register_type}</td>
+                                <td>via {user.register_type.name}</td>
                                 <td>
                                     {user.groups && user.groups.length > 0 ? user.groups.map((item: any) => (
                                         <span

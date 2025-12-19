@@ -8,7 +8,6 @@ from users.serializers.user import UserAdminSerializer
 class UserViewSet(BaseModelViewSet):
     permission_classes = [permissions.IsAdminUser]
     serializer_class = UserAdminSerializer
-    queryset = CustomUser.objects.filter()
 
     def get_queryset(self):
         params = self.request.query_params
