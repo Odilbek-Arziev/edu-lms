@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 
 from users.models import CustomUser
@@ -13,6 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserAdminSerializer(serializers.ModelSerializer):
     groups = RoleListSerializer(read_only=True, many=True)
+    groups_ids = serializers.PrimaryKeyRelatedField(
+        queryset=Group.objects.all(),
+        many=True,
+        write_only=True,
+        source='groups'
+    )
     register_type = RegisterTypeSerializer(read_only=True)
 
     class Meta:
@@ -26,6 +33,7 @@ class UserAdminSerializer(serializers.ModelSerializer):
             'is_active',
             'register_type',
             'groups',
+            'groups_ids',
             'phone_number',
             'telegram_link'
         ]

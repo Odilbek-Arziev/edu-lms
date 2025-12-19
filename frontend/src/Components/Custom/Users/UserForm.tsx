@@ -3,6 +3,8 @@ import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import FeatherIcon from "feather-icons-react";
+import Select from "react-select";
+import {useSelector} from "react-redux";
 
 
 interface UserFormProps {
@@ -14,23 +16,32 @@ interface UserFormProps {
 }
 
 export default function UserForm({onSubmit, onCancel, loader, initialValues, title}: UserFormProps) {
+    const roles = useSelector((state: any) => state.Roles.items);
+    const rolesOptions = roles.map((item: any) => ({
+        value: item.id,
+        label: item.name,
+    }))
+
     const validation: any = useFormik({
         enableReinitialize: true,
         initialValues: initialValues ?? {
             first_name: '',
             last_name: '',
             email: '',
-            is_staff: '',
-            phone_number: '',
-            telegram_link: '',
+            phone_number: null,
+            telegram_link: null,
+            groups_ids: []
         },
         validationSchema: Yup.object({
             first_name: Yup.string().required("Please enter first name"),
-            last_name: Yup.string().required("Please enter last name"),
+            last_name: Yup.string().optional(),
             email: Yup.string().required("Please enter email address"),
-            is_staff: Yup.boolean(),
-            phone_number: Yup.string().optional(),
-            telegram_link: Yup.string().optional()
+            phone_number: Yup.string().nullable().notRequired(),
+            telegram_link: Yup.string().nullable().notRequired(),
+            groups_ids: Yup.array()
+                .of(Yup.number())
+                .nullable()
+                .notRequired()
         }),
         onSubmit: onSubmit
     });
@@ -89,20 +100,6 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
                         type="invalid">{validation.errors.email}</FormFeedback>
                 ) : null}
             </div>
-            <div className="form-check mb-3">
-                <Input
-                    type="checkbox"
-                    name="is_staff"
-                    id="is_staff"
-                    className="form-check-input"
-                    checked={!!validation.values.is_staff}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                />
-                <Label htmlFor="is_staff" className="form-check-label">
-                    Is Staff
-                </Label>
-            </div>
             <div className="mb-3">
                 <Label htmlFor="phone_number" className="form-label">Phone number</Label>
                 <Input
@@ -146,6 +143,28 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
                         {validation.errors.telegram_link}
                     </FormFeedback>
                 ) : null}
+            </div>
+
+            <div className="mb-3">
+                <Label htmlFor="groups_ids" className="form-label">Roles</Label>
+                <Select
+                    isMulti
+                    isClearable
+                    options={rolesOptions}
+                    value={rolesOptions.filter((opt: any) =>
+                        (validation.values.groups_ids || []).includes(opt.value)
+                    )}
+                    onChange={(selected: any) =>
+                        validation.setFieldValue(
+                            'groups_ids',
+                            selected ? selected.map((opt: any) => opt.value) : []
+                        )
+                    }
+                    onBlur={() => validation.setFieldTouched('groups_ids', true)}
+                />
+                {validation.touched.groups_ids && validation.errors.groups_ids && (
+                    <FormFeedback>{validation.errors.groups_ids}</FormFeedback>
+                )}
             </div>
 
             <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>

@@ -59,9 +59,7 @@ export const editUser = (id: number, data: any) => async (dispatch: any) => {
     const api = new APIClient();
 
     try {
-        let response;
-        response = api.update(`/users/${id}/`, data);
-        return response
+        return await api.update(`/users/${id}/`, data);
     } catch (error: any) {
         dispatch(usersError(error));
     }

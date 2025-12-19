@@ -91,9 +91,9 @@ const Users = () => {
                     first_name: response.first_name,
                     last_name: response.last_name,
                     email: response.email,
-                    is_staff: response.is_staff,
                     phone_number: response.phone_number,
                     telegram_link: response.telegram_link,
+                    groups_ids: response.groups?.map((g: any) => g.id) || []
                 }
             });
         }
