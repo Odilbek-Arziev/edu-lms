@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUsers, getUser} from "../../../slices/users/thunk";
+import {editUser, fetchUsers, getUser} from "../../../slices/users/thunk";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
@@ -23,7 +23,6 @@ type EditModalProps = {
     id: number;
     initialValues: any;
 };
-
 
 const Users = () => {
     const dispatch = useDispatch<any>();
@@ -72,6 +71,11 @@ const Users = () => {
         }
     }
 
+    async function handleStatus(id: number, isActive: boolean) {
+        await dispatch(editUser(id, {is_active: !isActive}))
+        dispatch(fetchUsers());
+    }
+
     useEffect(() => {
         dispatch(fetchUsers())
     }, [])
@@ -110,6 +114,7 @@ const Users = () => {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
+                            <th>Register type</th>
                             <th>Roles</th>
                             <th>Status</th>
                             <th>Phone</th>
@@ -124,6 +129,7 @@ const Users = () => {
                                 <td>{user.first_name.length ? user.first_name : '-'}</td>
                                 <td>{user.last_name.length ? user.last_name : '-'}</td>
                                 <td>{user.email}</td>
+                                <td>via {user.register_type}</td>
                                 <td>
                                     {user.groups && user.groups.length > 0 ? user.groups.map((item: any) => (
                                         <span
@@ -171,7 +177,7 @@ const Users = () => {
                                                 Редактировать
                                             </DropdownItem>
 
-                                            <DropdownItem>
+                                            <DropdownItem onClick={() => handleStatus(user.id, user.is_active)}>
                                                 {user.is_active ?
                                                     (
                                                         <span className="d-flex align-items-center gap-2 text-info">

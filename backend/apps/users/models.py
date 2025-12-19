@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 from core.models import BaseModel
 from users.managers.email import EmailVerificationCodeManager
+from users.querysets.user import UserQuerySet
 
 
 class CustomUser(AbstractUser):
@@ -29,6 +30,7 @@ class CustomUser(AbstractUser):
     register_type = models.CharField(max_length=255, choices=REGISTRATION_TYPE_CHOICES, null=True)
     phone_number = models.CharField(max_length=16, null=True, blank=True)
     telegram_link = models.CharField(max_length=255, null=True, blank=True)
+    objects = UserQuerySet.as_manager()
 
     def is_student(self):
         return self.role == self.STUDENT
