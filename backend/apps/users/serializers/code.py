@@ -24,7 +24,7 @@ class EmailVerificationCodeSerializer(serializers.ModelSerializer):
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError(f"User with email {email} not exists")
 
-        if user.register_type != 'email':
+        if user.register_type.name != 'email':
             action_type = 'Password reset' if link_type == 'reset_password' else 'Email login'
 
             raise serializers.ValidationError(f"{action_type} is not supported for OAuth users")

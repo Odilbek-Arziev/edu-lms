@@ -20,6 +20,9 @@ import UserDelete from "../../../Components/Custom/Users/UserDelete";
 import UserEdit from "../../../Components/Custom/Users/UserEdit";
 import Select from "react-select";
 import {fetchRoles} from "../../../slices/roles/thunk";
+import {useRecaptchaSubmit} from "../../../hooks/useRecaptchaSubmit";
+import {userForgetPassword} from "../../../slices/auth/forgetpwd/thunk";
+import ReCAPTCHA from "react-google-recaptcha";
 
 
 type EditModalProps = {
@@ -27,7 +30,7 @@ type EditModalProps = {
     initialValues: any;
 };
 
-const Users = () => {
+const Users = (props: any) => {
     const [role, setRole] = useState<any>(null);
     const [search, setSearch] = useState<string>('');
     const [registerType, setRegisterType] = useState<any>(null);
@@ -36,6 +39,12 @@ const Users = () => {
     const dispatch = useDispatch<any>();
     const {users, loading, registerTypes} = useSelector((state: any) => state.Users);
     const roles = useSelector((state: any) => state.Roles.items);
+    const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
+        onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
+        loadingTitle: "Отправка письма...",
+        loadingText: "Пожалуйста, подождите",
+        showLoadingModal: true
+    });
 
     const rolesOptions = [
         ...roles.map((item: any) => ({
@@ -139,12 +148,16 @@ const Users = () => {
         dispatch(fetchUsers());
     }
 
-    function clearFilter() {
+    const clearFilter = () => {
         setRole(null)
         setSearch('')
         setRegisterType('')
         setStatus('')
     }
+
+    const resetUserPassword = (email: string) => {
+        handlePasswordReset({email});
+    };
 
     useEffect(() => {
         dispatch(fetchUsers())
@@ -310,6 +323,13 @@ const Users = () => {
                                                 <FeatherIcon icon="trash-2" size={14}/>
                                                 Удалить
                                             </DropdownItem>
+                                            <DropdownItem
+                                                className="text-secondary d-flex align-items-center gap-2"
+                                                onClick={() => resetUserPassword(user.email)}
+                                            >
+                                                <FeatherIcon icon="lock" size={14}/>
+                                                Сбросить пароль
+                                            </DropdownItem>
                                         </DropdownMenu>
                                     </UncontrolledDropdown>
                                 </td>
@@ -319,6 +339,11 @@ const Users = () => {
                     </Table>
                 </Container>
             </div>
+            <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                size="invisible"
+            />
         </React.Fragment>
     )
 }
