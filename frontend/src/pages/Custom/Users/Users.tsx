@@ -1,5 +1,5 @@
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {
     Button,
     Container,
@@ -29,6 +29,7 @@ type EditModalProps = {
 
 const Users = () => {
     const [role, setRole] = useState<any>(null);
+    const [search, setSearch] = useState<string>('');
     const [registerType, setRegisterType] = useState<any>(null);
     const [status, setStatus] = useState<any>(null);
 
@@ -98,9 +99,51 @@ const Users = () => {
         }
     }
 
+    const tableData = useMemo(() => {
+        let data = users;
+
+        if (search) {
+            const searchLower = search.toLowerCase();
+            data = data.filter((user: any) =>
+                user.first_name?.toLowerCase().includes(searchLower) ||
+                user.last_name?.toLowerCase().includes(searchLower) ||
+                user.email?.toLowerCase().includes(searchLower) ||
+                user.phone_number?.includes(searchLower)
+            );
+        }
+
+        if (role) {
+            data = data.filter((user: any) => {
+                return user.groups?.some((r: any) => r.id === role);
+            });
+        }
+
+        if (registerType) {
+            data = data.filter((user: any) => {
+                return user.register_type.id === registerType
+            });
+        }
+
+        if (status) {
+            data = data.filter((user: any) =>
+                status === 'active' ? user.is_active : !user.is_active
+            )
+        }
+
+        return data;
+
+    }, [search, users, role, registerType, status]);
+
     async function handleStatus(id: number, isActive: boolean) {
         await dispatch(editUser(id, {is_active: !isActive}))
         dispatch(fetchUsers());
+    }
+
+    function clearFilter() {
+        setRole(null)
+        setSearch('')
+        setRegisterType('')
+        setStatus('')
     }
 
     useEffect(() => {
@@ -128,6 +171,8 @@ const Users = () => {
                                 type="text"
                                 className="form-control"
                                 placeholder="Search..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                             <i className="ri-search-line search-icon"/>
                         </div>
@@ -167,7 +212,7 @@ const Users = () => {
                                 setStatus(selectedOption?.value || null);
                             }}
                         />
-                        <Button className='btn btn-secondary d-flex gap-1 align-items-center'>
+                        <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                             <FeatherIcon color="white" size={12} icon="trash"/>
                             Clear
                         </Button>
@@ -188,7 +233,7 @@ const Users = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {users ? users.map((user: any, idx: number) => (
+                        {tableData ? tableData.map((user: any, idx: number) => (
                             <tr key={idx}>
                                 <td>{idx + 1}</td>
                                 <td>{user.first_name.length ? user.first_name : '-'}</td>
