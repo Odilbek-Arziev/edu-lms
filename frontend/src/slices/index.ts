@@ -73,8 +73,9 @@ import MenuReducer from "./menu/reducer";
 import RolesReducer from "./roles/reducer";
 import IconsReducer from "./icons/reducer";
 import UsersReducer from "./users/reducer";
+import {LOGOUT} from "./auth/login/actions";
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
     Layout: LayoutReducer,
     Login: LoginReducer,
     Account: AccountReducer,
@@ -107,5 +108,12 @@ const rootReducer = combineReducers({
     Icons: IconsReducer,
     Users: UsersReducer
 });
+
+const rootReducer = (state: any, action: any) => {
+    if (action.type === LOGOUT) {
+        state = undefined;
+    }
+    return appReducer(state, action);
+};
 
 export default rootReducer;

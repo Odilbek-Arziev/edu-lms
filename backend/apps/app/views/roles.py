@@ -4,10 +4,12 @@ from rest_framework.response import Response
 from core.views.viewsets import BaseModelViewSet
 
 from app.serializers.roles import *
+from rest_framework import permissions
 
 
 class RoleViewSet(BaseModelViewSet):
     serializer_class = RoleDetailSerializer
+    permission_classes = [permissions.IsAdminUser]
 
     def get_queryset(self):
         qs = Group.objects.prefetch_related('permissions__content_type')

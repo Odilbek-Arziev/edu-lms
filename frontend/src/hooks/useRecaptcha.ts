@@ -8,24 +8,29 @@ export const useRecaptcha = () => {
     const executeRecaptcha = async (): Promise<string | null> => {
         try {
             if (!recaptchaRef.current) {
-                await showError('Ошибка', 'reCAPTCHA не инициализирована')
+                await showError('Ошибка', 'reCAPTCHA не инициализирована');
                 return null;
             }
 
             const token = await (recaptchaRef.current as any).executeAsync();
 
-            if (recaptchaRef.current.reset) {
-                recaptchaRef.current.reset();
+            try {
+                if (recaptchaRef.current?.reset) {
+                    recaptchaRef.current.reset();
+                }
+            } catch (resetError) {
+                console.warn('Failed to reset reCAPTCHA:', resetError);
             }
 
             if (!token) {
-                await showError('Ошибка', 'Не удалось проверить капчу')
+                await showError('Ошибка', 'Не удалось проверить капчу');
                 return null;
             }
 
             return token;
-        } catch (e) {
-            await showError('Ошибка', 'Ошибка проверки капчи')
+        } catch (e: any) {
+            console.error('reCAPTCHA error:', e);
+            await showError('Ошибка', 'Ошибка проверки капчи. Попробуйте снова.');
             return null;
         }
     };

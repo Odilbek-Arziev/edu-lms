@@ -9,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
         'username', 'is_active', 'register_type',
         'groups', 'phone_number', 'telegram_link'
     )
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'register_type')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'register_type', 'is_superuser')
 
 
 @admin.register(EmailVerificationCode)

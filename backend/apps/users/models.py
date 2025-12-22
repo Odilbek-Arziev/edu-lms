@@ -3,14 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from core.models import BaseModel
 
 from users.managers.email import EmailVerificationCodeManager
-from users.querysets.user import UserQuerySet
+from users.querysets.user import CustomUserManager
 
 
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=16, null=True, blank=True)
     telegram_link = models.CharField(max_length=255, null=True, blank=True)
     register_type = models.ForeignKey('users.RegisterType', on_delete=models.SET_NULL, null=True, blank=True)
-    objects = UserQuerySet.as_manager()
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.username

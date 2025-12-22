@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.contrib.auth.models import UserManager
 
 from core.querysets.base_queryset import BaseQuerySet
 
@@ -43,3 +44,26 @@ class UserQuerySet(BaseQuerySet):
                 .for_users()
                 .order_by("-date_joined")
         )
+
+
+class CustomUserManager(UserManager):
+    def get_queryset(self):
+        return UserQuerySet(self.model, using=self._db)
+
+    def search(self, term: str = None):
+        return self.get_queryset().search(term)
+
+    def for_role(self, roles):
+        return self.get_queryset().for_role(roles)
+
+    def for_register_type(self, register_type):
+        return self.get_queryset().for_register_type(register_type)
+
+    def for_status(self, status):
+        return self.get_queryset().for_status(status)
+
+    def for_users(self):
+        return self.get_queryset().for_users()
+
+    def list(self, search=None, role=None, register_type=None, status=None):
+        return self.get_queryset().list(search, role, register_type, status)

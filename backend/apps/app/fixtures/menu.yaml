@@ -1,0 +1,30 @@
+- model: app.Menu
+  pk: 1
+  fields:
+    title: "Settings"
+    url_path: "#"
+    icon: 208
+
+- model: app.Menu
+  pk: 2
+  fields:
+    title: "Menu"
+    order: 0
+    url_path: "/menu"
+    icon: 1
+
+- model: app.Menu
+  pk: 3
+  fields:
+    title: "Roles"
+    order: 1
+    url_path: "/roles"
+    icon: 164
+
+- model: app.Menu
+  pk: 4
+  fields:
+    title: "Users"
+    order: 2
+    url_path: "/users"
+    icon: 262

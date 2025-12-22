@@ -2,6 +2,7 @@ import {getFirebaseBackend} from "../../../helpers/firebase_helper";
 
 import {loginSuccess, logoutUserSuccess, apiError, reset_login_flag} from './reducer';
 import {APIClient} from "../../../helpers/api_helper";
+import {LOGOUT} from "./actions";
 
 export const loginUser = (user: any, history: any) => async (dispatch: any) => {
     const api = new APIClient();
@@ -33,13 +34,10 @@ export const loginUser = (user: any, history: any) => async (dispatch: any) => {
 export const logoutUser = () => async (dispatch: any) => {
     try {
         sessionStorage.removeItem("authUser");
-        let fireBaseBackend: any = getFirebaseBackend();
-        if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-            const response = fireBaseBackend.logout;
-            dispatch(logoutUserSuccess(response));
-        } else {
-            dispatch(logoutUserSuccess(true));
-        }
+
+        dispatch({ type: LOGOUT });
+
+        dispatch(logoutUserSuccess(true));
 
     } catch (error) {
         dispatch(apiError(error));

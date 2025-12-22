@@ -38,7 +38,8 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             icon: Yup.string().required("Please select icon"),
             groups_ids: Yup.array()
                 .of(Yup.number())
-                .min(1, "Please select at least 1 role")
+                .nullable()
+                .notRequired()
         }),
         onSubmit: onSubmit
     });

@@ -1,10 +1,12 @@
 from core.views.viewsets import BaseModelViewSet
 from app.models import Menu
 from app.serializers.menu import MenuSerializer
+from rest_framework import permissions
 
 
 class MenuViewSet(BaseModelViewSet):
     serializer_class = MenuSerializer
+    permission_classes = [permissions.IsAdminUser]
 
     def get_queryset(self):
         if self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
