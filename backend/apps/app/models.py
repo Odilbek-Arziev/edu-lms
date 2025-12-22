@@ -295,3 +295,11 @@ class Icon(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class LanguageLine(BaseModel):
+    key = models.CharField(max_length=255)
+    value = models.JSONField()
+
+    def __str__(self):
+        return self.key

@@ -126,3 +126,9 @@ class MenuAdmin(admin.ModelAdmin):
 class IconAdmin(admin.ModelAdmin):
     list_display = ("id", "name", 'status')
     search_fields = ('name',)
+
+
+@admin.register(LanguageLine)
+class LanguageLineAdmin(admin.ModelAdmin):
+    list_display = ("id", "key", 'value')
+    search_fields = ('key',)

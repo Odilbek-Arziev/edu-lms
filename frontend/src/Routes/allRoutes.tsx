@@ -246,6 +246,7 @@ import Roles from "../pages/Custom/Roles/Roles";
 import Menu from "../pages/Custom/Menu/Menu";
 import RolePermissions from "../pages/Custom/Roles/RolePermissions";
 import Users from "../pages/Custom/Users/Users";
+import LanguageLines from "../pages/Custom/LanguageLines/LanguageLines";
 
 
 const authProtectedRoutes = [
@@ -253,6 +254,7 @@ const authProtectedRoutes = [
     {path: "/dashboard-crm", element: <DashboardCrm/>},
     {path: "/dashboard", element: <DashboardEcommerce/>},
     {path: "/menu", element: <Menu/>},
+    {path: "/language-lines", element: <LanguageLines/>},
     {path: "/roles", element: <Roles/>},
     {path: "/users", element: <Users/>},
     {path: "/role-permissions/:id", element: <RolePermissions/>},

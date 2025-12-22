@@ -26,7 +26,7 @@ const defaultevent = [
 
   {
     "id": 3,
-    "title": "International Mother Language Day",
+    "title": "International Mother LanguageLines Day",
     "start": "2022-02-21",
     "className": "bg-info-subtle",
     "allDay": true,
@@ -56,7 +56,7 @@ const defaultevent = [
 
   {
     "id": 6,
-    "title": "International Mother Language Day",
+    "title": "International Mother LanguageLines Day",
     "start": "2022-03-21",
     "className": "bg-info-subtle",
     "allDay": true,

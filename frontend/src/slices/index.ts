@@ -69,10 +69,13 @@ import JobReducer from "./jobs/reducer";
 
 // API Key
 import APIKeyReducer from "./apiKey/reducer";
+
+// Custom
 import MenuReducer from "./menu/reducer";
 import RolesReducer from "./roles/reducer";
 import IconsReducer from "./icons/reducer";
 import UsersReducer from "./users/reducer";
+import LanguageLinesReducer from './languageLines/reducer'
 import {LOGOUT} from "./auth/login/actions";
 
 const appReducer = combineReducers({
@@ -106,7 +109,8 @@ const appReducer = combineReducers({
     Menu: MenuReducer,
     Roles: RolesReducer,
     Icons: IconsReducer,
-    Users: UsersReducer
+    Users: UsersReducer,
+    LanguageLines: LanguageLinesReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
