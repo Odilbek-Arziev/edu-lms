@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import config from "../config";
 import {logoutUser} from "../slices/auth/login/thunk";
 import {store} from "../index";
@@ -19,17 +19,20 @@ const responseInterceptor = (response: any) =>
     response.data ? response.data : response;
 
 const errorInterceptor = (error: any) => {
-
     if (error.response) {
         const status = error.response.status;
 
         if (status === 401) {
-            console.warn('Токен истек - выполняем logout')
+            const isLanguageLinesRequest = error.config?.url?.includes('/language_lines');
 
-            clearAuth()
-            store.dispatch(logoutUser())
-            window.location.href = '/login'
+            if (isLanguageLinesRequest) {
+                return Promise.reject(error);
+            }
 
+            console.warn('Токен истек - выполняем logout');
+            clearAuth();
+            store.dispatch(logoutUser());
+            window.location.href = '/login';
             return;
         }
 
@@ -61,9 +64,7 @@ authAxios.interceptors.request.use(
     }
 );
 
-
 const setAuthorization = (token: string | null) => {
-
     if (!token) {
         console.log("⚠️ Токен пустой, удаляем Authorization header");
         delete authAxios.defaults.headers.common["Authorization"];
@@ -72,7 +73,6 @@ const setAuthorization = (token: string | null) => {
 
     authAxios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
-
 
 const getLoggedinUser = () => {
     let user = localStorage.getItem("authUser");
@@ -95,16 +95,13 @@ const getLoggedinUser = () => {
     }
 };
 
-
 const clearAuth = () => {
     localStorage.removeItem("authUser");
     sessionStorage.removeItem("authUser");
     delete authAxios.defaults.headers.common["Authorization"];
 };
 
-
 const setLoggedinUser = (userData: any) => {
-
     if (!userData || !userData.access || !userData.refresh) {
         console.error("❌ Невалидные данные пользователя:", userData);
         return false;
@@ -112,16 +109,13 @@ const setLoggedinUser = (userData: any) => {
 
     try {
         localStorage.setItem("authUser", JSON.stringify(userData));
-
         setAuthorization(userData.access);
-
         return true;
     } catch (error) {
         console.error("❌ Ошибка сохранения данных:", error);
         return false;
     }
 };
-
 
 class APIClient {
     private client: typeof publicAxios | typeof authAxios;
@@ -130,7 +124,7 @@ class APIClient {
         this.client = auth ? authAxios : publicAxios;
     }
 
-    get = (url: string, params?: any): Promise<AxiosResponse> => {
+    get = (url: string, params?: any): Promise<any> => {
         let queryString = "";
         if (params) {
             queryString = Object.keys(params)
@@ -141,19 +135,19 @@ class APIClient {
         return this.client.get(fullUrl);
     };
 
-    create = (url: string, data: any): Promise<AxiosResponse> => {
+    create = (url: string, data: any): Promise<any> => {
         return this.client.post(url, data);
     };
 
-    update = (url: string, data: any): Promise<AxiosResponse> => {
+    update = (url: string, data: any): Promise<any> => {
         return this.client.patch(url, data);
     };
 
-    put = (url: string, data: any): Promise<AxiosResponse> => {
+    put = (url: string, data: any): Promise<any> => {
         return this.client.put(url, data);
     };
 
-    delete = (url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> => {
+    delete = (url: string, config?: AxiosRequestConfig): Promise<any> => {
         return this.client.delete(url, {...config});
     };
 }

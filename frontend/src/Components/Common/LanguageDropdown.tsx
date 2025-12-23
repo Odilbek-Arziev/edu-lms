@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import { get, map } from "lodash";
-
-//i18n
-import i18n from "../../i18n";
+import React, {useState} from 'react';
+import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from 'reactstrap';
+import {useDispatch, useSelector} from 'react-redux';
+import {get, map} from "lodash";
 import languages from "../../common/languages";
+
+import {changeLanguage} from '../../slices/languageLines/thunk';
+import type {RootState} from '../../slices';
 
 
 const LanguageDropdown = () => {
-    // Declare a new state variable, which we'll call "menu"
-    const [selectedLang, setSelectedLang] = useState("");
+    const dispatch = useDispatch()
+    const selectedLang = useSelector((state: RootState) => state.LanguageLines.currentLanguage)
+    const [isLanguageDropdown, setIsLanguageDropdown] = useState<boolean>(false)
 
-    useEffect(() => {
-        const currentLanguage: any = localStorage.getItem("I18N_LANGUAGE");
-        setSelectedLang(currentLanguage);
-    }, []);
-
-    const changeLanguageAction = (lang: any) => {
-        //set language as i18n
-        i18n.changeLanguage(lang);
-        localStorage.setItem("I18N_LANGUAGE", lang);
-        setSelectedLang(lang);
-    };
-
-
-    const [isLanguageDropdown, setIsLanguageDropdown] = useState<boolean>(false);
     const toggleLanguageDropdown = () => {
-        setIsLanguageDropdown(!isLanguageDropdown);
-    };
+        setIsLanguageDropdown(!isLanguageDropdown)
+    }
+
+    const changeLanguageAction = async (lang: string) => {
+        try {
+            await dispatch(changeLanguage(lang) as any)
+        } catch (error) {
+            console.error('Error changing language: ', error)
+        }
+    }
+
     return (
         <React.Fragment>
-            <Dropdown isOpen={isLanguageDropdown} toggle={toggleLanguageDropdown} className="ms-1 topbar-head-dropdown header-item">
+            <Dropdown
+                isOpen={isLanguageDropdown}
+                toggle={toggleLanguageDropdown}
+                className="ms-1 topbar-head-dropdown header-item"
+            >
                 <DropdownToggle className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" tag="button">
                     <img
                         src={get(languages, `${selectedLang}.flag`)}
@@ -44,8 +45,7 @@ const LanguageDropdown = () => {
                         <DropdownItem
                             key={key}
                             onClick={() => changeLanguageAction(key)}
-                            className={`notify-item ${selectedLang === key ? "active" : "none"
-                                }`}
+                            className={`notify-item ${selectedLang === key ? "active" : "none"}`}
                         >
                             <img
                                 src={get(languages, `${key}.flag`)}
