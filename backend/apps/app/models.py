@@ -298,7 +298,7 @@ class Icon(BaseModel):
 
 
 class LanguageLine(BaseModel):
-    key = models.CharField(max_length=255)
+    key = models.CharField(max_length=255, unique=True, db_index=True)
     value = models.JSONField()
 
     def __str__(self):
