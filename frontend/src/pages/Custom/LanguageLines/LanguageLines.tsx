@@ -3,12 +3,13 @@ import {Button, Container, Input, Table} from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchLanguageLines, getLanguageLine} from "../../../slices/languageLines/thunk";
+import {fetchLanguageLines, getLanguageLine, refreshLanguageLines} from "../../../slices/languageLines/thunk";
 import {useModal} from "../../../Components/Hooks/useModal";
 import LanguageLinesCreate from "../../../Components/Custom/LanguageLines/LanguageLinesCreate";
-import {closeLoading, showLoading} from "../../../utils/swal";
+import {closeLoading, showError, showLoading, showSuccess} from "../../../utils/swal";
 import LanguageLineDelete from "../../../Components/Custom/LanguageLines/LanguageLineDelete";
 import LanguageLineEdit from "../../../Components/Custom/LanguageLines/LanguageLineEdit";
+import {RootState} from "../../../slices";
 
 type EditModalProps = {
     id: number;
@@ -18,7 +19,7 @@ type EditModalProps = {
 const LanguageLines = () => {
     const [search, setSearch] = useState<string>('');
     const dispatch = useDispatch<any>();
-    const {items: languageLines, loading} = useSelector((state: any) => state.LanguageLines);
+    const {items: languageLines, loading} = useSelector((state: RootState) => state.LanguageLines);
 
     const [showCreate, hideCreate] = useModal(
         <LanguageLinesCreate onSuccess={() => {
@@ -62,6 +63,17 @@ const LanguageLines = () => {
             });
         }
     }
+
+    const handleRefreshTranslations = async () => {
+        try {
+            showLoading('Обновление переводов', 'Загружаем последние переводы...');
+            await dispatch(refreshLanguageLines());
+            closeLoading();
+        } catch (error) {
+            closeLoading();
+            await showError('Ошибка', 'Не удалось обновить переводы')
+        }
+    };
 
     useEffect(() => {
         dispatch(fetchLanguageLines());
@@ -116,10 +128,20 @@ const LanguageLines = () => {
                                 Clear
                             </Button>
                         </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                            <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            Create
-                        </Button>
+                        <div className='d-flex gap-1'>
+                            <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
+                                <FeatherIcon color="white" size={12} icon="plus-circle"/>
+                                Create
+                            </Button>
+                            <Button
+                                className='btn btn-primary d-flex gap-1 align-items-center'
+                                onClick={handleRefreshTranslations}
+                                disabled={loading}
+                            >
+                                <FeatherIcon color="white" size={12} icon="refresh-cw"/>
+                                Refresh
+                            </Button>
+                        </div>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>

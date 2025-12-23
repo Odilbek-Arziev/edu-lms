@@ -33,6 +33,7 @@ import {setLoggedinUser} from "../../helpers/api_helper";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
 import {useApiHandler} from "../../hooks/useApiHandler";
+import {RootState} from "../../slices";
 
 const Login = () => {
     const {recaptchaRef, executeRecaptcha} = useRecaptcha();
@@ -43,7 +44,7 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch<any>();
 
-    const selectLayoutState = (state: any) => state;
+    const selectLayoutState = (state: RootState) => state;
     const loginpageData = createSelector(
         selectLayoutState,
         (state) => ({

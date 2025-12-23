@@ -18,6 +18,7 @@ import {createSelector} from "reselect";
 import {resetForgetPassword} from "../../slices/auth/forgetpwd/reducer";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptchaSubmit} from "../../hooks/useRecaptchaSubmit";
+import {RootState} from "../../slices";
 
 
 const ForgetPasswordPage = (props: any) => {
@@ -44,7 +45,7 @@ const ForgetPasswordPage = (props: any) => {
     });
 
     const selectLayoutProperties = createSelector(
-        (state: any) => state.ForgetPassword,
+        (state: RootState) => state.ForgetPassword,
         (state) => ({
             forgetError: state.forgetError,
             forgetSuccessMsg: state.forgetSuccessMsg,

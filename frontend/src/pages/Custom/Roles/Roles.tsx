@@ -10,6 +10,7 @@ import RoleEdit from "../../../Components/Custom/Roles/RoleEdit";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {Link} from "react-router-dom";
 import {closeLoading, showLoading} from "../../../utils/swal";
+import {RootState} from "../../../slices";
 
 type EditModalProps = {
     id: number;
@@ -20,7 +21,7 @@ const Home = () => {
     const [search, setSearch] = useState<string>('');
     const dispatch = useDispatch<any>();
 
-    const {items: roles, loading} = useSelector((state: any) => state.Roles);
+    const {items: roles, loading} = useSelector((state: RootState) => state.Roles);
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {

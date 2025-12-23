@@ -14,6 +14,7 @@ import {fetchIcons} from "../../../slices/icons/thunk";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
+import {RootState} from "../../../slices";
 
 
 type EditModalProps = {
@@ -25,7 +26,7 @@ const Menu = () => {
     const [search, setSearch] = useState<string>('');
     const [role, setRole] = useState<any>(null);
 
-    const {items: menu, loading} = useSelector((state: any) => state.Menu);
+    const {items: menu, loading} = useSelector((state: RootState) => state.Menu);
     const roles = useSelector((state: any) => state.Roles.items);
     const rolesOptions = roles.map((item: any) => ({
         value: item.id,

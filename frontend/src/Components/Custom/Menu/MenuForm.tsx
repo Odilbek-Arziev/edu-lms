@@ -1,11 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 import Select from "react-select"
 import {flattenMenu} from "../../../utils/flatten";
+import {fetchMenu} from "../../../slices/menu/thunk";
+import {fetchRoles} from "../../../slices/roles/thunk";
+import {fetchIcons} from "../../../slices/icons/thunk";
+import {RootState} from "../../../slices";
 
 
 interface MenuFormProps {
@@ -17,9 +21,10 @@ interface MenuFormProps {
 }
 
 export default function MenuForm({onSubmit, onCancel, loader, initialValues, title}: MenuFormProps) {
-    const menu = useSelector((state: any) => state.Menu.items);
-    const roles = useSelector((state: any) => state.Roles.items);
-    const icons = useSelector((state: any) => state.Icons.items);
+    const dispatch = useDispatch<any>();
+    const menu = useSelector((state: RootState) => state.Menu.items);
+    const roles = useSelector((state: RootState) => state.Roles.items);
+    const icons = useSelector((state: RootState) => state.Icons.items);
     const menuItems = flattenMenu(menu)
 
     const validation: any = useFormik({
@@ -63,6 +68,12 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
         value: item.id,
         label: item.name,
     }))
+
+    useEffect(() => {
+        if (!menu?.length) dispatch(fetchMenu());
+        if (!roles?.length) dispatch(fetchRoles());
+        if (!icons?.length) dispatch(fetchIcons());
+    }, []);
 
     return (
         <Form onSubmit={validation.handleSubmit}>

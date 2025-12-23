@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import FeatherIcon from "feather-icons-react";
 import Select from "react-select";
 import {useSelector} from "react-redux";
+import {RootState} from "../../../slices";
 
 
 interface UserFormProps {
@@ -16,7 +17,7 @@ interface UserFormProps {
 }
 
 export default function UserForm({onSubmit, onCancel, loader, initialValues, title}: UserFormProps) {
-    const roles = useSelector((state: any) => state.Roles.items);
+    const roles = useSelector((state: RootState) => state.Roles.items);
     const rolesOptions = roles.map((item: any) => ({
         value: item.id,
         label: item.name,

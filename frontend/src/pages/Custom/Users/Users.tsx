@@ -23,6 +23,7 @@ import {fetchRoles} from "../../../slices/roles/thunk";
 import {useRecaptchaSubmit} from "../../../hooks/useRecaptchaSubmit";
 import {userForgetPassword} from "../../../slices/auth/forgetpwd/thunk";
 import ReCAPTCHA from "react-google-recaptcha";
+import {RootState} from "../../../slices";
 
 
 type EditModalProps = {
@@ -37,8 +38,8 @@ const Users = (props: any) => {
     const [status, setStatus] = useState<any>(null);
 
     const dispatch = useDispatch<any>();
-    const {users, loading, registerTypes} = useSelector((state: any) => state.Users);
-    const roles = useSelector((state: any) => state.Roles.items);
+    const {users, loading, registerTypes} = useSelector((state: RootState) => state.Users);
+    const roles = useSelector((state: RootState) => state.Roles.items);
     const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
         loadingTitle: "Отправка письма...",

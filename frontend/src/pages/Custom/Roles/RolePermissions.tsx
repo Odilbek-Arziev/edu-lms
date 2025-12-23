@@ -5,6 +5,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {editRole, getRoleItem} from "../../../slices/roles/thunk";
 import {useDispatch, useSelector} from "react-redux";
 import {showError, showSuccess} from "../../../utils/swal";
+import {RootState} from "../../../slices";
 
 
 const RolePermissions = () => {
@@ -13,7 +14,7 @@ const RolePermissions = () => {
     const {id} = useParams();
     let navigate = useNavigate();
     const dispatch = useDispatch<any>();
-    const {currentRole, loading, error} = useSelector((state: any) => state.Roles);
+    const {currentRole, loading, error} = useSelector((state: RootState) => state.Roles);
 
     useEffect(() => {
         const roleId = Number(id);
