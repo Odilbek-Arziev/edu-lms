@@ -12,6 +12,9 @@ import {Link} from "react-router-dom";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
+import {fetchLanguageLines} from "../../../slices/languageLines/thunk";
+import PaginationButtons from "../../../Components/Common/PaginationButtons";
+import {PER_PAGE} from "../../../constants";
 
 type EditModalProps = {
     id: number;
@@ -20,9 +23,10 @@ type EditModalProps = {
 
 const Home = () => {
     const [search, setSearch] = useState<string>('');
+    const [page, setPage] = useState<number>(1);
     const dispatch = useDispatch<any>();
 
-    const {items: roles, loading} = useSelector((state: RootState) => state.Roles);
+    const {items: roles, loading, count} = useSelector((state: RootState) => state.Roles);
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {
@@ -150,6 +154,15 @@ const Home = () => {
                         </tbody>
                     </Table>
                 </Container>
+                <PaginationButtons
+                    count={count}
+                    currentPage={page}
+                    perPageData={PER_PAGE}
+                    setCurrentPage={(p) => {
+                        setPage(p);
+                        dispatch(fetchRoles({page: p}));
+                    }}
+                />
             </div>
         </React.Fragment>
     );

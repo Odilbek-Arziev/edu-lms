@@ -24,6 +24,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
+import PaginationButtons from "../../../Components/Common/PaginationButtons";
+import {PER_PAGE} from "../../../constants";
 
 type EditModalProps = {
     id: number;
@@ -33,11 +35,12 @@ type EditModalProps = {
 const Users = (props: any) => {
     const [role, setRole] = useState<any>(null);
     const [search, setSearch] = useState<string>('');
+    const [page, setPage] = useState<number>(0);
     const [registerType, setRegisterType] = useState<any>(null);
     const [status, setStatus] = useState<any>(null);
 
     const dispatch = useDispatch<any>();
-    const {users, loading, registerTypes} = useSelector((state: RootState) => state.Users);
+    const {items: users, loading, registerTypes, count} = useSelector((state: RootState) => state.Users);
     const roles = useSelector((state: RootState) => state.Roles.items);
     const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
@@ -314,6 +317,15 @@ const Users = (props: any) => {
                         </tbody>
                     </Table>
                 </Container>
+                <PaginationButtons
+                    count={count}
+                    currentPage={page}
+                    perPageData={PER_PAGE}
+                    setCurrentPage={(p) => {
+                        setPage(p);
+                        dispatch(fetchUsers({page: p}));
+                    }}
+                />
             </div>
             <ReCAPTCHA
                 ref={recaptchaRef}

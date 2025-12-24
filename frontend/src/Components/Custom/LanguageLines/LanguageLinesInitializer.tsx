@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchLanguageLines} from '../../../slices/languageLines/thunk';
 import type {RootState} from '../../../slices';
 import i18n from '../../../i18n';
+import {fetchLanguageLines} from "../../../slices/languageLines/thunk";
 
 interface Props {
     children: React.ReactNode;
@@ -20,7 +20,6 @@ const LanguageLinesInitializer: React.FC<Props> = ({children}) => {
 
     useEffect(() => {
         const languages = Object.keys(translations)
-
         languages.forEach((lang) => {
             const translationForLang = translations[lang]
 

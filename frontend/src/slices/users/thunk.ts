@@ -1,13 +1,13 @@
 import {APIClient} from "../../helpers/api_helper";
 import {setRegisterTypes, usersError, usersRequest, usersSuccess} from "./reducer";
 
-export const fetchUsers = () => async (dispatch: any) => {
+export const fetchUsers = (params: { page?: number } = {}) => async (dispatch: any) => {
     const api = new APIClient();
 
     dispatch(usersRequest());
 
     try {
-        const response = await api.get('/users/')
+        const response = await api.get("/users/", params);
         dispatch(usersSuccess(response))
         return response
     } catch (error: any) {

@@ -6,18 +6,20 @@ import {
     setCurrentLanguage,
     upsertLanguageLine,
     removeLanguageLine,
-    LanguageLine
+    LanguageLine, PaginatedResponse
 } from "./reducer";
 import i18n from "../../i18n";
 import type {RootState} from "../index";
 
-export const fetchLanguageLines = () => async (dispatch: any, getState: () => RootState) => {
+export const fetchLanguageLines = (params: { page?: number } = {}) => async (dispatch: any, getState: () => RootState) => {
     const api = new APIClient();
 
     dispatch(languageLinesRequest());
 
     try {
-        const response: LanguageLine[] = await api.get("/language_lines/");
+        const response: PaginatedResponse<LanguageLine> =
+            await api.get("/language_lines/", params);
+
         dispatch(languageLinesSuccess(response));
 
         const state = getState();

@@ -2,7 +2,7 @@ import {menuSuccess, menuError, menuRequest} from './reducer'
 import {APIClient} from "../../helpers/api_helper";
 
 
-export const fetchMenu = (params: { search?: string; role?: number | null } = {}) => async (dispatch: any) => {
+export const fetchMenu = (params: { search?: string; role?: number | null, page?: number } = {}) => async (dispatch: any) => {
     const api = new APIClient();
 
     dispatch(menuRequest());
@@ -12,6 +12,7 @@ export const fetchMenu = (params: { search?: string; role?: number | null } = {}
         if (queryParams.role == null) delete queryParams.role;
 
         const response = await api.get("/menu/", queryParams);
+
         dispatch(menuSuccess(response));
         return response;
     } catch (error: any) {

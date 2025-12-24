@@ -7,3 +7,4 @@ from app.serializers.icons import IconSerializer
 class IconViewSet(BaseModelViewSet):
     queryset = Icon.objects.all()
     serializer_class = IconSerializer
+    pagination_class = None

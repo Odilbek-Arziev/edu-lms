@@ -16,6 +16,9 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
+import PaginationButtons from "../../../Components/Common/PaginationButtons";
+import {fetchLanguageLines} from "../../../slices/languageLines/thunk";
+import {PER_PAGE} from "../../../constants";
 
 
 type EditModalProps = {
@@ -26,14 +29,18 @@ type EditModalProps = {
 const Menu = () => {
     const [search, setSearch] = useState<string>('');
     const [role, setRole] = useState<any>(null);
+    const [page, setPage] = useState<number>(1);
+    const [count, setCount] = useState<number>(0);
+    const [perPage] = useState<number>(10);
 
+    const dispatch = useDispatch<any>();
     const {items: menu, loading} = useSelector((state: RootState) => state.Menu);
     const roles = useSelector((state: any) => state.Roles.items);
+
     const rolesOptions = roles.map((item: any) => ({
         value: item.id,
         label: item.name,
     }))
-    const dispatch = useDispatch<any>();
 
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
@@ -123,6 +130,15 @@ const Menu = () => {
         }
     }, [loading]);
 
+    useEffect(() => {
+        setCount(tableData.length);
+    }, [tableData]);
+
+    const paginatedData = useMemo(() => {
+        const start = (page - 1) * perPage;
+        return tableData.slice(start, start + perPage);
+    }, [tableData, page]);
+
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
 
     return (
@@ -165,7 +181,7 @@ const Menu = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {tableData && tableData.length > 0 ? tableData.map((row, idx) => (
+                        {paginatedData && paginatedData.length > 0 ? paginatedData.map((row, idx) => (
                             <tr key={row.id || idx}>
                                 <td>{idx + 1}</td>
                                 <td>{row.title}</td>
@@ -203,6 +219,15 @@ const Menu = () => {
                         </tbody>
                     </Table>
                 </Container>
+                <PaginationButtons
+                    count={count}
+                    currentPage={page}
+                    perPageData={PER_PAGE}
+                    setCurrentPage={(p) => {
+                        setPage(p);
+                        dispatch(fetchMenu({page: p}));
+                    }}
+                />
             </div>
         </React.Fragment>
     );

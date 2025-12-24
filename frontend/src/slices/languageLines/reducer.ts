@@ -4,6 +4,7 @@ export interface TranslationValue {
     en: string;
     ru: string;
     uz: string;
+
     [key: string]: string;
 }
 
@@ -21,6 +22,7 @@ export interface TranslationsByLanguage {
     en: FlatTranslations;
     ru: FlatTranslations;
     uz: FlatTranslations;
+
     [key: string]: FlatTranslations;
 }
 
@@ -31,6 +33,17 @@ export interface LanguageLinesState {
     currentLanguage: string;
     translations: TranslationsByLanguage;
     lastFetch: number | null;
+
+    count?: number;
+    next?: string | null;
+    previous?: string | null;
+}
+
+export interface PaginatedResponse<T> {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: T[];
 }
 
 export const initialState: LanguageLinesState = {
@@ -43,7 +56,10 @@ export const initialState: LanguageLinesState = {
         ru: {},
         uz: {}
     },
-    lastFetch: null
+    lastFetch: null,
+    count: 0,
+    next: null,
+    previous: null,
 };
 
 const LanguageLinesSlice = createSlice({
@@ -54,20 +70,29 @@ const LanguageLinesSlice = createSlice({
             state.loading = true;
             state.error = "";
         },
-        
-        languageLinesSuccess(state, action: PayloadAction<LanguageLine[]>) {
-            state.items = action.payload;
+
+        languageLinesSuccess(
+            state,
+            action: PayloadAction<PaginatedResponse<LanguageLine>>
+        ) {
+            const {results, count, next, previous} = action.payload;
+
+            state.items = results;
+            state.count = count;
+            state.next = next;
+            state.previous = previous;
+
             state.loading = false;
             state.error = "";
             state.lastFetch = Date.now();
-            
+
             const translationsByLang: TranslationsByLanguage = {
                 en: {},
                 ru: {},
                 uz: {}
             };
-            
-            action.payload.forEach((item: LanguageLine) => {
+
+            results.forEach((item: LanguageLine) => {
                 Object.keys(item.value).forEach((lang: string) => {
                     if (!translationsByLang[lang]) {
                         translationsByLang[lang] = {};
@@ -75,29 +100,29 @@ const LanguageLinesSlice = createSlice({
                     translationsByLang[lang][item.key] = item.value[lang];
                 });
             });
-            
+
             state.translations = translationsByLang;
         },
-        
+
         languageLinesError(state, action: PayloadAction<string>) {
             state.error = action.payload;
             state.loading = false;
         },
-        
+
         setCurrentLanguage(state, action: PayloadAction<string>) {
             state.currentLanguage = action.payload;
             localStorage.setItem("I18N_LANGUAGE", action.payload);
         },
-        
+
         upsertLanguageLine(state, action: PayloadAction<LanguageLine>) {
             const index = state.items.findIndex(item => item.id === action.payload.id);
-            
+
             if (index !== -1) {
                 state.items[index] = action.payload;
             } else {
                 state.items.push(action.payload);
             }
-            
+
             Object.keys(action.payload.value).forEach((lang: string) => {
                 if (state.translations[lang]) {
                     state.translations[lang][action.payload.key] = action.payload.value[lang];
@@ -107,10 +132,10 @@ const LanguageLinesSlice = createSlice({
 
         removeLanguageLine(state, action: PayloadAction<number>) {
             const item = state.items.find(item => item.id === action.payload);
-            
+
             if (item) {
                 state.items = state.items.filter(i => i.id !== action.payload);
-                
+
                 Object.keys(state.translations).forEach((lang: string) => {
                     if (state.translations[lang]) {
                         delete state.translations[lang][item.key];

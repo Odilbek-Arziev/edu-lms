@@ -34,8 +34,10 @@ import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
 import {useApiHandler} from "../../hooks/useApiHandler";
 import {RootState} from "../../slices";
+import withRouter from "../../Components/Common/withRouter";
+import {withTranslation} from "react-i18next";
 
-const Login = () => {
+const Login = (props: any) => {
     const {recaptchaRef, executeRecaptcha} = useRecaptcha();
     const [userLogin, setUserLogin] = useState<any>([]);
     const [passwordShow, setPasswordShow] = useState<boolean>(false);
@@ -63,8 +65,8 @@ const Login = () => {
             password: userLogin.password,
         },
         validationSchema: Yup.object({
-            login: Yup.string().required("Please Enter Your Email or Username"),
-            password: Yup.string().required("Please Enter Your Password"),
+            login: Yup.string().required(props.t('enter_email_or_username')),
+            password: Yup.string().required(props.t('enter_password')),
         }),
         onSubmit: async (values) => {
             const token = await executeRecaptcha();
@@ -116,7 +118,7 @@ const Login = () => {
                         navigate("/dashboard", {replace: true});
                     }, 300);
                 } else {
-                    console.error("❌ Ошибка сохранения данных");
+                    console.error(`❌ ${props.t('error_saving_data')}`);
                 }
             }
         };
@@ -134,7 +136,7 @@ const Login = () => {
         }
     }, [user]);
 
-    document.title = "Basic SignIn | Velzon - React Admin & Dashboard Template";
+    document.title = props.t('login_page')
     return (
         <React.Fragment>
             <ParticlesAuth>
@@ -148,7 +150,7 @@ const Login = () => {
                                             <img src={logoLight} alt="" width="150"/>
                                         </Link>
                                     </div>
-                                    <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
+                                    <p className="mt-3 fs-15 fw-medium">{props.t('slogan')}</p>
                                 </div>
                             </Col>
                         </Row>
@@ -158,8 +160,8 @@ const Login = () => {
                                 <Card className="mt-4">
                                     <CardBody className="p-4">
                                         <div className="text-center mt-2">
-                                            <h5 className="text-primary">Welcome Back !</h5>
-                                            <p className="text-muted">Sign in to continue to edu-lms.</p>
+                                            <h5 className="text-primary">{props.t('welcome_back')}!</h5>
+                                            <p className="text-muted">{props.t('login_to_continue')}.</p>
                                         </div>
                                         {error && error ? (<Alert color="danger"> {error} </Alert>) : null}
                                         <div className="p-2 mt-4">
@@ -172,12 +174,13 @@ const Login = () => {
                                                 action="#">
 
                                                 <div className="mb-3">
-                                                    <Label htmlFor="login" className="form-label">Email or
-                                                        Username</Label>
+                                                    <Label htmlFor="login" className="form-label">
+                                                        {props.t('email_or_username')}
+                                                    </Label>
                                                     <Input
                                                         name="login"
                                                         className="form-control"
-                                                        placeholder="Enter email or username"
+                                                        placeholder={props.t('enter_email_or_username')}
                                                         type="text"
                                                         onChange={validation.handleChange}
                                                         onBlur={validation.handleBlur}
@@ -193,18 +196,19 @@ const Login = () => {
 
                                                 <div className="mb-3">
                                                     <div className="float-end">
-                                                        <Link to="/forgot-password" className="text-muted">Forgot
-                                                            password?</Link>
+                                                        <Link to="/forgot-password" className="text-muted">
+                                                            {props.t('forgot_password')}?
+                                                        </Link>
                                                     </div>
                                                     <Label className="form-label"
-                                                           htmlFor="password-input">Password</Label>
+                                                           htmlFor="password-input">{props.t('password')}</Label>
                                                     <div className="position-relative auth-pass-inputgroup mb-3">
                                                         <Input
                                                             name="password"
                                                             value={validation.values.password || ""}
                                                             type={passwordShow ? "text" : "password"}
                                                             className="form-control pe-5"
-                                                            placeholder="Enter Password"
+                                                            placeholder={props.t('enter_password')}
                                                             onChange={validation.handleChange}
                                                             onBlur={validation.handleBlur}
                                                             invalid={
@@ -226,8 +230,9 @@ const Login = () => {
                                                 <div className="form-check">
                                                     <Input className="form-check-input" type="checkbox" value=""
                                                            id="auth-remember-check"/>
-                                                    <Label className="form-check-label" htmlFor="auth-remember-check">Remember
-                                                        me</Label>
+                                                    <Label className="form-check-label" htmlFor="auth-remember-check">
+                                                        {props.t('remember_me')}
+                                                    </Label>
                                                 </div>
 
                                                 <div className="mt-4">
@@ -235,8 +240,9 @@ const Login = () => {
                                                             disabled={loader && true}
                                                             className="btn btn-success w-100" type="submit">
                                                         {loader &&
-                                                        <Spinner size="sm" className='me-2'> Loading... </Spinner>}
-                                                        Sign In
+                                                        <Spinner size="sm"
+                                                                 className='me-2'> {props.t('loading')}... </Spinner>}
+                                                        {props.t('sign_in')}
                                                     </Button>
                                                 </div>
                                                 <div className="mt-4 d-flex justify-content-center">
@@ -248,7 +254,9 @@ const Login = () => {
                                                 </div>
                                                 <div className="mt-4 text-center">
                                                     <div className="signin-other-title">
-                                                        <h5 className="fs-13 mb-4 title">Sign In with</h5>
+                                                        <h5 className="fs-13 mb-4 title">
+                                                            {props.t('sign_in_with')}
+                                                        </h5>
                                                     </div>
                                                     <div>
                                                         <Link
@@ -286,8 +294,11 @@ const Login = () => {
                                 </Card>
 
                                 <div className="mt-4 text-center">
-                                    <p className="mb-0">Don't have an account ? <Link to="/register"
-                                                                                      className="fw-semibold text-primary text-decoration-underline"> Signup </Link>
+                                    <p className="mb-0">{props.t('no_account')}
+                                        ? <Link to="/register"
+                                                className="fw-semibold text-primary text-decoration-underline">
+                                            {props.t('sign_up')}
+                                        </Link>
                                     </p>
                                 </div>
 
@@ -300,4 +311,4 @@ const Login = () => {
     );
 };
 
-export default Login
+export default withRouter(withTranslation()(Login));

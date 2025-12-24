@@ -4,8 +4,18 @@ export const initialState = {
     items: [],
     currentRole: null,
     loading: false,
-    error: ''
+    error: '',
+    count: 0,
+    next: null,
+    previous: null
 };
+
+export interface PaginatedResponse<T> {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: T[];
+}
 
 const rolesSlice = createSlice({
     name: 'roles',
@@ -16,7 +26,13 @@ const rolesSlice = createSlice({
             state.error = "";
         },
         rolesSuccess(state, action) {
-            state.items = action.payload;
+            const {results, count, next, previous} = action.payload;
+
+            state.items = results;
+            state.count = count;
+            state.next = next;
+            state.previous = previous;
+
             state.loading = false;
             state.error = "";
         },

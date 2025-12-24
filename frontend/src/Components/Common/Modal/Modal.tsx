@@ -14,12 +14,10 @@ export function Modal({isActive, children, onClose}: ModalProps) {
                 onClose();
             }
         };
-
         if (isActive) {
             window.addEventListener('keydown', handleKeyboard);
             document.body.style.overflow = 'hidden';
         }
-
         return () => {
             window.removeEventListener('keydown', handleKeyboard);
             document.body.style.overflow = 'unset';
@@ -32,11 +30,9 @@ export function Modal({isActive, children, onClose}: ModalProps) {
         <div
             className="modal fade show d-block"
             style={{backgroundColor: 'rgba(0,0,0,0.5)'}}
-            onClick={onClose}
         >
             <div
                 className="modal-dialog modal-dialog-centered"
-                onClick={(e) => e.stopPropagation()}
             >
                 <div className="modal-content">
                     <div className="modal-header">

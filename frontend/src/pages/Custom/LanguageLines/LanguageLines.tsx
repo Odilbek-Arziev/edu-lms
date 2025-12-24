@@ -11,6 +11,8 @@ import LanguageLineDelete from "../../../Components/Custom/LanguageLines/Languag
 import LanguageLineEdit from "../../../Components/Custom/LanguageLines/LanguageLineEdit";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
+import PaginationButtons from "../../../Components/Common/PaginationButtons";
+import {PER_PAGE} from "../../../constants";
 
 type EditModalProps = {
     id: number;
@@ -19,8 +21,9 @@ type EditModalProps = {
 
 const LanguageLines = () => {
     const [search, setSearch] = useState<string>('');
+    const [page, setPage] = useState<number>(1);
     const dispatch = useDispatch<any>();
-    const {items: languageLines, loading} = useSelector((state: RootState) => state.LanguageLines);
+    const {items: languageLines, loading, count} = useSelector((state: RootState) => state.LanguageLines);
 
     const [showCreate, hideCreate] = useModal(
         <LanguageLinesCreate onSuccess={() => {
@@ -77,8 +80,8 @@ const LanguageLines = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchLanguageLines());
-    }, [dispatch])
+        dispatch(fetchLanguageLines({page}));
+    }, [dispatch, page])
 
     useEffect(() => {
         if (loading) {
@@ -175,6 +178,17 @@ const LanguageLines = () => {
                     </Table>
                 </Container>
             </div>
+            {count > 10 ? (
+                <PaginationButtons
+                    count={count}
+                    currentPage={page}
+                    perPageData={PER_PAGE}
+                    setCurrentPage={(p) => {
+                        setPage(p);
+                        dispatch(fetchLanguageLines({page: p}));
+                    }}
+                />
+            ) : null}
         </React.Fragment>
     );
 };

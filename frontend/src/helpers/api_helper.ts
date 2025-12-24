@@ -125,14 +125,7 @@ class APIClient {
     }
 
     get = (url: string, params?: any): Promise<any> => {
-        let queryString = "";
-        if (params) {
-            queryString = Object.keys(params)
-                .map((key) => `${key}=${params[key]}`)
-                .join("&");
-        }
-        const fullUrl = queryString ? `${url}?${queryString}` : url;
-        return this.client.get(fullUrl);
+        return this.client.get(url, {params});
     };
 
     create = (url: string, data: any): Promise<any> => {

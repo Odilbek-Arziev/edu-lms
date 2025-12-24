@@ -1,13 +1,13 @@
 import {rolesSuccess, rolesError, rolesRequest, setCurrentRole} from './reducer'
 import {APIClient} from "../../helpers/api_helper";
 
-export const fetchRoles = () => async (dispatch: any) => {
+export const fetchRoles = (params: { page?: number } = {}) => async (dispatch: any) => {
     const api = new APIClient();
 
     dispatch(rolesRequest());
 
     try {
-        const response = await api.get('/roles/')
+        const response = await api.get('/roles/', params)
         dispatch(rolesSuccess(response))
         return response
     } catch (error: any) {
