@@ -10,6 +10,7 @@ import {closeLoading, showError, showLoading, showSuccess} from "../../../utils/
 import LanguageLineDelete from "../../../Components/Custom/LanguageLines/LanguageLineDelete";
 import LanguageLineEdit from "../../../Components/Custom/LanguageLines/LanguageLineEdit";
 import {RootState} from "../../../slices";
+import SearchInput from "../../../Components/Common/SearchInput";
 
 type EditModalProps = {
     id: number;
@@ -111,17 +112,10 @@ const LanguageLines = () => {
                     <BreadCrumb title="Language" pageTitle="Dashboards"/>
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
-                            <div className="search-box">
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <i className="ri-search-line search-icon"/>
-                            </div>
-
+                            <SearchInput
+                                value={search}
+                                onChange={setSearch}
+                            />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center'
                                     onClick={() => setSearch('')}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>

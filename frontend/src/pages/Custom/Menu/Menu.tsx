@@ -2,7 +2,6 @@ import React, {useEffect, useState, useMemo} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
-import Select from "react-select";
 import {useModal} from "../../../Components/Hooks/useModal";
 import MenuCreate from "../../../Components/Custom/Menu/MenuCreate";
 import {fetchMenu, getMenuItem} from "../../../slices/menu/thunk";
@@ -15,6 +14,8 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
+import SearchInput from "../../../Components/Common/SearchInput";
+import CustomSelect from "../../../Components/Common/RoleSelect";
 
 
 type EditModalProps = {
@@ -131,27 +132,15 @@ const Menu = () => {
                     <BreadCrumb title="Menu" pageTitle="Dashboards"/>
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
-                            <div className="search-box">
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <i className="ri-search-line search-icon"/>
-                            </div>
-                            <Select
-                                value={rolesOptions.find((option: any) => option.value === role) || null}
+                            <SearchInput
+                                value={search}
+                                onChange={setSearch}
+                            />
+                            <CustomSelect
+                                placeholder='Select role...'
+                                value={role}
                                 options={rolesOptions}
-                                isClearable
-                                placeholder="Select role..."
-                                styles={{
-                                    container: (provided: any) => ({...provided, width: '20vw'})
-                                }}
-                                onChange={(selectedOption: any) => {
-                                    setRole(selectedOption?.value || null);
-                                }}
+                                onChange={setRole}
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>

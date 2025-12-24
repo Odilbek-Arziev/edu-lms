@@ -6,7 +6,6 @@ import {
     DropdownItem,
     DropdownMenu,
     DropdownToggle,
-    Input,
     Table,
     UncontrolledDropdown
 } from "reactstrap";
@@ -18,13 +17,13 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
 import UserDelete from "../../../Components/Custom/Users/UserDelete";
 import UserEdit from "../../../Components/Custom/Users/UserEdit";
-import Select from "react-select";
 import {fetchRoles} from "../../../slices/roles/thunk";
 import {useRecaptchaSubmit} from "../../../hooks/useRecaptchaSubmit";
 import {userForgetPassword} from "../../../slices/auth/forgetpwd/thunk";
 import ReCAPTCHA from "react-google-recaptcha";
 import {RootState} from "../../../slices";
-
+import SearchInput from "../../../Components/Common/SearchInput";
+import CustomSelect from "../../../Components/Common/RoleSelect";
 
 type EditModalProps = {
     id: number;
@@ -180,51 +179,27 @@ const Users = (props: any) => {
                 <Container fluid>
                     <BreadCrumb title="Users" pageTitle="Dashboards"/>
                     <div className='d-flex gap-1'>
-                        <div className="search-box">
-                            <Input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                            <i className="ri-search-line search-icon"/>
-                        </div>
-                        <Select
-                            value={rolesOptions.find((option: any) => option.value === role) || null}
+                        <SearchInput
+                            value={search}
+                            onChange={setSearch}
+                        />
+                        <CustomSelect
+                            placeholder='Select role...'
+                            value={role}
                             options={rolesOptions}
-                            isClearable
-                            placeholder="Select role..."
-                            styles={{
-                                container: (provided: any) => ({...provided, width: '15vw'})
-                            }}
-                            onChange={(selectedOption: any) => {
-                                setRole(selectedOption?.value || null);
-                            }}
+                            onChange={setRole}
                         />
-                        <Select
-                            value={regTypesOptions.find((option: any) => option.value === registerType) || null}
-                            options={regTypesOptions}
-                            isClearable
+                        <CustomSelect
                             placeholder="Select register type..."
-                            styles={{
-                                container: (provided: any) => ({...provided, width: '15vw'})
-                            }}
-                            onChange={(selectedOption: any) => {
-                                setRegisterType(selectedOption?.value || null);
-                            }}
+                            value={registerType}
+                            options={regTypesOptions}
+                            onChange={setRegisterType}
                         />
-                        <Select
-                            value={statusTypes.find((option: any) => option.value === status) || null}
-                            options={statusTypes}
-                            isClearable
+                        <CustomSelect
                             placeholder="Select status..."
-                            styles={{
-                                container: (provided: any) => ({...provided, width: '15vw'})
-                            }}
-                            onChange={(selectedOption: any) => {
-                                setStatus(selectedOption?.value || null);
-                            }}
+                            value={status}
+                            options={statusTypes}
+                            onChange={setStatus}
                         />
                         <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                             <FeatherIcon color="white" size={12} icon="trash"/>

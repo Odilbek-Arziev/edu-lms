@@ -11,6 +11,7 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {Link} from "react-router-dom";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
+import SearchInput from "../../../Components/Common/SearchInput";
 
 type EditModalProps = {
     id: number;
@@ -101,16 +102,10 @@ const Home = () => {
                     <BreadCrumb title="Roles" pageTitle="Dashboards"/>
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
-                            <div className="search-box">
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <i className="ri-search-line search-icon"/>
-                            </div>
+                            <SearchInput
+                                value={search}
+                                onChange={setSearch}
+                            />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center'
                                     onClick={() => setSearch('')}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
