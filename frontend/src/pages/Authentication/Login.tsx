@@ -26,7 +26,7 @@ import {useFormik} from "formik";
 // actions
 import {loginUser, resetLoginFlag} from "../../slices/thunks";
 
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/svg/logo.png";
 import {createSelector} from 'reselect';
 import {HOST_API_URL} from "../../helpers/url_helper";
 import {setLoggedinUser} from "../../helpers/api_helper";
@@ -145,10 +145,10 @@ const Login = () => {
                                 <div className="text-center mt-sm-5 mb-4 text-white-50">
                                     <div>
                                         <Link to="/" className="d-inline-block auth-logo">
-                                            <img src={logoLight} alt="" height="20"/>
+                                            <img src={logoLight} alt="" width="150"/>
                                         </Link>
                                     </div>
-                                    <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                                    <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
                                 </div>
                             </Col>
                         </Row>
@@ -159,7 +159,7 @@ const Login = () => {
                                     <CardBody className="p-4">
                                         <div className="text-center mt-2">
                                             <h5 className="text-primary">Welcome Back !</h5>
-                                            <p className="text-muted">Sign in to continue to Velzon.</p>
+                                            <p className="text-muted">Sign in to continue to edu-lms.</p>
                                         </div>
                                         {error && error ? (<Alert color="danger"> {error} </Alert>) : null}
                                         <div className="p-2 mt-4">

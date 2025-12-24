@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Button, Card, CardBody, Col, Container, Row, Form, Input, Label, FormFeedback} from 'reactstrap';
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/svg/logo.png";
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
@@ -63,11 +63,11 @@ const ResetPasswordPage = () => {
                         <Col lg={12}>
                             <div className="text-center mt-sm-5 mb-4 text-white-50">
                                 <div>
-                                    <Link to="/#" className="d-inline-block auth-logo">
-                                        <img src={logoLight} alt="" height="20"/>
+                                    <Link to="/" className="d-inline-block auth-logo">
+                                        <img src={logoLight} alt="" width="150"/>
                                     </Link>
                                 </div>
-                                <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                                <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
                             </div>
                         </Col>
                     </Row>

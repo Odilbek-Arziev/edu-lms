@@ -31,12 +31,12 @@
 }
 
 .auth-one-bg{
-    background-image: url("../../images/auth-one-bg.jpg");
+    background-image: url("../../images/web2.png");
     background-position: center;
     background-size: cover;
 
     .bg-overlay{
-        background: linear-gradient(to right, darken($primary, 6%), $primary);
+        background: linear-gradient(to right, darken(#0065b3, 6%), rgba(6, 64, 210, 0.8));
         opacity: 0.9;
     }
 }

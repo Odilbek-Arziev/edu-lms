@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import withRouter from "../../Components/Common/withRouter";
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/svg/logo.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {createSelector} from "reselect";
 import {emailLinkLogin} from "../../slices/auth/email_login/thunk";
@@ -64,10 +64,10 @@ const EmailLinkLoginPage = (props: any) => {
                             <div className="text-center mt-sm-5 mb-4 text-white-50">
                                 <div>
                                     <Link to="/" className="d-inline-block auth-logo">
-                                        <img src={logoLight} alt="" height="20"/>
+                                        <img src={logoLight} alt="" width="150"/>
                                     </Link>
                                 </div>
-                                <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                                <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
                             </div>
                         </Col>
                     </Row>

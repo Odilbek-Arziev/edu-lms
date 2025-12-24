@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {Card, CardBody, Col, Container, Row, Button} from 'reactstrap';
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/svg/logo.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import {maskEmail} from "../../helpers/maskEmail";
 import {resendCode, verifyUser} from "../../slices/auth/register/thunk";
@@ -150,11 +150,11 @@ const VerifyEmail = () => {
                                 <Col lg={12}>
                                     <div className="text-center mt-sm-5 mb-4 text-white-50">
                                         <div>
-                                            <Link to="/dashboard" className="d-inline-block auth-logo">
-                                                <img src={logoLight} alt="" height="20"/>
+                                            <Link to="/" className="d-inline-block auth-logo">
+                                                <img src={logoLight} alt="" width="150"/>
                                             </Link>
                                         </div>
-                                        <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                                        <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
                                     </div>
                                 </Col>
                             </Row>

@@ -141,7 +141,7 @@ const Layout = (props: any) => {
                     onChangeLayoutMode={onChangeLayoutMode}/>
                 <Sidebar layoutType={layoutType}/>
                 <div className="main-content">{props.children}
-                    <Footer/>
+                    {/*<Footer/>*/}
                 </div>
             </div>
             <RightSidebar/>
