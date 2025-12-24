@@ -104,6 +104,38 @@ const LanguageLinesSlice = createSlice({
             state.translations = translationsByLang;
         },
 
+        setAllTranslations(state, action: PayloadAction<LanguageLine[]>) {
+            if (!action.payload || !Array.isArray(action.payload)) {
+                console.error('setAllTranslations: payload is undefined or not an array', action.payload);
+                state.loading = false;
+                return;
+            }
+
+            const translationsByLang: TranslationsByLanguage = {
+                en: {},
+                ru: {},
+                uz: {}
+            };
+
+            action.payload.forEach((item: LanguageLine) => {
+                if (!item || !item.key || !item.value) {
+                    console.warn('Invalid language line item:', item);
+                    return;
+                }
+
+                Object.keys(item.value).forEach((lang: string) => {
+                    if (!translationsByLang[lang]) {
+                        translationsByLang[lang] = {};
+                    }
+                    translationsByLang[lang][item.key] = item.value[lang];
+                });
+            });
+
+            state.translations = translationsByLang;
+            state.loading = false;
+            state.error = "";
+        },
+
         languageLinesError(state, action: PayloadAction<string>) {
             state.error = action.payload;
             state.loading = false;
@@ -149,6 +181,7 @@ const LanguageLinesSlice = createSlice({
 export const {
     languageLinesRequest,
     languageLinesSuccess,
+    setAllTranslations,
     languageLinesError,
     setCurrentLanguage,
     upsertLanguageLine,

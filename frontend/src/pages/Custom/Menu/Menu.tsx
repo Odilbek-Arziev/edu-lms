@@ -17,7 +17,6 @@ import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
-import {fetchLanguageLines} from "../../../slices/languageLines/thunk";
 import {PER_PAGE} from "../../../constants";
 
 

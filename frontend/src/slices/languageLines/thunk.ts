@@ -6,7 +6,7 @@ import {
     setCurrentLanguage,
     upsertLanguageLine,
     removeLanguageLine,
-    LanguageLine, PaginatedResponse
+    LanguageLine, PaginatedResponse, setAllTranslations
 } from "./reducer";
 import i18n from "../../i18n";
 import type {RootState} from "../index";
@@ -35,6 +35,45 @@ export const fetchLanguageLines = (params: { page?: number } = {}) => async (dis
         return null;
     }
 }
+
+export const loadAllTranslations = () => async (dispatch: any, getState: () => RootState) => {
+    const api = new APIClient();
+
+    try {
+        const languageLines: LanguageLine[] =
+            await api.get("/language_lines/", {page_size: 'all'});
+
+        if (!Array.isArray(languageLines)) {
+            console.error('Invalid API response - not an array:', languageLines);
+            dispatch(languageLinesError('Некорректный ответ от сервера'));
+            return false;
+        }
+
+        dispatch(setAllTranslations(languageLines));
+
+        const state = getState();
+        const currentLang = state.LanguageLines.currentLanguage;
+        const translations = state.LanguageLines.translations;
+
+        Object.keys(translations).forEach((lang: string) => {
+            i18n.addResourceBundle(
+                lang,
+                "translation",
+                translations[lang],
+                true,
+                true
+            );
+        });
+
+        await i18n.changeLanguage(currentLang);
+
+        return true;
+    } catch (error: any) {
+        console.error('❌ Error loading translations:', error);
+        dispatch(languageLinesError('Ошибка загрузки переводов'));
+        return false;
+    }
+};
 
 export const createLanguageLines = (data: Omit<LanguageLine, 'id'>) => async (dispatch: any) => {
     const api = new APIClient();

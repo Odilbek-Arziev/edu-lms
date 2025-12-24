@@ -150,7 +150,7 @@ const VerticalLayout = (props: any) => {
                     <React.Fragment key={key}>
                         {/* Main Header */}
                         {item['isHeader'] ?
-                            <div className="menu-title"><span data-key="t-menu">{props.t(item.label)}</span></div>
+                            <div className="menu-title"><span data-key="t-menu">{props.t(item.label.toLowerCase())}</span></div>
                             : (
                                 (item.subItems ? (
                                     <div className="nav-item">
@@ -160,7 +160,7 @@ const VerticalLayout = (props: any) => {
                                             to={item.link ? item.link : "/#"}
                                             data-bs-toggle="collapse"
                                         >
-                                            {item.icon} <span data-key="t-apps">{props.t(item.label)}</span>
+                                            {item.icon} <span data-key="t-apps">{props.t(item.label.toLowerCase())}</span>
                                         </Link>
                                         <Collapse
                                             className="menu-dropdown"
@@ -178,7 +178,7 @@ const VerticalLayout = (props: any) => {
                                                                     >
                                                                         {subItem.icon &&
                                                                         <span className="me-2">{subItem.icon}</span>}
-                                                                        {props.t(subItem.label)}
+                                                                        {props.t(subItem.label.toLowerCase())}
                                                                         {subItem.badgeName ?
                                                                             <span
                                                                                 className={"badge badge-pill bg-" + subItem.badgeColor}
@@ -193,7 +193,7 @@ const VerticalLayout = (props: any) => {
                                                                         className="nav-link"
                                                                         to="/#"
                                                                         data-bs-toggle="collapse"
-                                                                    > {props.t(subItem.label)}
+                                                                    > {props.t(subItem.label.toLowerCase())}
                                                                         {subItem.badgeName ?
                                                                             <span
                                                                                 className={"badge badge-pill bg-" + subItem.badgeColor}
@@ -216,7 +216,7 @@ const VerticalLayout = (props: any) => {
                                                                                                     {childItem.icon &&
                                                                                                     <span
                                                                                                         className="me-2">{childItem.icon}</span>}
-                                                                                                    {props.t(childItem.label)}
+                                                                                                    {props.t(childItem.label.toLowerCase())}
                                                                                                 </Link>
                                                                                             </div>
                                                                                             : <div className="nav-item">
@@ -224,7 +224,7 @@ const VerticalLayout = (props: any) => {
                                                                                                       className="nav-link"
                                                                                                       onClick={childItem.click}
                                                                                                       data-bs-toggle="collapse">
-                                                                                                    {props.t(childItem.label)}
+                                                                                                    {props.t(childItem.label.toLowerCase())}
                                                                                                 </Link>
                                                                                                 <Collapse
                                                                                                     className="menu-dropdown"
@@ -237,7 +237,7 @@ const VerticalLayout = (props: any) => {
                                                                                                                 <Link
                                                                                                                     to={subChildItem.link}
                                                                                                                     className="nav-link"
-                                                                                                                    data-key="t-basic-action">{props.t(subChildItem.label)} </Link>
+                                                                                                                    data-key="t-basic-action">{props.t(subChildItem.label.toLowerCase())} </Link>
                                                                                                             </div>
                                                                                                         ))}
                                                                                                     </ul>
@@ -263,7 +263,7 @@ const VerticalLayout = (props: any) => {
                                         <Link
                                             className="nav-link menu-link"
                                             to={item.link ? item.link : "/#"}>
-                                            {item.icon} <span>{props.t(item.label)}</span>
+                                            {item.icon} <span>{props.t(item.label.toLowerCase())}</span>
                                             {item.badgeName ?
                                                 <span className={"badge badge-pill bg-" + item.badgeColor}
                                                       data-key="t-new">{item.badgeName}</span>

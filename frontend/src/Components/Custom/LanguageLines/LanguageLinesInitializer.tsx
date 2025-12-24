@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import type {RootState} from '../../../slices';
 import i18n from '../../../i18n';
-import {fetchLanguageLines} from "../../../slices/languageLines/thunk";
+import {loadAllTranslations} from "../../../slices/languageLines/thunk";
 
 interface Props {
     children: React.ReactNode;
@@ -10,12 +10,10 @@ interface Props {
 
 const LanguageLinesInitializer: React.FC<Props> = ({children}) => {
     const dispatch = useDispatch()
-    const {translations, currentLanguage, loading, items} = useSelector(
-        (state: RootState) => state.LanguageLines
-    )
+    const {translations} = useSelector((state: RootState) => state.LanguageLines)
 
     useEffect(() => {
-        dispatch(fetchLanguageLines() as any)
+        dispatch(loadAllTranslations() as any)
     }, [dispatch])
 
     useEffect(() => {
