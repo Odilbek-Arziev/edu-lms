@@ -6,10 +6,11 @@ import {
     setCurrentLanguage,
     upsertLanguageLine,
     removeLanguageLine,
-    LanguageLine, PaginatedResponse, setAllTranslations
+    setAllTranslations
 } from "./reducer";
 import i18n from "../../i18n";
 import type {RootState} from "../index";
+import {LanguageLine, PaginatedResponse} from "../../types/i18nTypes";
 
 export const fetchLanguageLines = (params: { page?: number } = {}) => async (dispatch: any, getState: () => RootState) => {
     const api = new APIClient();
