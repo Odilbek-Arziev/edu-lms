@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import MenuForm from "./MenuForm";
 import {useDispatch} from "react-redux";
-import {editMenu} from "../../../slices/menu/thunk";
+import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 
 interface MenuEditProps {
@@ -19,7 +19,7 @@ export default function MenuEdit({onCancel, onSuccess, id, initialValues}: MenuE
 
     async function onSubmit(data: any, actions: any) {
         await handleRequest(
-            () => dispatch(editMenu(id, data)),
+            () => dispatch(menuThunks.update(id, data)),
             {
                 onSuccess,
                 onResetForm: () => actions.resetForm()

@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchMenu} from "../slices/menu/thunk";
+import {menuThunks} from "../slices/menu";
 import {RootState} from "../slices";
 
 const Navdata = () => {
@@ -13,7 +13,7 @@ const Navdata = () => {
     const [menuStates, setMenuStates] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
-        dispatch(fetchMenu())
+        dispatch(menuThunks.fetch())
     }, [dispatch])
 
     const menu = useSelector((state: RootState) => state.Menu.items);

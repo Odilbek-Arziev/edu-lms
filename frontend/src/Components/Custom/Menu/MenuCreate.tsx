@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import MenuForm from "./MenuForm";
 import {useDispatch} from "react-redux";
-import {createMenu} from "../../../slices/menu/thunk";
+import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 
 interface MenuCreateProps {
@@ -16,7 +16,7 @@ export default function MenuCreate({onCancel, onSuccess}: MenuCreateProps) {
 
     async function onSubmit(data: any, actions: any) {
         await handleRequest(
-            () => dispatch(createMenu(data)),
+            () => dispatch(menuThunks.create(data)),
             {
                 onSuccess,
                 onResetForm: () => actions.resetForm()

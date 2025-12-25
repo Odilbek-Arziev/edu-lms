@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 import {useModal} from "../../../Components/Hooks/useModal";
 import MenuCreate from "../../../Components/Custom/Menu/MenuCreate";
-import {fetchMenu, getMenuItem} from "../../../slices/menu/thunk";
 import MenuDelete from "../../../Components/Custom/Menu/MenuDelete";
 import MenuEdit from "../../../Components/Custom/Menu/MenuEdit";
 import {flattenMenu} from "../../../utils/flatten";
@@ -18,6 +17,7 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
+import {menuThunks} from "../../../slices/menu";
 
 
 type EditModalProps = {
@@ -43,7 +43,7 @@ const Menu = () => {
 
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
-            dispatch(fetchMenu())
+            dispatch(menuThunks.fetch())
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
@@ -53,7 +53,7 @@ const Menu = () => {
             <MenuDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchMenu());
+                    dispatch(menuThunks.fetch())
                     hideDelete();
                 }}
                 onCancel={() => hideDelete()}
@@ -66,7 +66,7 @@ const Menu = () => {
             <MenuEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchMenu());
+                    dispatch(menuThunks.fetch())
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
@@ -98,7 +98,7 @@ const Menu = () => {
     }, [menu, search, role]);
 
     async function getData(id: number) {
-        const response = await dispatch(getMenuItem(id));
+        const response = await dispatch(menuThunks.getById(id))
         if (response) {
             showEdit({
                 id: id,
@@ -116,7 +116,7 @@ const Menu = () => {
     }
 
     useEffect(() => {
-        dispatch(fetchMenu());
+        dispatch(menuThunks.fetch())
         dispatch(fetchRoles())
         dispatch(fetchIcons())
     }, [dispatch])
@@ -224,7 +224,7 @@ const Menu = () => {
                     perPageData={PER_PAGE}
                     setCurrentPage={(p) => {
                         setPage(p);
-                        dispatch(fetchMenu({page: p}));
+                        dispatch(menuThunks.fetch({page: p}))
                     }}
                 />
             </div>

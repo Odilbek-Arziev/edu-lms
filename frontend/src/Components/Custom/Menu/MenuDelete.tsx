@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
-import {deleteMenu} from "../../../slices/menu/thunk";
+import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 
 interface MenuDeleteProps {
@@ -18,7 +18,7 @@ export default function MenuDelete({onCancel, onSuccess, id}: MenuDeleteProps) {
 
     async function onDelete() {
         await handleRequest(
-            () => dispatch(deleteMenu(id)),
+            () => dispatch(menuThunks.delete(id)),
             {onSuccess}
         )
     }
