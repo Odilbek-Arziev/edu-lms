@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
 import {useApiHandler} from "../../../hooks/useApiHandler";
-import {deleteUser} from "../../../slices/users/thunk";
+import {usersThunks} from "../../../slices/users";
 
 interface UserDeleteProps {
     onCancel: () => void;
@@ -17,7 +17,7 @@ export default function UserDelete({onCancel, onSuccess, id}: UserDeleteProps) {
 
     async function onDelete() {
         await handleRequest(
-            () => dispatch(deleteUser(id)),
+            () => dispatch(usersThunks.delete(id)),
             {onSuccess}
         )
     }

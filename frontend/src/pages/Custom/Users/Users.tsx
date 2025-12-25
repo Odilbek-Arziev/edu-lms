@@ -11,7 +11,6 @@ import {
 } from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import {editUser, fetchUsers, getRegisterTypes, getUser} from "../../../slices/users/thunk";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
@@ -26,6 +25,7 @@ import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
 import {rolesThunks} from "../../../slices/roles";
+import {usersThunks} from "../../../slices/users";
 
 type EditModalProps = {
     id: number;
@@ -40,8 +40,10 @@ const Users = (props: any) => {
     const [status, setStatus] = useState<any>(null);
 
     const dispatch = useDispatch<any>();
-    const {items: users, loading, registerTypes, count} = useSelector((state: RootState) => state.Users);
-    const roles = useSelector((state: RootState) => state.Roles.items);
+
+    const {items: users = [], loading, registerTypes = [], count} = useSelector((state: RootState) => state.Users);
+    const {items: roles} = useSelector((state: RootState) => state.Roles);
+
     const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
         loadingTitle: "Отправка письма...",
@@ -49,31 +51,27 @@ const Users = (props: any) => {
         showLoadingModal: true
     });
 
-    const rolesOptions = [
-        ...roles.map((item: any) => ({
-            value: item.id,
-            label: item.name,
-        }))
-    ];
+    const rolesOptions = roles?.map((item: any) => ({
+        value: item.id,
+        label: item.name,
+    })) || [];
 
-    const regTypesOptions = [
-        ...registerTypes.map((item: any) => ({
-            value: item.id,
-            label: item.name,
-        }))
-    ];
+    const regTypesOptions = registerTypes?.map((item: any) => ({
+        value: item.id,
+        label: item.name,
+    })) || [];
 
     const statusTypes = [
         {value: 'active', label: 'active'},
         {value: 'passive', label: 'passive'}
-    ]
+    ];
 
     const [showDelete, hideDelete] = useModal<{ id: number }>(
         (props: { id: number }) => (
             <UserDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchUsers());
+                    dispatch(usersThunks.fetch());
                     hideDelete();
                 }}
                 onCancel={() => hideDelete()}
@@ -86,7 +84,7 @@ const Users = (props: any) => {
             <UserEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchUsers());
+                    dispatch(usersThunks.fetch());
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
@@ -95,7 +93,8 @@ const Users = (props: any) => {
     );
 
     async function getData(id: number) {
-        const response = await dispatch(getUser(id));
+        const response = await dispatch(usersThunks.getById(id));
+
         if (response) {
             showEdit({
                 id: id,
@@ -147,15 +146,15 @@ const Users = (props: any) => {
     }, [search, users, role, registerType, status]);
 
     async function handleStatus(id: number, isActive: boolean) {
-        await dispatch(editUser(id, {is_active: !isActive}))
-        dispatch(fetchUsers());
+        await dispatch(usersThunks.update(id, {is_active: !isActive}))
+        dispatch(usersThunks.fetch());
     }
 
     const clearFilter = () => {
         setRole(null)
         setSearch('')
-        setRegisterType('')
-        setStatus('')
+        setRegisterType(null)
+        setStatus(null)
     }
 
     const resetUserPassword = (email: string) => {
@@ -163,9 +162,9 @@ const Users = (props: any) => {
     };
 
     useEffect(() => {
-        dispatch(fetchUsers())
+        dispatch(usersThunks.fetch());
         dispatch(rolesThunks.fetch())
-        dispatch(getRegisterTypes())
+        dispatch(usersThunks.getRegisterTypes());
     }, [])
 
     useEffect(() => {
@@ -225,95 +224,105 @@ const Users = (props: any) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {tableData ? tableData.map((user: any, idx: number) => (
-                            <tr key={idx}>
-                                <td>{idx + 1}</td>
-                                <td>{user.first_name.length ? user.first_name : '-'}</td>
-                                <td>{user.last_name.length ? user.last_name : '-'}</td>
-                                <td>{user.email}</td>
-                                <td>via {user.register_type.name}</td>
-                                <td>
-                                    {user.groups && user.groups.length > 0 ? user.groups.map((item: any) => (
-                                        <span
-                                            key={item.id}
-                                            className={`badge ${roleTypeColors[item.name] ?? 'bg-secondary'} me-1`}
-                                        >
-                                            {item.name}
-                                        </span>
-                                    )) : '-'}
-                                </td>
-                                <td>{user.is_active
-                                    ? <span className='badge bg-success'>active</span>
-                                    : <span className='badge bg-danger'>passive</span>}
-                                </td>
-                                <td>{user.phone_number ? user.phone_number : '-'}</td>
-                                <td>
-                                    {user.telegram_link ? (
-                                        <a
-                                            href={`https://t.me/${user.telegram_link}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            https://t.me/{user.telegram_link}
-                                        </a>
-                                    ) : (
-                                        '-'
-                                    )}
-                                </td>
-                                <td className="text-center">
-                                    <UncontrolledDropdown>
-                                        <DropdownToggle
-                                            tag="button"
-                                            className="btn btn-light btn-icon btn-sm"
-                                            aria-label="Действия"
-                                        >
-                                            <FeatherIcon icon="more-vertical" size={16}/>
-                                        </DropdownToggle>
-
-                                        <DropdownMenu end className="dropdown-menu-end">
-                                            <DropdownItem
-                                                className="d-flex align-items-center gap-2 text-warning"
-                                                onClick={() => getData(user.id)}
-                                            >
-                                                <FeatherIcon icon="edit" size={14}/>
-                                                Редактировать
-                                            </DropdownItem>
-
-                                            <DropdownItem onClick={() => handleStatus(user.id, user.is_active)}>
-                                                {user.is_active ?
-                                                    (
-                                                        <span className="d-flex align-items-center gap-2 text-info">
-                                                            <FeatherIcon icon="x" size={14}/>
-                                                            Деактивировать
-                                                        </span>
-                                                    ) :
-                                                    (
-                                                        <span className="d-flex align-items-center gap-2 text-info">
-                                                            <FeatherIcon icon="check" size={14}/>
-                                                            Активировать
-                                                        </span>
-                                                    )}
-                                            </DropdownItem>
-
-                                            <DropdownItem
-                                                className="text-danger d-flex align-items-center gap-2"
-                                                onClick={() => showDelete({id: user.id})}
-                                            >
-                                                <FeatherIcon icon="trash-2" size={14}/>
-                                                Удалить
-                                            </DropdownItem>
-                                            <DropdownItem
-                                                className="text-secondary d-flex align-items-center gap-2"
-                                                onClick={() => resetUserPassword(user.email)}
-                                            >
-                                                <FeatherIcon icon="lock" size={14}/>
-                                                Сбросить пароль
-                                            </DropdownItem>
-                                        </DropdownMenu>
-                                    </UncontrolledDropdown>
-                                </td>
+                        {loading ? (
+                            <tr>
+                                <td colSpan={10} className="text-center">Загрузка...</td>
                             </tr>
-                        )) : null}
+                        ) : tableData && tableData.length > 0 ? (
+                            tableData.map((user: any, idx: number) => (
+                                <tr key={user.id || idx}>
+                                    <td>{idx + 1}</td>
+                                    <td>{user.first_name?.length ? user.first_name : '-'}</td>
+                                    <td>{user.last_name?.length ? user.last_name : '-'}</td>
+                                    <td>{user.email}</td>
+                                    <td>via {user.register_type?.name || '-'}</td>
+                                    <td>
+                                        {user.groups && user.groups.length > 0 ? user.groups.map((item: any) => (
+                                            <span
+                                                key={item.id}
+                                                className={`badge ${roleTypeColors[item.name] ?? 'bg-secondary'} me-1`}
+                                            >
+                                                {item.name}
+                                            </span>
+                                        )) : '-'}
+                                    </td>
+                                    <td>{user.is_active
+                                        ? <span className='badge bg-success'>active</span>
+                                        : <span className='badge bg-danger'>passive</span>}
+                                    </td>
+                                    <td>{user.phone_number ? user.phone_number : '-'}</td>
+                                    <td>
+                                        {user.telegram_link ? (
+                                            <a
+                                                href={`https://t.me/${user.telegram_link}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                https://t.me/{user.telegram_link}
+                                            </a>
+                                        ) : (
+                                            '-'
+                                        )}
+                                    </td>
+                                    <td className="text-center">
+                                        <UncontrolledDropdown>
+                                            <DropdownToggle
+                                                tag="button"
+                                                className="btn btn-light btn-icon btn-sm"
+                                                aria-label="Действия"
+                                            >
+                                                <FeatherIcon icon="more-vertical" size={16}/>
+                                            </DropdownToggle>
+
+                                            <DropdownMenu end className="dropdown-menu-end">
+                                                <DropdownItem
+                                                    className="d-flex align-items-center gap-2 text-warning"
+                                                    onClick={() => getData(user.id)}
+                                                >
+                                                    <FeatherIcon icon="edit" size={14}/>
+                                                    Редактировать
+                                                </DropdownItem>
+
+                                                <DropdownItem onClick={() => handleStatus(user.id, user.is_active)}>
+                                                    {user.is_active ?
+                                                        (
+                                                            <span className="d-flex align-items-center gap-2 text-info">
+                                                                <FeatherIcon icon="x" size={14}/>
+                                                                Деактивировать
+                                                            </span>
+                                                        ) :
+                                                        (
+                                                            <span className="d-flex align-items-center gap-2 text-info">
+                                                                <FeatherIcon icon="check" size={14}/>
+                                                                Активировать
+                                                            </span>
+                                                        )}
+                                                </DropdownItem>
+
+                                                <DropdownItem
+                                                    className="text-danger d-flex align-items-center gap-2"
+                                                    onClick={() => showDelete({id: user.id})}
+                                                >
+                                                    <FeatherIcon icon="trash-2" size={14}/>
+                                                    Удалить
+                                                </DropdownItem>
+                                                <DropdownItem
+                                                    className="text-secondary d-flex align-items-center gap-2"
+                                                    onClick={() => resetUserPassword(user.email)}
+                                                >
+                                                    <FeatherIcon icon="lock" size={14}/>
+                                                    Сбросить пароль
+                                                </DropdownItem>
+                                            </DropdownMenu>
+                                        </UncontrolledDropdown>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={10} className="text-center">Нет данных</td>
+                            </tr>
+                        )}
                         </tbody>
                     </Table>
                 </Container>
@@ -323,7 +332,7 @@ const Users = (props: any) => {
                     perPageData={PER_PAGE}
                     setCurrentPage={(p) => {
                         setPage(p);
-                        dispatch(fetchUsers({page: p}));
+                        dispatch(usersThunks.fetch({page: p}));
                     }}
                 />
             </div>

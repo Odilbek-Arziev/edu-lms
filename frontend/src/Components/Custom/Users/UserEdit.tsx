@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {useApiHandler} from "../../../hooks/useApiHandler";
-import {editUser} from "../../../slices/users/thunk";
 import UserForm from "./UserForm";
+import {usersThunks} from "../../../slices/users";
 
 interface UserEditProps {
     onCancel: () => void;
@@ -18,7 +18,7 @@ export default function UserEdit({onCancel, onSuccess, id, initialValues}: UserE
 
     async function onSubmit(data: any, actions: any) {
         await handleRequest(
-            () => dispatch(editUser(id, data)),
+            () => dispatch(usersThunks.update(id, data)),
             {
                 onSuccess,
                 onResetForm: () => actions.resetForm()

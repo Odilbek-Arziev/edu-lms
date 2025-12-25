@@ -1,5 +1,5 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CrudState} from "./crudState";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CrudState } from "./crudState";
 
 export function createCrudSlice<T>(
     name: string,
@@ -7,6 +7,7 @@ export function createCrudSlice<T>(
         reducers?: any;
         extraReducers?: any;
         simplifiedResponse?: boolean;
+        initialState?: Partial<CrudState<T>>;
     }
 ) {
     const initialState: CrudState<T> = {
@@ -15,12 +16,13 @@ export function createCrudSlice<T>(
         error: '',
         count: 0,
         next: null,
-        previous: null
+        previous: null,
+        ...(config?.initialState || {})
     };
 
     return createSlice({
         name,
-        initialState,
+        initialState: initialState as any,
         reducers: {
             request(state: any) {
                 state.loading = true;
@@ -31,7 +33,7 @@ export function createCrudSlice<T>(
                     state.items = action.payload as any;
                     state.count = action.payload.length;
                 } else {
-                    const {results, count, next, previous} = action.payload;
+                    const { results, count, next, previous } = action.payload;
                     state.items = results as any;
                     state.count = count;
                     state.next = next;

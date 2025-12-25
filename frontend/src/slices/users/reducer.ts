@@ -1,53 +1,51 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createCrudSlice } from "../common/reducer";
+import { createCrudThunks } from "../common/thunk";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload, Draft, PayloadAction } from "@reduxjs/toolkit";
+import { APIClient } from "../../helpers/api_helper";
+import {UsersState} from "../../types/User";
 
-export const initialState = {
-    items: [],
-    registerTypes: [],
-    loading: false,
-    error: '',
-    count: 0,
-    next: null,
-    previous: null
-};
 
-export interface PaginatedResponse<T> {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: T[];
-}
-
-const usersSlice = createSlice({
-    name: 'users',
-    initialState,
+const usersSlice = createCrudSlice<any>('users', {
     reducers: {
-        usersRequest(state) {
-            state.loading = true;
-            state.error = "";
-        },
-        setRegisterTypes: (state, action) => {
+        setRegisterTypes(state: Draft<UsersState<any>>, action: PayloadAction<any>) {
             state.registerTypes = Array.isArray(action.payload)
                 ? action.payload
                 : action.payload?.results ?? [];
-        },
-        usersSuccess(state, action) {
-            const {results, count, next, previous} = action.payload;
-
-            state.items = results;
-            state.count = count;
-            state.next = next;
-            state.previous = previous;
-
-            state.loading = false;
-            state.error = "";
-        },
-        usersError(state, action) {
-            state.error = action.payload;
-            state.loading = false
         }
     }
-})
+});
 
-export const {usersRequest, setRegisterTypes, usersSuccess, usersError} = usersSlice.actions
+export const usersReducer = usersSlice.reducer;
 
-export default usersSlice.reducer
+const { request, success, error, setRegisterTypes } = usersSlice.actions;
+
+export const usersActions = {
+    request: request as ActionCreatorWithoutPayload,
+    success: success as ActionCreatorWithPayload<any>,
+    error: error as ActionCreatorWithPayload<string>,
+    setRegisterTypes: setRegisterTypes as ActionCreatorWithPayload<any>
+};
+
+const baseThunks = createCrudThunks('/users/', {
+    request: usersActions.request,
+    success: usersActions.success,
+    error: usersActions.error
+});
+
+export const usersThunks = {
+    ...baseThunks,
+
+    getRegisterTypes: () => async (dispatch: any) => {
+        const api = new APIClient();
+
+        try {
+            const response = await api.get('/users/register_types/');
+            dispatch(usersActions.setRegisterTypes(response));
+            return response;
+        } catch (error: any) {
+            const message = error.response?.data || 'Ошибка загрузки типов регистрации';
+            dispatch(usersActions.error(message));
+            return null;
+        }
+    }
+};
