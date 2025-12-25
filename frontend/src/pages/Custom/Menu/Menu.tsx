@@ -7,7 +7,6 @@ import MenuCreate from "../../../Components/Custom/Menu/MenuCreate";
 import MenuDelete from "../../../Components/Custom/Menu/MenuDelete";
 import MenuEdit from "../../../Components/Custom/Menu/MenuEdit";
 import {flattenMenu} from "../../../utils/flatten";
-import {fetchIcons} from "../../../slices/icons/thunk";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
@@ -18,6 +17,7 @@ import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
 import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
+import {iconsThunks} from "../../../slices/icons";
 
 
 type EditModalProps = {
@@ -118,7 +118,7 @@ const Menu = () => {
     useEffect(() => {
         dispatch(menuThunks.fetch())
         dispatch(rolesThunks.fetch());
-        dispatch(fetchIcons())
+        dispatch(iconsThunks.fetch());
     }, [dispatch])
 
     useEffect(() => {

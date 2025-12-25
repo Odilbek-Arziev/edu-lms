@@ -6,6 +6,7 @@ export function createCrudSlice<T>(
     config?: {
         reducers?: any;
         extraReducers?: any;
+        simplifiedResponse?: boolean;
     }
 ) {
     const initialState: CrudState<T> = {
@@ -26,12 +27,16 @@ export function createCrudSlice<T>(
                 state.error = '';
             },
             success(state: any, action: PayloadAction<any>) {
-                const {results, count, next, previous} = action.payload;
-
-                state.items = results;
-                state.count = count;
-                state.next = next;
-                state.previous = previous;
+                if (config?.simplifiedResponse) {
+                    state.items = action.payload as any;
+                    state.count = action.payload.length;
+                } else {
+                    const {results, count, next, previous} = action.payload;
+                    state.items = results as any;
+                    state.count = count;
+                    state.next = next;
+                    state.previous = previous;
+                }
                 state.loading = false;
             },
             error(state: any, action: PayloadAction<string>) {

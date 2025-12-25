@@ -73,7 +73,7 @@ import APIKeyReducer from "./apiKey/reducer";
 // Custom
 import {menuReducer} from "./menu";
 import {rolesReducer} from "./roles";
-import IconsReducer from "./icons/reducer";
+import {iconsReducer} from "./icons";
 import UsersReducer from "./users/reducer";
 import LanguageLinesReducer from './languageLines/reducer'
 import {LOGOUT} from "./auth/login/actions";
@@ -108,7 +108,7 @@ const appReducer = combineReducers({
     APIKey: APIKeyReducer,
     Menu: menuReducer,
     Roles: rolesReducer,
-    Icons: IconsReducer,
+    Icons: iconsReducer,
     Users: UsersReducer,
     LanguageLines: LanguageLinesReducer,
 });

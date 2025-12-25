@@ -1,27 +1,10 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSimpleListSlice} from "../common/simpleListReducer";
+import {createSimpleListThunks} from "../common/simpleListThunk";
+import {Icon} from "../../types/Icon";
 
-export const initialState = {
-    items: [],
-    loading: false,
-    error: ''
-};
+const iconsSlice = createSimpleListSlice<Icon>('icons');
 
-const iconsSlice = createSlice({
-    name: 'icons',
-    initialState,
-    reducers: {
-        iconsSuccess(state, action) {
-            state.items = action.payload;
-            state.loading = false;
-            state.error = "";
-        },
-        iconsError(state, action) {
-            state.error = action.payload;
-            state.loading = false
-        }
-    }
-})
+export const iconsReducer = iconsSlice.reducer;
+export const iconsActions = iconsSlice.actions;
 
-export const {iconsSuccess, iconsError} = iconsSlice.actions
-
-export default iconsSlice.reducer
+export const iconsThunks = createSimpleListThunks('/icons/', iconsActions);

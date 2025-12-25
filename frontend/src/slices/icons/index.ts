@@ -1,0 +1,1 @@
+export {iconsReducer, iconsActions, iconsThunks} from "./reducer";
