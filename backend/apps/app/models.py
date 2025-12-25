@@ -15,6 +15,7 @@ from app.querysets.homework_criterion import HomeworkCriterionQuerySet
 from app.querysets.submission_criterion import SubmissionCriterionResultQuerySet
 from app.querysets.submission_review import SubmissionReviewQueryset
 from app.querysets.menu import MenuQuerySet
+from app.querysets.language_line import LanguageLineQuerySet
 
 LEVEL_CHOICES = [
     ('beginner', 'Beginner'),
@@ -300,6 +301,7 @@ class Icon(BaseModel):
 class LanguageLine(BaseModel):
     key = models.CharField(max_length=255, unique=True, db_index=True)
     value = models.JSONField()
+    objects = LanguageLineQuerySet.as_manager()
 
     def __str__(self):
         return self.key

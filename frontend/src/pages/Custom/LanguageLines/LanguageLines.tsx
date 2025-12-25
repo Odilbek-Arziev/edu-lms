@@ -79,9 +79,14 @@ const LanguageLines = () => {
         }
     };
 
+    const handleSearchChange = (value: string) => {
+        setSearch(value);
+        setPage(1);
+    };
+
     useEffect(() => {
-        dispatch(fetchLanguageLines({page}));
-    }, [dispatch, page])
+        dispatch(fetchLanguageLines({page, search}));
+    }, [dispatch, page, search]);
 
     useEffect(() => {
         if (loading) {
@@ -91,21 +96,6 @@ const LanguageLines = () => {
         }
     }, [loading]);
 
-    const tableData = useMemo(() => {
-        let items = languageLines;
-
-        if (search) {
-            const searchLower = search.toLowerCase();
-            items = items.filter((item: any) =>
-                item.key?.toLowerCase().includes(searchLower) ||
-                item.value.en?.toLowerCase().includes(searchLower) ||
-                item.value.ru?.toLowerCase().includes(searchLower) ||
-                item.value.uz?.toLowerCase().includes(searchLower)
-            );
-        }
-        return items;
-
-    }, [search, languageLines]);
 
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
     return (
@@ -117,10 +107,13 @@ const LanguageLines = () => {
                         <div className='d-flex gap-1'>
                             <SearchInput
                                 value={search}
-                                onChange={setSearch}
+                                onSearch={handleSearchChange}
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center'
-                                    onClick={() => setSearch('')}>
+                                    onClick={() => {
+                                        setSearch('')
+                                        setPage(1);
+                                    }}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
                                 Clear
                             </Button>
@@ -152,7 +145,7 @@ const LanguageLines = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {tableData && tableData.length > 0 ? tableData.map((row: any, idx: string) => (
+                        {languageLines && languageLines.length > 0 ? languageLines.map((row: any, idx: string) => (
                             <tr key={row.id || idx}>
                                 <td>{idx + 1}</td>
                                 <td>{row.key}</td>

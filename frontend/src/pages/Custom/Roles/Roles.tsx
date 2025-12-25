@@ -107,7 +107,7 @@ const Home = () => {
                         <div className='d-flex gap-1'>
                             <SearchInput
                                 value={search}
-                                onChange={setSearch}
+                                onSearch={setSearch}
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center'
                                     onClick={() => setSearch('')}>

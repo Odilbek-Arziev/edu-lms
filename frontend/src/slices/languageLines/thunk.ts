@@ -12,7 +12,7 @@ import i18n from "../../i18n";
 import type {RootState} from "../index";
 import {LanguageLine, PaginatedResponse} from "../../types/i18nTypes";
 
-export const fetchLanguageLines = (params: { page?: number } = {}) => async (dispatch: any, getState: () => RootState) => {
+export const fetchLanguageLines = (params: { page?: number | string, search?: string } = {}) => async (dispatch: any, getState: () => RootState) => {
     const api = new APIClient();
 
     dispatch(languageLinesRequest());

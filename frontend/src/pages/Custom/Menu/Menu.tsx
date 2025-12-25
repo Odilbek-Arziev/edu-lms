@@ -149,7 +149,7 @@ const Menu = () => {
                         <div className='d-flex gap-1'>
                             <SearchInput
                                 value={search}
-                                onChange={setSearch}
+                                onSearch={setSearch}
                             />
                             <CustomSelect
                                 placeholder='Select role...'

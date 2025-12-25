@@ -7,7 +7,9 @@ from app.paginations.language_line import LanguageLinePagination
 
 
 class LanguageLineViewSet(BaseModelViewSet):
-    queryset = LanguageLine.objects.all().order_by('id')
     serializer_class = LanguageLineSerializer
     permission_classes = [AllowAny]
     pagination_class = LanguageLinePagination
+
+    def get_queryset(self):
+        return LanguageLine.objects.list(search=self.request.query_params.get('search'))
