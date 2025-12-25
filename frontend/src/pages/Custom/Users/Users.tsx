@@ -17,7 +17,6 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
 import UserDelete from "../../../Components/Custom/Users/UserDelete";
 import UserEdit from "../../../Components/Custom/Users/UserEdit";
-import {fetchRoles} from "../../../slices/roles/thunk";
 import {useRecaptchaSubmit} from "../../../hooks/useRecaptchaSubmit";
 import {userForgetPassword} from "../../../slices/auth/forgetpwd/thunk";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -26,6 +25,7 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
+import {rolesThunks} from "../../../slices/roles";
 
 type EditModalProps = {
     id: number;
@@ -164,7 +164,7 @@ const Users = (props: any) => {
 
     useEffect(() => {
         dispatch(fetchUsers())
-        dispatch(fetchRoles())
+        dispatch(rolesThunks.fetch())
         dispatch(getRegisterTypes())
     }, [])
 

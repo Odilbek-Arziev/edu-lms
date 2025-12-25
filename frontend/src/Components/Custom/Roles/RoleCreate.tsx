@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
-import {createRole} from "../../../slices/roles/thunk";
 import RoleForm from "./RoleForm";
 import {useApiHandler} from "../../../hooks/useApiHandler";
+import {rolesThunks} from "../../../slices/roles";
 
 interface RoleCreateProps {
     onCancel: () => void;
@@ -16,7 +16,7 @@ export default function RoleCreate({onCancel, onSuccess}: RoleCreateProps) {
 
     async function onSubmit(data: any, actions: any) {
         await handleRequest(
-            () => dispatch(createRole(data)),
+            () => dispatch(rolesThunks.create(data)),
             {
                 onSuccess,
                 onResetForm: () => actions.resetForm()

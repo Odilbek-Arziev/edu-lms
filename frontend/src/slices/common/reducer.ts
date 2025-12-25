@@ -1,7 +1,13 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {CrudState} from "./crudState";
 
-export function createCrudSlice<T>(name: string, extraReducers?: any) {
+export function createCrudSlice<T>(
+    name: string,
+    config?: {
+        reducers?: any;
+        extraReducers?: any;
+    }
+) {
     const initialState: CrudState<T> = {
         items: [],
         loading: false,
@@ -15,11 +21,11 @@ export function createCrudSlice<T>(name: string, extraReducers?: any) {
         name,
         initialState,
         reducers: {
-            request(state) {
+            request(state: any) {
                 state.loading = true;
                 state.error = '';
             },
-            success(state, action: PayloadAction<any>) {
+            success(state: any, action: PayloadAction<any>) {
                 const {results, count, next, previous} = action.payload;
 
                 state.items = results;
@@ -28,11 +34,12 @@ export function createCrudSlice<T>(name: string, extraReducers?: any) {
                 state.previous = previous;
                 state.loading = false;
             },
-            error(state, action: PayloadAction<string>) {
+            error(state: any, action: PayloadAction<string>) {
                 state.error = action.payload;
                 state.loading = false;
-            }
+            },
+            ...(config?.reducers || {})
         },
-        extraReducers
+        extraReducers: config?.extraReducers
     });
 }

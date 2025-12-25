@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react'
 import {Container, Input, Label, Spinner} from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {editRole, getRoleItem} from "../../../slices/roles/thunk";
 import {useDispatch, useSelector} from "react-redux";
-import {showError, showSuccess} from "../../../utils/swal";
+import {closeLoading, showError, showLoading, showSuccess} from "../../../utils/swal";
 import {RootState} from "../../../slices";
+import {rolesThunks} from "../../../slices/roles";
 
 
 const RolePermissions = () => {
@@ -20,7 +20,7 @@ const RolePermissions = () => {
         const roleId = Number(id);
 
         if (id && !isNaN(roleId)) {
-            dispatch(getRoleItem(roleId));
+            dispatch(rolesThunks.getById(roleId));
         } else {
             console.error("Неверный ID роли:", id);
         }
@@ -48,11 +48,11 @@ const RolePermissions = () => {
         try {
             const roleId = Number(id);
 
-            await dispatch(editRole(
+            await dispatch(rolesThunks.editRole(
                 roleId,
                 {permissions: selectedPermissions},
-                true
-            ));
+                true)
+            );
 
             showSuccess('Успешно!', 'Права роли обновлены')
                 .then(() => navigate('/roles'))
@@ -63,6 +63,14 @@ const RolePermissions = () => {
             setLoader(false);
         }
     };
+
+    useEffect(() => {
+        if (loading) {
+            showLoading()
+        } else {
+            closeLoading()
+        }
+    }, [loading]);
 
     return (
         <React.Fragment>

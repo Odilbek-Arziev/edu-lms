@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 import {useModal} from "../../../Components/Hooks/useModal";
 import RoleCreate from "../../../Components/Custom/Roles/RoleCreate";
-import {fetchRoles, getRoleItem} from "../../../slices/roles/thunk";
 import RoleDelete from "../../../Components/Custom/Roles/RoleDelete";
 import RoleEdit from "../../../Components/Custom/Roles/RoleEdit";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
@@ -12,9 +11,9 @@ import {Link} from "react-router-dom";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
-import {fetchLanguageLines} from "../../../slices/languageLines/thunk";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
+import {rolesThunks} from "../../../slices/roles";
 
 type EditModalProps = {
     id: number;
@@ -30,7 +29,7 @@ const Home = () => {
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {
-            dispatch(fetchRoles())
+            dispatch(rolesThunks.fetch());
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
@@ -40,7 +39,7 @@ const Home = () => {
             <RoleDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchRoles());
+                    dispatch(rolesThunks.fetch());
                     hideDelete();
                 }}
                 onCancel={() => hideDelete()}
@@ -53,7 +52,7 @@ const Home = () => {
             <RoleEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchRoles());
+                    dispatch(rolesThunks.fetch());
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
@@ -75,7 +74,7 @@ const Home = () => {
     }, [search, roles]);
 
     async function getData(id: number) {
-        const response = await dispatch(getRoleItem(id));
+        const response = await dispatch(rolesThunks.getById(id));
         if (response) {
             showEdit({
                 id: id,
@@ -87,7 +86,7 @@ const Home = () => {
     }
 
     useEffect(() => {
-        dispatch(fetchRoles())
+        dispatch(rolesThunks.fetch());
     }, [])
 
     useEffect(() => {
@@ -160,7 +159,7 @@ const Home = () => {
                     perPageData={PER_PAGE}
                     setCurrentPage={(p) => {
                         setPage(p);
-                        dispatch(fetchRoles({page: p}));
+                       dispatch(rolesThunks.fetch({page: 1}));
                     }}
                 />
             </div>

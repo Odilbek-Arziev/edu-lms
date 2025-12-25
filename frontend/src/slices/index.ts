@@ -71,8 +71,8 @@ import JobReducer from "./jobs/reducer";
 import APIKeyReducer from "./apiKey/reducer";
 
 // Custom
-import {menuReducer} from "./menu/reducer";
-import RolesReducer from "./roles/reducer";
+import {menuReducer} from "./menu";
+import {rolesReducer} from "./roles";
 import IconsReducer from "./icons/reducer";
 import UsersReducer from "./users/reducer";
 import LanguageLinesReducer from './languageLines/reducer'
@@ -107,7 +107,7 @@ const appReducer = combineReducers({
     Jobs: JobReducer,
     APIKey: APIKeyReducer,
     Menu: menuReducer,
-    Roles: RolesReducer,
+    Roles: rolesReducer,
     Icons: IconsReducer,
     Users: UsersReducer,
     LanguageLines: LanguageLinesReducer,

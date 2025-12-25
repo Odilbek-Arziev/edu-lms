@@ -5,4 +5,5 @@ export interface CrudState<T> {
     count: number;
     next: string | null;
     previous: string | null;
+    currentRole?: T | null;
 }

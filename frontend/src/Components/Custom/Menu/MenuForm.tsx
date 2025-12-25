@@ -6,10 +6,10 @@ import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 import Select from "react-select"
 import {flattenMenu} from "../../../utils/flatten";
-import {fetchRoles} from "../../../slices/roles/thunk";
 import {fetchIcons} from "../../../slices/icons/thunk";
 import {RootState} from "../../../slices";
 import {menuThunks} from "../../../slices/menu";
+import {rolesThunks} from "../../../slices/roles";
 
 
 interface MenuFormProps {
@@ -71,7 +71,7 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
 
     useEffect(() => {
         if (!menu?.length) dispatch(menuThunks.fetch());
-        if (!roles?.length) dispatch(fetchRoles());
+        if (!roles?.length) dispatch(rolesThunks.fetch({page: 1}));
         if (!icons?.length) dispatch(fetchIcons());
     }, []);
 

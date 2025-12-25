@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
 import {useApiHandler} from "../../../hooks/useApiHandler";
-import {deleteRole} from "../../../slices/roles/thunk";
+import {rolesThunks} from "../../../slices/roles";
 
 interface RoleDeleteProps {
     onCancel: () => void;
@@ -17,7 +17,7 @@ export default function RoleDelete({onCancel, onSuccess, id}: RoleDeleteProps) {
 
     async function onDelete() {
         await handleRequest(
-            () => dispatch(deleteRole(id)),
+            () => dispatch(rolesThunks.delete(id)),
             {onSuccess}
         )
     }

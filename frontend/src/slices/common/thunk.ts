@@ -2,11 +2,7 @@ import {APIClient} from "../../helpers/api_helper";
 
 export function createCrudThunks(
     endpoint: string,
-    actions: {
-        request: any;
-        success: any;
-        error: any;
-    }
+    actions: any
 ) {
     const api = new APIClient();
 

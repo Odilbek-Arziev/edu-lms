@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from "react-redux";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import RoleForm from "./RoleForm";
-import {editRole} from "../../../slices/roles/thunk";
+import {rolesThunks} from "../../../slices/roles";
 
 interface RoleEditProps {
     onCancel: () => void;
@@ -18,7 +18,7 @@ export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleE
 
     async function onSubmit(data: any, actions: any) {
         await handleRequest(
-            () => dispatch(editRole(id, data)),
+            () => dispatch(rolesThunks.update(id, data)),
             {
                 onSuccess,
                 onResetForm: () => actions.resetForm()
