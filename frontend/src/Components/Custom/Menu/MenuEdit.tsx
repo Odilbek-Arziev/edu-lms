@@ -33,7 +33,7 @@ export default function MenuEdit({onCancel, onSuccess, id, initialValues}: MenuE
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Отредактировать меню'
+            title='edit_menu'
         />
     )
 }

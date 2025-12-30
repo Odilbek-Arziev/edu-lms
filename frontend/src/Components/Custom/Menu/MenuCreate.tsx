@@ -29,6 +29,6 @@ export default function MenuCreate({onCancel, onSuccess}: MenuCreateProps) {
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Добавить новое меню'/>
+            title='add_new_menu'/>
     )
 }

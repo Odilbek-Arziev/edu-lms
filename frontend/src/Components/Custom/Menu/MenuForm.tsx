@@ -10,6 +10,7 @@ import {RootState} from "../../../slices";
 import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
+import {withTranslation} from "react-i18next";
 
 
 interface MenuFormProps {
@@ -17,10 +18,11 @@ interface MenuFormProps {
     onCancel: () => void,
     loader: boolean,
     initialValues?: any,
-    title: string
+    title: string,
+    t: (key: string) => string;
 }
 
-export default function MenuForm({onSubmit, onCancel, loader, initialValues, title}: MenuFormProps) {
+function MenuForm({onSubmit, onCancel, loader, initialValues, title, t}: MenuFormProps) {
     const dispatch = useDispatch<any>();
     const menu = useSelector((state: RootState) => state.Menu.items);
     const roles = useSelector((state: RootState) => state.Roles.items);
@@ -37,10 +39,10 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             groups_ids: []
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Please Enter Title"),
+            title: Yup.string().required(t('enter_title')),
             parent: Yup.number().nullable(),
             url_path: Yup.string().optional(),
-            icon: Yup.string().required("Please select icon"),
+            icon: Yup.string().required(t('select_icon')),
             groups_ids: Yup.array()
                 .of(Yup.number())
                 .nullable()
@@ -77,13 +79,13 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
 
     return (
         <Form onSubmit={validation.handleSubmit}>
-            <p className="fw-bold fs-5">{title}</p>
+            <p className="fw-bold fs-5">{t(title)}</p>
             <div className="mb-3">
-                <Label htmlFor="title" className="form-label"> Title</Label>
+                <Label htmlFor="title" className="form-label">{t('title')} </Label>
                 <Input
                     name="title"
                     className="form-control"
-                    placeholder="Enter title"
+                    placeholder={t('enter_title')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -97,7 +99,7 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="parent" className="form-label">Parent</Label>
+                <Label htmlFor="parent" className="form-label">{t('parent')}</Label>
                 <Select
                     options={parentOptions}
                     isClearable
@@ -116,11 +118,11 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="url_path" className="form-label">Url path</Label>
+                <Label htmlFor="url_path" className="form-label">{t('url_path')}</Label>
                 <Input
                     name="url_path"
                     className="form-control"
-                    placeholder="Enter path"
+                    placeholder={t('enter_url_path')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -134,7 +136,7 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="icon" className="form-label">Icon</Label>
+                <Label htmlFor="icon" className="form-label">{t('icon')}</Label>
                 <Select
                     options={iconOptions}
                     isClearable
@@ -153,7 +155,7 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="roles" className="form-label">Roles</Label>
+                <Label htmlFor="roles" className="form-label">{t('roles')}</Label>
                 <Select
                     isMulti
                     isClearable
@@ -176,12 +178,13 @@ export default function MenuForm({onSubmit, onCancel, loader, initialValues, tit
             <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>
                 {loader && (
                     <Spinner size="sm" className="me-2">
-                        Loading...
+                        {t('loading')}...
                     </Spinner>
                 )}
                 <FeatherIcon icon="plus" size={12}/>
-                Submit
+                {t('submit')}
             </Button>
         </Form>
     )
 }
+export default withTranslation()(MenuForm);

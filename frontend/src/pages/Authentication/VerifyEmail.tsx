@@ -282,6 +282,7 @@ const VerifyEmail = (props: any) => {
                                                     <span
                                                         className='text-secondary'>
                                                         {props.t('available_in')}
+                                                        &nbsp;
                                                         {formatTime(seconds)}
                                                     </span>
                                                 </p>

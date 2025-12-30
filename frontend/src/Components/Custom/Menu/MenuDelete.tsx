@@ -3,15 +3,17 @@ import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
 import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
+import {withTranslation} from "react-i18next";
 
 interface MenuDeleteProps {
     onCancel: () => void;
     onSuccess: () => void;
     id: number;
+    t: (key: string) => string;
 }
 
 
-export default function MenuDelete({onCancel, onSuccess, id}: MenuDeleteProps) {
+function MenuDelete({onCancel, onSuccess, id, t}: MenuDeleteProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -28,7 +30,7 @@ export default function MenuDelete({onCancel, onSuccess, id}: MenuDeleteProps) {
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
                 <p className="fw-bold fs-5">
-                    Вы уверены что хотите удалить этот пункт меню?
+                    {t('delete_menu_confirm')}
                 </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
@@ -38,7 +40,7 @@ export default function MenuDelete({onCancel, onSuccess, id}: MenuDeleteProps) {
                     data-bs-dismiss="modal"
                     onClick={onCancel}
                 >
-                    Закрыть
+                    {t('close')}
                 </button>
                 <button
                     type="button"
@@ -49,12 +51,14 @@ export default function MenuDelete({onCancel, onSuccess, id}: MenuDeleteProps) {
                 >
                     {loader && (
                         <Spinner size="sm" className="me-2">
-                            Loading...
+                            {t('loading')}...
                         </Spinner>
                     )}
-                    Да, удалить.
+                    {t('yes_delete')}
                 </button>
             </div>
         </div>
     )
 }
+
+export default withTranslation()(MenuDelete);

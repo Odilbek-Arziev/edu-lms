@@ -17,6 +17,7 @@ import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
+import {withTranslation} from "react-i18next";
 
 
 type EditModalProps = {
@@ -24,7 +25,7 @@ type EditModalProps = {
     initialValues: any;
 };
 
-const Menu = () => {
+const Menu = (props: any) => {
     const [search, setSearch] = useState<string>('');
     const [role, setRole] = useState<any>(null);
     const [page, setPage] = useState<number>(1);
@@ -118,7 +119,7 @@ const Menu = () => {
                 setTotalCount(total);
             }
         } catch (error) {
-            console.error('Error fetching menu data:', error);
+            console.error(`${props.t('error_fetching_data', {type: 'menu'})}:`, error);
         } finally {
             setIsSearching(false);
         }
@@ -159,7 +160,7 @@ const Menu = () => {
 
     useEffect(() => {
         if (loading || isSearching) {
-            showLoading('Загрузка меню', 'Пожалуйста, подождите...');
+            showLoading(props.t('loading'), props.t('wait'));
         } else {
             closeLoading()
         }
@@ -173,13 +174,13 @@ const Menu = () => {
 
     const count = hasActiveFilters ? totalCount : tableData.length;
 
-    document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
+    document.title = props.t('menu_page')
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Menu" pageTitle="Dashboards"/>
+                    <BreadCrumb title={props.t('menu')} pageTitle={props.t('main')}/>
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
                             <SearchInput
@@ -187,31 +188,31 @@ const Menu = () => {
                                 onSearch={setSearch}
                             />
                             <CustomSelect
-                                placeholder='Select role...'
+                                placeholder={`${props.t('select_role')}...`}
                                 value={role}
                                 options={rolesOptions}
                                 onChange={setRole}
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
-                                Clear
+                                {props.t('clear')}
                             </Button>
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            Create
+                            {props.t('create')}
                         </Button>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>
                             <th>№</th>
-                            <th>Title</th>
-                            <th>Parent</th>
-                            <th>Path</th>
-                            <th>Status</th>
-                            <th>Roles</th>
-                            <th>Actions</th>
+                            <th>{props.t('title')}</th>
+                            <th>{props.t('parent')}</th>
+                            <th>{props.t('url_path')}</th>
+                            <th>{props.t('status')}</th>
+                            <th>{props.t('roles')}</th>
+                            <th>{props.t('actions')}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -222,8 +223,8 @@ const Menu = () => {
                                 <td>{row.parent ?? '-'}</td>
                                 <td>{row.url_path}</td>
                                 <td>{row.status
-                                    ? <span className='badge bg-success'>active</span>
-                                    : <span className='badge bg-danger'>passive</span>}
+                                    ? <span className='badge bg-success'>{props.t('active')}</span>
+                                    : <span className='badge bg-danger'>{props.t('passive')}</span>}
                                 </td>
                                 <td>
                                     {row.roles && row.roles.length > 0 ? row.roles.map((item: any) => (
@@ -264,4 +265,4 @@ const Menu = () => {
     );
 };
 
-export default Menu;
+export default withTranslation()(Menu);
