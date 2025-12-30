@@ -2,9 +2,10 @@ import {useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {showError} from "../../utils/swal";
+import {withTranslation} from "react-i18next";
 
 
-const MagicLoginPage = () => {
+const MagicLoginPage = (props: any) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -30,11 +31,14 @@ const MagicLoginPage = () => {
                 }
             })
             .catch(() => {
-                showError("Error", 'Link expired or already used')
+                showError(
+                    props.t('expired_or_used_link'),
+                    props.t('expired_or_used_link')
+                )
                 navigate("/login");
             });
     }, [location.search, navigate]);
 
     return <div>Verifying magic link...</div>;
 }
-export default MagicLoginPage
+export default withTranslation()(MagicLoginPage)

@@ -29,6 +29,7 @@ const LanguageLines = () => {
         <LanguageLinesCreate onSuccess={() => {
             dispatch(fetchLanguageLines())
             hideCreate()
+            setPage(1)
         }} onCancel={() => hideCreate()}/>,
     )
 
@@ -39,6 +40,7 @@ const LanguageLines = () => {
                 onSuccess={() => {
                     dispatch(fetchLanguageLines());
                     hideDelete();
+                    setPage(1)
                 }}
                 onCancel={() => hideDelete()}
             />
@@ -52,6 +54,7 @@ const LanguageLines = () => {
                 onSuccess={() => {
                     dispatch(fetchLanguageLines());
                     hideEdit();
+                    setPage(1)
                 }}
                 onCancel={() => hideEdit()}
             />

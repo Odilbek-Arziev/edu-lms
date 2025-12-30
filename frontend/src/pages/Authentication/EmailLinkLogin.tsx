@@ -13,6 +13,7 @@ import {emailLinkLogin} from "../../slices/auth/email_login/thunk";
 import {resetEmailLogin} from "../../slices/auth/email_login/reducer";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptchaSubmit} from "../../hooks/useRecaptchaSubmit";
+import {withTranslation} from "react-i18next";
 
 
 const EmailLinkLoginPage = (props: any) => {
@@ -21,8 +22,8 @@ const EmailLinkLoginPage = (props: any) => {
     const {handleSubmit, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(emailLinkLogin(payload, props.history)),
         onResetForm: () => validation.resetForm(),
-        loadingTitle: "Отправка письма...",
-        loadingText: "Пожалуйста, подождите",
+        loadingTitle: `${props.t('message_sending')}...`,
+        loadingText: props.t('wait'),
         showLoadingModal: true
     });
 
@@ -31,8 +32,8 @@ const EmailLinkLoginPage = (props: any) => {
         initialValues: {email: ""},
         validationSchema: Yup.object({
             email: Yup.string()
-                .email("Введите корректный email")
-                .required("Пожалуйста, введите ваш email"),
+                .email(props.t('enter_valid_email'))
+                .required(props.t('enter_email')),
         }),
         onSubmit: handleSubmit
     });
@@ -53,7 +54,7 @@ const EmailLinkLoginPage = (props: any) => {
         };
     }, [dispatch]);
 
-    document.title = "Вход через Email | Velzon";
+    document.title = props.t('email_login_page');
 
     return (
         <ParticlesAuth>
@@ -67,7 +68,7 @@ const EmailLinkLoginPage = (props: any) => {
                                         <img src={logoLight} alt="" width="150"/>
                                     </Link>
                                 </div>
-                                <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
+                                <p className="mt-3 fs-15 fw-medium">{props.t('slogan')}</p>
                             </div>
                         </Col>
                     </Row>
@@ -77,14 +78,18 @@ const EmailLinkLoginPage = (props: any) => {
                             <Card className="mt-4">
                                 <CardBody className="p-4">
                                     <div className="text-center mt-2">
-                                        <h5 className="text-primary">Быстрый вход через Email</h5>
-                                        <p className="text-muted">Войдите без пароля</p>
+                                        <h5 className="text-primary">
+                                            {props.t('email_login_page')}
+                                        </h5>
+                                        <p className="text-muted">
+                                            {props.t('passwordless_login')}
+                                        </p>
                                         <i className="ri-mail-send-line display-5 text-success mb-3"></i>
                                     </div>
 
                                     {(!loginSuccessMsg && !loginError) && (
                                         <Alert className="border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                            Введите ваш email и ссылка для входа будет отправлена вам!
+                                            {props.t('link_will_sent')}
                                         </Alert>
                                     )}
 
@@ -108,11 +113,11 @@ const EmailLinkLoginPage = (props: any) => {
                                             }}
                                         >
                                             <div className="mb-4">
-                                                <Label className="form-label">Email</Label>
+                                                <Label className="form-label">{props.t('email')}</Label>
                                                 <Input
                                                     name="email"
                                                     className="form-control"
-                                                    placeholder="Введите email"
+                                                    placeholder={props.t('enter_email')}
                                                     type="email"
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
@@ -132,7 +137,9 @@ const EmailLinkLoginPage = (props: any) => {
                                                     type="submit"
                                                     disabled={isLoading}
                                                 >
-                                                    {isLoading ? "Отправка..." : "Отправить ссылку для входа"}
+                                                    {isLoading
+                                                        ? `${props.t('message_sending')}...`
+                                                        : props.t('send_link')}
                                                 </button>
                                             </div>
                                             <div className="mt-4 d-flex justify-content-center">
@@ -149,12 +156,12 @@ const EmailLinkLoginPage = (props: any) => {
 
                             <div className="mt-4 text-center">
                                 <p className="mb-0">
-                                    Постойте, я помню свой пароль...{" "}
+                                    {props.t('remember_password')}...{" "}
                                     <Link
                                         to="/login"
                                         className="fw-semibold text-primary text-decoration-underline"
                                     >
-                                        Нажмите здесь
+                                        {props.t('click_here')}
                                     </Link>
                                 </p>
                             </div>
@@ -170,4 +177,4 @@ EmailLinkLoginPage.propTypes = {
     history: PropTypes.object,
 };
 
-export default withRouter(EmailLinkLoginPage);
+export default withRouter(withTranslation()(EmailLinkLoginPage));

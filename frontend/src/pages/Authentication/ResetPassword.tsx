@@ -9,8 +9,9 @@ import {useDispatch} from "react-redux";
 import {resetPassword} from "../../slices/auth/reset/thunk";
 import {useApiHandler} from "../../hooks/useApiHandler";
 import {showSuccess} from "../../utils/swal";
+import {withTranslation} from "react-i18next";
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage = (props: any) => {
     const [passwordShow, setPasswordShow] = useState<boolean>(false);
     const [confrimPasswordShow, setConfrimPasswordShow] = useState<boolean>(false);
     const [loader, setLoader] = useState<boolean>(false);
@@ -29,14 +30,14 @@ const ResetPasswordPage = () => {
         },
         validationSchema: Yup.object({
             password: Yup.string()
-                .min(8, 'Password must be at least 8 characters')
-                .matches(RegExp('(.*[a-z].*)'), 'At least lowercase letter')
-                .matches(RegExp('(.*[A-Z].*)'), 'At least uppercase letter')
-                .matches(RegExp('(.*[0-9].*)'), 'At least one number')
-                .required("This field is required"),
+                .min(8, props.t('8_characters'))
+                .matches(RegExp('(.*[a-z].*)'), props.t('lowercase_letter'))
+                .matches(RegExp('(.*[A-Z].*)'), props.t('uppercase_letter'))
+                .matches(RegExp('(.*[0-9].*)'), props.t('one_number'))
+                .required(props.t('field_required')),
             confirm_password: Yup.string()
                 .oneOf([Yup.ref('password'), ""],)
-                .required('Confirm Password is required')
+                .required(props.t('confirm_password'))
         }),
         onSubmit: async (values) => {
             const payload = {...values, token};
@@ -46,7 +47,10 @@ const ResetPasswordPage = () => {
                 {
                     onSuccess: async (result: any) => {
                         if (result?.status === "ok") {
-                            await showSuccess("Успех", "Пароль успешно изменён. Пожалуйста, войдите снова.")
+                            await showSuccess(
+                                props.t('success'),
+                                props.t('password_changed')
+                            )
                             navigate("/login");
                         }
                     }
@@ -54,6 +58,8 @@ const ResetPasswordPage = () => {
             );
         }
     });
+
+    document.title = props.t('set_password_page')
 
     return (
         <ParticlesAuth>
@@ -67,7 +73,7 @@ const ResetPasswordPage = () => {
                                         <img src={logoLight} alt="" width="150"/>
                                     </Link>
                                 </div>
-                                <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
+                                <p className="mt-3 fs-15 fw-medium">{props.t('slogan')}</p>
                             </div>
                         </Col>
                     </Row>
@@ -77,9 +83,12 @@ const ResetPasswordPage = () => {
 
                                 <CardBody className="p-4">
                                     <div className="text-center mt-2">
-                                        <h5 className="text-primary">Create new password</h5>
-                                        <p className="text-muted">Your new password must be different from previous used
-                                            password.</p>
+                                        <h5 className="text-primary">
+                                            {props.t('create_password')}
+                                        </h5>
+                                        <p className="text-muted">
+                                            {props.t('passwords_must_different')}
+                                        </p>
                                     </div>
 
                                     <div className="p-2">
@@ -91,12 +100,14 @@ const ResetPasswordPage = () => {
                                             }}
                                         >
                                             <div className="mb-3">
-                                                <Label className="form-label" htmlFor="password-input">Password</Label>
+                                                <Label className="form-label" htmlFor="password-input">
+                                                    {props.t('password')}
+                                                </Label>
                                                 <div className="position-relative auth-pass-inputgroup">
                                                     <Input
                                                         type={passwordShow ? "text" : "password"}
                                                         className="form-control pe-5 password-input"
-                                                        placeholder="Enter password"
+                                                        placeholder={props.t('enter_password')}
                                                         id="password-input"
                                                         name="password"
                                                         value={validation.values.password}
@@ -115,19 +126,20 @@ const ResetPasswordPage = () => {
                                                             id="password-addon"><i
                                                         className="ri-eye-fill align-middle"></i></Button>
                                                 </div>
-                                                <div id="passwordInput" className="form-text">Must be at least 8
-                                                    characters.
+                                                <div id="passwordInput" className="form-text">
+                                                    {props.t('8_characters')}
                                                 </div>
                                             </div>
 
                                             <div className="mb-3">
-                                                <Label className="form-label" htmlFor="confirm-password-input">Confirm
-                                                    Password</Label>
+                                                <Label className="form-label" htmlFor="confirm-password-input">
+                                                    {props.t('confirm_password')}
+                                                </Label>
                                                 <div className="position-relative auth-pass-inputgroup mb-3">
                                                     <Input
                                                         type={confrimPasswordShow ? "text" : "password"}
                                                         className="form-control pe-5 password-input"
-                                                        placeholder="Confirm password"
+                                                        placeholder={props.t('confirm_password')}
                                                         id="confirm-password-input"
                                                         name="confirm_password"
                                                         value={validation.values.confirm_password}
@@ -148,25 +160,6 @@ const ResetPasswordPage = () => {
                                                 </div>
                                             </div>
 
-                                            <div id="password-contain" className="p-3 bg-light mb-2 rounded">
-                                                <h5 className="fs-13">Password must contain:</h5>
-                                                <p id="pass-length" className="invalid fs-12 mb-2">Minimum <b>8
-                                                    characters</b></p>
-                                                <p id="pass-lower"
-                                                   className="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                <p id="pass-upper" className="invalid fs-12 mb-2">At
-                                                    least <b>uppercase</b> letter (A-Z)</p>
-                                                <p id="pass-number" className="invalid fs-12 mb-0">A
-                                                    least <b>number</b> (0-9)</p>
-                                            </div>
-
-                                            <div className="form-check">
-                                                <Input className="form-check-input" type="checkbox" value=""
-                                                       id="auth-remember-check"/>
-                                                <Label className="form-check-label" htmlFor="auth-remember-check">Remember
-                                                    me</Label>
-                                            </div>
-
                                             <div className="mt-4">
                                                 <Button
                                                     color="success"
@@ -174,7 +167,7 @@ const ResetPasswordPage = () => {
                                                     type="submit"
                                                     disabled={loader}
                                                 >
-                                                    {loader ? 'Resetting...' : 'Reset Password'}
+                                                    {loader ? `${props.t('resetting')}...` : props.t('reset_password')}
                                                 </Button>
                                             </div>
                                         </Form>
@@ -182,9 +175,13 @@ const ResetPasswordPage = () => {
                                 </CardBody>
                             </Card>
                             <div className="mt-4 text-center">
-                                <p className="mb-0">Wait, I remember my password... <Link to="/login"
-                                                                                          className="fw-semibold text-primary text-decoration-underline"> Click
-                                    here </Link></p>
+                                <p className="mb-0">{props.t('remember_password')}...
+                                    <Link to="/login"
+                                          className="fw-semibold text-primary text-decoration-underline"
+                                    > {' '}
+                                        {props.t('click_here')}
+                                    </Link>
+                                </p>
                             </div>
                         </Col>
                     </Row>
@@ -194,4 +191,4 @@ const ResetPasswordPage = () => {
     );
 };
 
-export default ResetPasswordPage;
+export default withTranslation()(ResetPasswordPage);

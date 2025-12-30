@@ -23,9 +23,10 @@ import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
 import {useApiHandler} from "../../hooks/useApiHandler";
 import {showSuccess} from "../../utils/swal";
+import {withTranslation} from "react-i18next";
+import withRouter from "../../Components/Common/withRouter";
 
-
-const Register = () => {
+const Register = (props: any) => {
     const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
@@ -41,12 +42,15 @@ const Register = () => {
             confirm_password: "",
         },
         validationSchema: Yup.object({
-            email: Yup.string().required("Please Enter Your Email"),
-            username: Yup.string().required("Please Enter Your Username"),
-            password: Yup.string().required("Please enter your password"),
+            email: Yup.string().required(props.t('enter_email')),
+            username: Yup.string().required(props.t('enter_username')),
+            password: Yup.string().required(props.t('enter_password')),
             confirm_password: Yup.string()
-                .oneOf([Yup.ref("password")], "Passwords do not match")
-                .required("Please confirm your password"),
+                .oneOf(
+                    [Yup.ref("password")],
+                    props.t("passwords_mismatch")
+                )
+                .required(props.t('confirm_password')),
         }),
         onSubmit: async (values) => {
             const token = await executeRecaptcha();
@@ -64,8 +68,8 @@ const Register = () => {
                     onSuccess: async (result: any) => {
                         if (result?.msg === 'created') {
                             await showSuccess(
-                                "Подтвердите аккаунт",
-                                `На почту ${result.user.email} отправлен код для подтвердения аккаунта`
+                                props.t("confirm_account"),
+                                props.t("code_sent", {email: result.user.email})
                             )
 
                             localStorage.setItem("verifyEmail", result.user.email);
@@ -77,7 +81,7 @@ const Register = () => {
         }
     });
 
-    document.title = "Basic SignUp | Velzon - React Admin & Dashboard Template";
+    document.title = props.t('register_page')
 
     return (
         <ParticlesAuth>
@@ -91,7 +95,7 @@ const Register = () => {
                                         <img src={logoLight} alt="" width="150"/>
                                     </Link>
                                 </div>
-                                <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
+                                <p className="mt-3 fs-15 fw-medium">{props.t('slogan')}</p>
                             </div>
                         </Col>
                     </Row>
@@ -101,9 +105,11 @@ const Register = () => {
                             <Card className="mt-4">
                                 <CardBody className="p-4">
                                     <div className="text-center mt-2">
-                                        <h5 className="text-primary">Create New Account</h5>
+                                        <h5 className="text-primary">
+                                            {props.t('create_account')}
+                                        </h5>
                                         <p className="text-muted">
-                                            Get your account now
+                                            {props.t('get_account')}
                                         </p>
                                     </div>
 
@@ -117,12 +123,15 @@ const Register = () => {
                                             className="needs-validation"
                                         >
                                             <div className="mb-3">
-                                                <Label>Email <span className="text-danger">*</span></Label>
+                                                <Label>
+                                                    {props.t('email')}
+                                                    <span className="text-danger">*</span>
+                                                </Label>
                                                 <Input
                                                     id="email"
                                                     name="email"
                                                     type="email"
-                                                    placeholder="Enter email address"
+                                                    placeholder={props.t('enter_email')}
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
                                                     value={validation.values.email}
@@ -136,11 +145,14 @@ const Register = () => {
                                             </div>
 
                                             <div className="mb-3">
-                                                <Label>Username <span className="text-danger">*</span></Label>
+                                                <Label>
+                                                    {props.t('username')}
+                                                    <span className="text-danger">*</span>
+                                                </Label>
                                                 <Input
                                                     name="username"
                                                     type="text"
-                                                    placeholder="Enter username"
+                                                    placeholder={props.t('enter_username')}
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
                                                     value={validation.values.username}
@@ -154,11 +166,14 @@ const Register = () => {
                                             </div>
 
                                             <div className="mb-3">
-                                                <Label>Password <span className="text-danger">*</span></Label>
+                                                <Label>
+                                                    {props.t('password')}
+                                                    <span className="text-danger">*</span>
+                                                </Label>
                                                 <Input
                                                     name="password"
                                                     type="password"
-                                                    placeholder="Enter Password"
+                                                    placeholder={props.t('enter_password')}
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
                                                     value={validation.values.password}
@@ -172,11 +187,14 @@ const Register = () => {
                                             </div>
 
                                             <div className="mb-3">
-                                                <Label>Confirm Password <span className="text-danger">*</span></Label>
+                                                <Label>
+                                                    {props.t('password_confirm')}
+                                                    <span className="text-danger">*</span>
+                                                </Label>
                                                 <Input
                                                     name="confirm_password"
                                                     type="password"
-                                                    placeholder="Confirm Password"
+                                                    placeholder={props.t('password_confirm')}
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
                                                     value={validation.values.confirm_password}
@@ -201,10 +219,10 @@ const Register = () => {
                                                 >
                                                     {loader && (
                                                         <Spinner size="sm" className="me-2">
-                                                            Loading...
+                                                            {props.t('loading')}...
                                                         </Spinner>
                                                     )}
-                                                    Sign Up
+                                                    {props.t('sign_up')}
                                                 </Button>
                                             </div>
                                             <div className="mt-4 d-flex justify-content-center">
@@ -220,12 +238,13 @@ const Register = () => {
                             </Card>
                             <div className="mt-4 text-center">
                                 <p className="mb-0">
-                                    Already have an account ?{" "}
+                                    {props.t('have_account')}?
                                     <Link
                                         to="/login"
                                         className="fw-semibold text-primary text-decoration-underline"
                                     >
-                                        Signin
+                                        {" "}
+                                        {props.t('sign_in')}
                                     </Link>
                                 </p>
                             </div>
@@ -237,4 +256,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default withRouter(withTranslation()(Register));

@@ -10,9 +10,10 @@ import {useApiHandler} from "../../hooks/useApiHandler";
 import {useRecaptcha} from "../../hooks/useRecaptcha";
 import ReCAPTCHA from "react-google-recaptcha";
 import {closeLoading, showLoading, showSuccess} from "../../utils/swal";
+import {withTranslation} from "react-i18next";
 
 
-const VerifyEmail = () => {
+const VerifyEmail = (props: any) => {
     let verifyEmail = localStorage.getItem('verifyEmail')
 
     const initialTime = 90
@@ -58,7 +59,10 @@ const VerifyEmail = () => {
                     closeLoading()
 
                     if (result?.msg === 'Email confirmed') {
-                        await showSuccess("Аккаунт подтвержден", "Ваш аккаунт был успешно подтвержден!")
+                        await showSuccess(
+                            props.t('account_confirmed'),
+                            props.t('account_confirmed_success')
+                        )
                         localStorage.removeItem("verifyEmail");
                         navigate('/login');
                     }
@@ -71,7 +75,10 @@ const VerifyEmail = () => {
     };
 
     const handleResend = async () => {
-        showLoading('Отправка кода...', 'Пожалуйста, подождите')
+        showLoading(
+            `${props.t('message_sending')}...`,
+            props.t('wait')
+        )
 
         const token = await executeRecaptcha();
 
@@ -90,8 +97,8 @@ const VerifyEmail = () => {
 
                     if (result?.msg === 'Code sent successfully') {
                         await showSuccess(
-                            "Код отправлен повторно",
-                            `На почту ${email} отправлен код для подтверждения аккаунта`
+                            props.t('code_sent_again'),
+                            props.t('code_sent_to_email', {email}),
                         )
 
                         setResend(false);
@@ -139,7 +146,7 @@ const VerifyEmail = () => {
         return `${minRemain}:${String(secondsRemain).padStart(2, '0')}`
     }
 
-    document.title = "Two Step Verification | Velzon - React Admin & Dashboard Template";
+    document.title = props.t('verify_email_page')
     return (
         <React.Fragment>
             <div className="auth-page-wrapper">
@@ -154,7 +161,7 @@ const VerifyEmail = () => {
                                                 <img src={logoLight} alt="" width="150"/>
                                             </Link>
                                         </div>
-                                        <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
+                                        <p className="mt-3 fs-15 fw-medium">{props.t('slogan')}</p>
                                     </div>
                                 </Col>
                             </Row>
@@ -167,15 +174,15 @@ const VerifyEmail = () => {
                                                 <div className="avatar-lg mx-auto">
                                                     <div
                                                         className="avatar-title bg-light text-primary display-5 rounded-circle">
-                                                        <i className="ri-mail-line"></i>
+                                                        <i className="ri-mail-line"/>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div className="p-2 mt-4">
                                                 <div className="text-muted text-center mb-4 mx-lg-3">
-                                                    <h4>Verify Your Email</h4>
-                                                    <p>Please enter the 4 digit code sent to <span
+                                                    <h4>{props.t('verify_email')}</h4>
+                                                    <p>{props.t('enter_4_digit')} <span
                                                         className="fw-semibold">
                                                         {verifyEmail ? maskEmail(verifyEmail) : ""}
                                                     </span></p>
@@ -243,7 +250,7 @@ const VerifyEmail = () => {
                                                         onClick={handleSubmit}
                                                         disabled={loader}
                                                     >
-                                                        {loader ? 'Проверка...' : 'Confirm'}
+                                                        {loader ? `${props.t('checking')}...` : props.t('confirm')}
                                                     </Button>
                                                 </div>
 
@@ -260,20 +267,23 @@ const VerifyEmail = () => {
                                     <div className="mt-4 text-center">
                                         {
                                             resend ? (
-                                                <p className="mb-0">Didn't receive a code ?
+                                                <p className="mb-0">{props.t('code_not_received')} ?
                                                     &nbsp;
                                                     <Link to="#"
                                                           onClick={handleResend}
                                                           className="fw-semibold text-primary text-decoration-underline">
-                                                        Resend
+                                                        {props.t('resend')}
                                                     </Link>
                                                 </p>
 
                                             ) : (
                                                 <p className="mb-0">
-                                                    <span>Didn't receive a code ?</span> &nbsp;
+                                                    <span>{props.t('code_not_received')} ?</span> &nbsp;
                                                     <span
-                                                        className='text-secondary'>Available in {formatTime(seconds)}</span>
+                                                        className='text-secondary'>
+                                                        {props.t('available_in')}
+                                                        {formatTime(seconds)}
+                                                    </span>
                                                 </p>
                                             )
                                         }
@@ -289,4 +299,4 @@ const VerifyEmail = () => {
     );
 };
 
-export default VerifyEmail;
+export default withTranslation()(VerifyEmail);

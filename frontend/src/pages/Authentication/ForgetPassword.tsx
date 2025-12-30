@@ -19,6 +19,7 @@ import {resetForgetPassword} from "../../slices/auth/forgetpwd/reducer";
 import ReCAPTCHA from "react-google-recaptcha";
 import {useRecaptchaSubmit} from "../../hooks/useRecaptchaSubmit";
 import {RootState} from "../../slices";
+import {withTranslation} from "react-i18next";
 
 
 const ForgetPasswordPage = (props: any) => {
@@ -26,8 +27,8 @@ const ForgetPasswordPage = (props: any) => {
     const {handleSubmit, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
         onResetForm: () => validation.resetForm(),
-        loadingTitle: "Отправка письма...",
-        loadingText: "Пожалуйста, подождите",
+        loadingTitle: `${props.t('message_sending')}...`,
+        loadingText: props.t('wait'),
         showLoadingModal: true
     });
 
@@ -38,8 +39,8 @@ const ForgetPasswordPage = (props: any) => {
         },
         validationSchema: Yup.object({
             email: Yup.string()
-                .email("Введите корректный email")
-                .required("Пожалуйста, введите ваш email"),
+                .email(props.t('enter_valid_email'))
+                .required(props.t('enter_email')),
         }),
         onSubmit: handleSubmit
     });
@@ -60,7 +61,7 @@ const ForgetPasswordPage = (props: any) => {
         };
     }, [dispatch]);
 
-    document.title = "Сброс пароля | Velzon";
+    document.title = props.t('reset_password')
 
     return (
         <ParticlesAuth>
@@ -74,7 +75,7 @@ const ForgetPasswordPage = (props: any) => {
                                         <img src={logoLight} alt="" width="150"/>
                                     </Link>
                                 </div>
-                                <p className="mt-3 fs-15 fw-medium">Online courses for programmers</p>
+                                <p className="mt-3 fs-15 fw-medium">{props.t('slogan')}</p>
                             </div>
                         </Col>
                     </Row>
@@ -84,14 +85,14 @@ const ForgetPasswordPage = (props: any) => {
                             <Card className="mt-4">
                                 <CardBody className="p-4">
                                     <div className="text-center mt-2">
-                                        <h5 className="text-primary">Забыли пароль?</h5>
-                                        <p className="text-muted">Сбросить пароль</p>
+                                        <h5 className="text-primary">{props.t('forgot_password')}?</h5>
+                                        <p className="text-muted">{props.t('reset_password')}</p>
                                         <i className="ri-mail-send-line display-5 text-success mb-3"/>
                                     </div>
 
                                     {(!forgetSuccessMsg && !forgetError) && (
                                         <Alert className="border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                            Введите ваш email и инструкции будут отправлены вам!
+                                            {props.t('instructions_will_sent')}!
                                         </Alert>
                                     )}
 
@@ -115,11 +116,11 @@ const ForgetPasswordPage = (props: any) => {
                                             }}
                                         >
                                             <div className="mb-4">
-                                                <Label className="form-label">Email</Label>
+                                                <Label className="form-label">{props.t('email')}</Label>
                                                 <Input
                                                     name="email"
                                                     className="form-control"
-                                                    placeholder="Введите email"
+                                                    placeholder={props.t('enter_email')}
                                                     type="email"
                                                     onChange={validation.handleChange}
                                                     onBlur={validation.handleBlur}
@@ -141,7 +142,9 @@ const ForgetPasswordPage = (props: any) => {
                                                     type="submit"
                                                     disabled={isLoading}
                                                 >
-                                                    {isLoading ? "Отправка..." : "Отправить ссылку для сброса"}
+                                                    {isLoading
+                                                        ? `${props.t('message_sending')}...`
+                                                        : props.t('send_link')}
                                                 </button>
                                             </div>
                                             <div className="mt-4 d-flex justify-content-center">
@@ -158,9 +161,12 @@ const ForgetPasswordPage = (props: any) => {
 
                             <div className="mt-4 text-center">
                                 <p className="mb-0">
-                                    Постойте, я помню свой пароль...{" "}
-                                    <Link to="/login" className="fw-semibold text-primary text-decoration-underline">
-                                        Нажмите здесь
+                                    {props.t('remember_password')}...{" "}
+                                    <Link
+                                        to="/login"
+                                        className="fw-semibold text-primary text-decoration-underline"
+                                    >
+                                        {props.t('click_here')}
                                     </Link>
                                 </p>
                             </div>
@@ -176,4 +182,4 @@ ForgetPasswordPage.propTypes = {
     history: PropTypes.object,
 };
 
-export default withRouter(ForgetPasswordPage);
+export default withRouter(withTranslation()(ForgetPasswordPage));
