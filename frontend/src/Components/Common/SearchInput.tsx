@@ -1,16 +1,19 @@
 import React, {useEffect, useState} from "react";
 import {Input} from "reactstrap";
+import {withTranslation} from "react-i18next";
 
 interface SearchInputProps {
-    value: string;
-    onSearch: (value: string) => void;
-    placeholder?: string;
+    value: string,
+    onSearch: (value: string) => void,
+    t: (key: string) => string,
+    placeholder?: string,
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
     value,
     onSearch,
-    placeholder = "Search..."
+    placeholder,
+    t
 }) => {
     const [localValue, setLocalValue] = useState(value);
 
@@ -18,12 +21,14 @@ const SearchInput: React.FC<SearchInputProps> = ({
         setLocalValue(value);
     }, [value]);
 
+    const resolvedPlaceholder = placeholder ?? `${t('search')}...`;
+
     return (
         <div className="search-box">
             <Input
                 type="text"
                 className="form-control"
-                placeholder={placeholder}
+                placeholder={resolvedPlaceholder}
                 value={localValue}
                 onChange={(e) => setLocalValue(e.target.value)}
                 onKeyDown={(e) => {
@@ -37,4 +42,4 @@ const SearchInput: React.FC<SearchInputProps> = ({
     );
 };
 
-export default SearchInput;
+export default withTranslation()(SearchInput);

@@ -32,6 +32,6 @@ export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleE
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Отредактировать роль'/>
+            title='edit_role'/>
     )
 }

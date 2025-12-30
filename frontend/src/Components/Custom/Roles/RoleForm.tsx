@@ -3,6 +3,7 @@ import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import FeatherIcon from "feather-icons-react";
+import {withTranslation} from "react-i18next";
 
 
 interface RoleFormProps {
@@ -10,30 +11,31 @@ interface RoleFormProps {
     onCancel: () => void,
     loader: boolean,
     initialValues?: any,
-    title: string
+    title: string,
+    t: (key: string) => string;
 }
 
-export default function RoleForm({onSubmit, onCancel, loader, initialValues, title}: RoleFormProps) {
+function RoleForm({onSubmit, onCancel, loader, initialValues, title, t}: RoleFormProps) {
     const validation: any = useFormik({
         enableReinitialize: true,
         initialValues: initialValues ?? {
             name: '',
         },
         validationSchema: Yup.object({
-            name: Yup.string().required("Please Enter Name"),
+            name: Yup.string().required(t('enter_name')),
         }),
         onSubmit: onSubmit
     });
 
     return (
         <Form onSubmit={validation.handleSubmit}>
-            <p className="fw-bold fs-5">{title}</p>
+            <p className="fw-bold fs-5">{t(title)}</p>
             <div className="mb-3">
-                <Label htmlFor="name" className="form-label">Name</Label>
+                <Label htmlFor="name" className="form-label">{t('name')}</Label>
                 <Input
                     name="name"
                     className="form-control"
-                    placeholder="Enter title"
+                    placeholder={t('enter_title')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -48,12 +50,13 @@ export default function RoleForm({onSubmit, onCancel, loader, initialValues, tit
             <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>
                 {loader && (
                     <Spinner size="sm" className="me-2">
-                        Loading...
+                        {t('loading')}...
                     </Spinner>
                 )}
                 <FeatherIcon icon="plus" size={12}/>
-                Submit
+                {t('submit')}
             </Button>
         </Form>
     )
 }
+export default withTranslation()(RoleForm);

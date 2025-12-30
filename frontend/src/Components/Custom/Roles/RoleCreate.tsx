@@ -30,6 +30,6 @@ export default function RoleCreate({onCancel, onSuccess}: RoleCreateProps) {
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title="Добавить новую роль"/>
+            title="create_role"/>
     )
 }

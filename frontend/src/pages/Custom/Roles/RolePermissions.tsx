@@ -6,9 +6,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {closeLoading, showError, showLoading, showSuccess} from "../../../utils/swal";
 import {RootState} from "../../../slices";
 import {rolesThunks} from "../../../slices/roles";
+import {withTranslation} from "react-i18next";
 
 
-const RolePermissions = () => {
+const RolePermissions = (props: any) => {
     const [loader, setLoader] = useState(false);
     const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
     const {id} = useParams();
@@ -22,7 +23,7 @@ const RolePermissions = () => {
         if (id && !isNaN(roleId)) {
             dispatch(rolesThunks.getById(roleId));
         } else {
-            console.error("Неверный ID роли:", id);
+            console.error(`${props.t('invalid_role_id')}:`, id);
         }
     }, [id]);
 
@@ -54,11 +55,11 @@ const RolePermissions = () => {
                 true)
             );
 
-            showSuccess('Успешно!', 'Права роли обновлены')
+            showSuccess(`${props.t('success')}!`, props.t('permissions_updated'))
                 .then(() => navigate('/roles'))
 
         } catch (err) {
-            await showError('Ошибка!', 'Не удалось обновить права')
+            await showError(`${props.t('error')}!`, props.t('error_updating_permissions'))
         } finally {
             setLoader(false);
         }
@@ -72,11 +73,13 @@ const RolePermissions = () => {
         }
     }, [loading]);
 
+    document.title = props.t('permissions_page')
+
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Permissions" pageTitle="Dashboards"/>
+                    <BreadCrumb title={props.t('permissions_page')} pageTitle={props.t('main')}/>
 
                     <div className="mt-4">
                         <div className="row g-4">
@@ -121,16 +124,16 @@ const RolePermissions = () => {
                         >
                             {loader && (
                                 <Spinner size="sm" className="me-2">
-                                    Loading...
+                                    {props.t('loading')}...
                                 </Spinner>
                             )}
-                            Сохранить
+                            {props.t('save')}
                         </button>
                         <Link
                             className="btn w-sm btn-light"
                             data-bs-dismiss="modal"
                             to='/roles'>
-                            Закрыть
+                            {props.t('close')}
                         </Link>
                     </div>
                 </Container>
@@ -138,4 +141,4 @@ const RolePermissions = () => {
         </React.Fragment>
     )
 }
-export default RolePermissions;
+export default withTranslation()(RolePermissions);

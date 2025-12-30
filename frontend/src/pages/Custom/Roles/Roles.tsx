@@ -13,13 +13,14 @@ import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
+import {withTranslation} from "react-i18next";
 
 type EditModalProps = {
     id: number;
     initialValues: any;
 };
 
-const Home = () => {
+const Roles = (props: any) => {
     const [search, setSearch] = useState<string>('');
     const [page, setPage] = useState<number>(1);
     const [localData, setLocalData] = useState<any[]>([]);
@@ -90,7 +91,7 @@ const Home = () => {
                 setLocalData(Array.isArray(data) ? data : []);
             }
         } catch (error) {
-            console.error('Error fetching menu data:', error);
+                console.error(`${props.t('error_fetching_data', {type: 'roles'})}:`, error);
         } finally {
             setIsSearching(false);
         }
@@ -120,13 +121,13 @@ const Home = () => {
         }
     }, [loading, isSearching]);
 
-    document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
+    document.title = props.t('roles_page')
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Roles" pageTitle="Dashboards"/>
+                    <BreadCrumb title={props.t('roles_page')} pageTitle={props.t('main')}/>
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
                             <SearchInput
@@ -136,20 +137,20 @@ const Home = () => {
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center'
                                     onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
-                                Clear
+                                {props.t('clear')}
                             </Button>
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            Create
+                            {props.t('create')}
                         </Button>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>
                             <th>№</th>
-                            <th>Name</th>
-                            <th>Actions</th>
+                            <th>{props.t('name')}</th>
+                            <th>{props.t('actions')}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -191,4 +192,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default withTranslation()(Roles);
