@@ -23,7 +23,6 @@ import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
-import {PER_PAGE} from "../../../constants";
 import {rolesThunks} from "../../../slices/roles";
 import {usersThunks} from "../../../slices/users";
 
@@ -35,9 +34,12 @@ type EditModalProps = {
 const Users = (props: any) => {
     const [role, setRole] = useState<any>(null);
     const [search, setSearch] = useState<string>('');
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
     const [registerType, setRegisterType] = useState<any>(null);
     const [status, setStatus] = useState<any>(null);
+    const [localData, setLocalData] = useState<any[]>([]);
+    const [isSearching, setIsSearching] = useState<boolean>(false);
+    const [perPage] = useState<number>(10);
 
     const dispatch = useDispatch<any>();
 
@@ -110,40 +112,44 @@ const Users = (props: any) => {
         }
     }
 
-    const tableData = useMemo(() => {
-        let data = users;
+    const fetchData = async () => {
+        setIsSearching(true);
 
-        if (search) {
-            const searchLower = search.toLowerCase();
-            data = data.filter((user: any) =>
-                user.first_name?.toLowerCase().includes(searchLower) ||
-                user.last_name?.toLowerCase().includes(searchLower) ||
-                user.email?.toLowerCase().includes(searchLower) ||
-                user.phone_number?.includes(searchLower)
-            );
+        try {
+            const params: any = {
+                page,
+                perPage,
+                skipReduxUpdate: true,
+            };
+
+            if (search) {
+                params.search = search;
+            }
+
+            if (registerType) {
+                params.register_type = registerType;
+            }
+
+            if (role) {
+                params.role = role;
+            }
+
+            if (status) {
+                params.status = status;
+            }
+
+            const response = await dispatch(usersThunks.fetch(params));
+
+            if (response) {
+                const data = response.results || response.data || response;
+                setLocalData(Array.isArray(data) ? data : []);
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        } finally {
+            setIsSearching(false);
         }
-
-        if (role) {
-            data = data.filter((user: any) => {
-                return user.groups?.some((r: any) => r.id === role);
-            });
-        }
-
-        if (registerType) {
-            data = data.filter((user: any) => {
-                return user.register_type.id === registerType
-            });
-        }
-
-        if (status) {
-            data = data.filter((user: any) =>
-                status === 'active' ? user.is_active : !user.is_active
-            )
-        }
-
-        return data;
-
-    }, [search, users, role, registerType, status]);
+    };
 
     async function handleStatus(id: number, isActive: boolean) {
         await dispatch(usersThunks.update(id, {is_active: !isActive}))
@@ -155,6 +161,7 @@ const Users = (props: any) => {
         setSearch('')
         setRegisterType(null)
         setStatus(null)
+       setPage(1);
     }
 
     const resetUserPassword = (email: string) => {
@@ -162,10 +169,12 @@ const Users = (props: any) => {
     };
 
     useEffect(() => {
-        dispatch(usersThunks.fetch());
-        dispatch(rolesThunks.fetch())
+        fetchData()
+    }, [role, registerType, status, search, page])
+
+    useEffect(() => {
         dispatch(usersThunks.getRegisterTypes());
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (loading) {
@@ -173,7 +182,7 @@ const Users = (props: any) => {
         } else {
             closeLoading()
         }
-    }, [loading]);
+    }, [loading, isSearching]);
 
     return (
         <React.Fragment>
@@ -228,8 +237,8 @@ const Users = (props: any) => {
                             <tr>
                                 <td colSpan={10} className="text-center">Загрузка...</td>
                             </tr>
-                        ) : tableData && tableData.length > 0 ? (
-                            tableData.map((user: any, idx: number) => (
+                        ) : localData && localData.length > 0 ? (
+                            localData.map((user: any, idx: number) => (
                                 <tr key={user.id || idx}>
                                     <td>{idx + 1}</td>
                                     <td>{user.first_name?.length ? user.first_name : '-'}</td>
@@ -329,10 +338,10 @@ const Users = (props: any) => {
                 <PaginationButtons
                     count={count}
                     currentPage={page}
-                    perPageData={PER_PAGE}
+                    perPageData={perPage}
                     setCurrentPage={(p) => {
                         setPage(p);
-                        dispatch(usersThunks.fetch({page: p}));
+                        dispatch(usersThunks.fetch({page: 1}));
                     }}
                 />
             </div>

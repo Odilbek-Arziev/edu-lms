@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
@@ -14,7 +14,6 @@ import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
-import {PER_PAGE} from "../../../constants";
 import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
@@ -29,12 +28,17 @@ const Menu = () => {
     const [search, setSearch] = useState<string>('');
     const [role, setRole] = useState<any>(null);
     const [page, setPage] = useState<number>(1);
-    const [count, setCount] = useState<number>(0);
     const [perPage] = useState<number>(10);
+
+    const [localMenuData, setLocalMenuData] = useState<any[]>([]);
+    const [totalCount, setTotalCount] = useState<number>(0);
+    const [isSearching, setIsSearching] = useState<boolean>(false);
 
     const dispatch = useDispatch<any>();
     const {items: menu, loading} = useSelector((state: RootState) => state.Menu);
     const roles = useSelector((state: any) => state.Roles.items);
+
+    const hasActiveFilters = search || role !== null;
 
     const rolesOptions = roles.map((item: any) => ({
         value: item.id,
@@ -43,7 +47,11 @@ const Menu = () => {
 
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
-            dispatch(menuThunks.fetch())
+            if (hasActiveFilters) {
+                fetchMenuData();
+            } else {
+                dispatch(menuThunks.fetch());
+            }
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
@@ -53,7 +61,11 @@ const Menu = () => {
             <MenuDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(menuThunks.fetch())
+                    if (hasActiveFilters) {
+                        fetchMenuData();
+                    } else {
+                        dispatch(menuThunks.fetch());
+                    }
                     hideDelete();
                 }}
                 onCancel={() => hideDelete()}
@@ -66,7 +78,11 @@ const Menu = () => {
             <MenuEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(menuThunks.fetch())
+                    if (hasActiveFilters) {
+                        fetchMenuData();
+                    } else {
+                        dispatch(menuThunks.fetch());
+                    }
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
@@ -74,28 +90,39 @@ const Menu = () => {
         )
     );
 
-    const tableData = useMemo(() => {
-        if (!menu) return [];
+    const fetchMenuData = async () => {
+        setIsSearching(true);
 
-        let flattened = flattenMenu(menu);
+        try {
+            const params: any = {
+                page,
+                perPage,
+                skipReduxUpdate: true,
+            };
 
-        if (search) {
-            const searchLower = search.toLowerCase();
-            flattened = flattened.filter((item: any) =>
-                item.title?.toLowerCase().includes(searchLower) ||
-                item.url_path?.toLowerCase().includes(searchLower)
-            );
+            if (search) {
+                params.search = search;
+            }
+
+            if (role) {
+                params.roleId = role;
+            }
+
+            const response = await dispatch(menuThunks.fetch(params));
+
+            if (response) {
+                const data = response.results || response.data || response;
+                const total = response.count || response.total || (Array.isArray(data) ? data.length : 0);
+
+                setLocalMenuData(Array.isArray(data) ? data : []);
+                setTotalCount(total);
+            }
+        } catch (error) {
+            console.error('Error fetching menu data:', error);
+        } finally {
+            setIsSearching(false);
         }
-
-        if (role) {
-            flattened = flattened.filter((item: any) => {
-                return item.roles?.some((r: any) => r.id === role);
-            });
-        }
-
-        return flattened;
-
-    }, [menu, search, role]);
+    };
 
     async function getData(id: number) {
         const response = await dispatch(menuThunks.getById(id))
@@ -113,6 +140,9 @@ const Menu = () => {
     function clearFilter() {
         setRole(null)
         setSearch('')
+        setPage(1);
+        setLocalMenuData([]);
+        setTotalCount(0);
     }
 
     useEffect(() => {
@@ -122,21 +152,26 @@ const Menu = () => {
     }, [dispatch])
 
     useEffect(() => {
-        if (loading) {
+        if (hasActiveFilters) {
+            fetchMenuData();
+        }
+    }, [search, role, page]);
+
+    useEffect(() => {
+        if (loading || isSearching) {
             showLoading('Загрузка меню', 'Пожалуйста, подождите...');
         } else {
             closeLoading()
         }
-    }, [loading]);
+    }, [loading, isSearching]);
 
-    useEffect(() => {
-        setCount(tableData.length);
-    }, [tableData]);
+    const tableData = hasActiveFilters ? localMenuData : flattenMenu(menu || []);
 
-    const paginatedData = useMemo(() => {
-        const start = (page - 1) * perPage;
-        return tableData.slice(start, start + perPage);
-    }, [tableData, page]);
+    const paginatedData = hasActiveFilters
+        ? tableData
+        : tableData.slice((page - 1) * perPage, page * perPage);
+
+    const count = hasActiveFilters ? totalCount : tableData.length;
 
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
 
@@ -182,7 +217,7 @@ const Menu = () => {
                         <tbody>
                         {paginatedData && paginatedData.length > 0 ? paginatedData.map((row, idx) => (
                             <tr key={row.id || idx}>
-                                <td>{idx + 1}</td>
+                                <td>{(page - 1) * perPage + idx + 1}</td>
                                 <td>{row.title}</td>
                                 <td>{row.parent ?? '-'}</td>
                                 <td>{row.url_path}</td>
@@ -221,11 +256,8 @@ const Menu = () => {
                 <PaginationButtons
                     count={count}
                     currentPage={page}
-                    perPageData={PER_PAGE}
-                    setCurrentPage={(p) => {
-                        setPage(p);
-                        dispatch(menuThunks.fetch({page: p}))
-                    }}
+                    perPageData={perPage}
+                    setCurrentPage={setPage}
                 />
             </div>
         </React.Fragment>

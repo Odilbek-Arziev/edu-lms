@@ -12,7 +12,6 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
-import {PER_PAGE} from "../../../constants";
 import {rolesThunks} from "../../../slices/roles";
 
 type EditModalProps = {
@@ -23,6 +22,10 @@ type EditModalProps = {
 const Home = () => {
     const [search, setSearch] = useState<string>('');
     const [page, setPage] = useState<number>(1);
+    const [localData, setLocalData] = useState<any[]>([]);
+    const [isSearching, setIsSearching] = useState<boolean>(false);
+    const [perPage] = useState<number>(10);
+
     const dispatch = useDispatch<any>();
 
     const {items: roles, loading, count} = useSelector((state: RootState) => state.Roles);
@@ -60,18 +63,38 @@ const Home = () => {
         )
     );
 
-    const tableData = useMemo(() => {
-        let roleItems = roles;
+    const clearFilter = () => {
+        setSearch('')
+        setPage(1);
+        setLocalData([]);
+    }
 
-        if (search) {
-            const searchLower = search.toLowerCase();
-            roleItems = roleItems.filter((item: any) =>
-                item.name?.toLowerCase().includes(searchLower)
-            );
+    const fetchData = async () => {
+        setIsSearching(true);
+
+        try {
+            const params: any = {
+                page,
+                perPage,
+                skipReduxUpdate: true,
+            };
+
+            if (search) {
+                params.search = search;
+            }
+
+            const response = await dispatch(rolesThunks.fetch(params));
+
+            if (response) {
+                const data = response.results || response.data || response;
+                setLocalData(Array.isArray(data) ? data : []);
+            }
+        } catch (error) {
+            console.error('Error fetching menu data:', error);
+        } finally {
+            setIsSearching(false);
         }
-        return roleItems;
-
-    }, [search, roles]);
+    };
 
     async function getData(id: number) {
         const response = await dispatch(rolesThunks.getById(id));
@@ -86,8 +109,8 @@ const Home = () => {
     }
 
     useEffect(() => {
-        dispatch(rolesThunks.fetch());
-    }, [])
+        fetchData()
+    }, [search, page])
 
     useEffect(() => {
         if (loading) {
@@ -95,9 +118,10 @@ const Home = () => {
         } else {
             closeLoading()
         }
-    }, [loading]);
+    }, [loading, isSearching]);
 
     document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -110,7 +134,7 @@ const Home = () => {
                                 onSearch={setSearch}
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center'
-                                    onClick={() => setSearch('')}>
+                                    onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
                                 Clear
                             </Button>
@@ -129,7 +153,7 @@ const Home = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {tableData ? tableData.map((row: any, idx: number) => (
+                        {localData ? localData.map((row: any, idx: number) => (
                             <tr>
                                 <td>{idx + 1}</td>
                                 <td>{row.name}</td>
@@ -156,10 +180,10 @@ const Home = () => {
                 <PaginationButtons
                     count={count}
                     currentPage={page}
-                    perPageData={PER_PAGE}
+                    perPageData={perPage}
                     setCurrentPage={(p) => {
                         setPage(p);
-                       dispatch(rolesThunks.fetch({page: 1}));
+                        dispatch(rolesThunks.fetch({page: 1}));
                     }}
                 />
             </div>

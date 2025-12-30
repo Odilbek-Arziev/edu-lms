@@ -10,13 +10,24 @@ export function createCrudThunks(
         fetch:
             (params: any = {}) =>
                 async (dispatch: any) => {
-                    dispatch(actions.request());
+                    const { skipReduxUpdate, ...apiParams } = params;
+
+                    if (!skipReduxUpdate) {
+                        dispatch(actions.request());
+                    }
+
                     try {
-                        const response = await api.get(endpoint, params);
-                        dispatch(actions.success(response));
+                        const response = await api.get(endpoint, apiParams);
+
+                        if (!skipReduxUpdate) {
+                            dispatch(actions.success(response));
+                        }
+
                         return response;
                     } catch (e: any) {
-                        dispatch(actions.error(e.response?.data || 'Ошибка загрузки'));
+                        if (!skipReduxUpdate) {
+                            dispatch(actions.error(e.response?.data || 'Ошибка загрузки'));
+                        }
                         return null;
                     }
                 },

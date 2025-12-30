@@ -19,8 +19,8 @@ class UserQuerySet(BaseQuerySet):
         if not roles:
             return self
         if isinstance(roles, (list, tuple, set)):
-            return self.filter(groups__name__in=roles).distinct()
-        return self.filter(groups__name=roles)
+            return self.filter(groups__pk__in=roles).distinct()
+        return self.filter(groups__id=roles)
 
     def for_register_type(self, register_type):
         if not register_type:
