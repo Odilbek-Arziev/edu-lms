@@ -3,13 +3,10 @@ import {useDispatch} from "react-redux";
 import RoleForm from "./RoleForm";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import {rolesThunks} from "../../../slices/roles";
+import {CreateProps} from '../../../types/crud'
 
-interface RoleCreateProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-}
 
-export default function RoleCreate({onCancel, onSuccess}: RoleCreateProps) {
+export default function RoleCreate({onCancel, onSuccess}: CreateProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -30,6 +27,6 @@ export default function RoleCreate({onCancel, onSuccess}: RoleCreateProps) {
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title="create_role"/>
+            action="add"/>
     )
 }

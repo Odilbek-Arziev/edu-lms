@@ -14,11 +14,8 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {withTranslation} from "react-i18next";
+import {EditModalProps} from "../../../types/editModal";
 
-type EditModalProps = {
-    id: number;
-    initialValues: any;
-};
 
 const Roles = (props: any) => {
     const [search, setSearch] = useState<string>('');
@@ -157,7 +154,7 @@ const Roles = (props: any) => {
                         {localData ? localData.map((row: any, idx: number) => (
                             <tr>
                                 <td>{idx + 1}</td>
-                                <td>{row.name}</td>
+                                <td>{props.t(row.name)}</td>
                                 <td className='d-flex gap-1 justify-content-center'>
                                     <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
@@ -170,7 +167,7 @@ const Roles = (props: any) => {
                                         className='btn btn-success btn-sm permissionsBtn d-flex gap-1 align-items-center'
                                         to={`/role-permissions/${row.id}`}>
                                         <FeatherIcon color="white" size={12} icon="list"/>
-                                        Permissions
+                                        {props.t('permissions')}
                                     </Link>
                                 </td>
                             </tr>

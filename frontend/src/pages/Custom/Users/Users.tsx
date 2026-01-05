@@ -25,11 +25,9 @@ import CustomSelect from "../../../Components/Common/RoleSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {usersThunks} from "../../../slices/users";
+import {withTranslation} from "react-i18next";
+import {EditModalProps} from "../../../types/editModal";
 
-type EditModalProps = {
-    id: number;
-    initialValues: any;
-};
 
 const Users = (props: any) => {
     const [role, setRole] = useState<any>(null);
@@ -48,8 +46,8 @@ const Users = (props: any) => {
 
     const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
-        loadingTitle: "Отправка письма...",
-        loadingText: "Пожалуйста, подождите",
+        loadingTitle: `${props.t('message_sending')}...`,
+        loadingText: props.t('wait'),
         showLoadingModal: true
     });
 
@@ -145,7 +143,7 @@ const Users = (props: any) => {
                 setLocalData(Array.isArray(data) ? data : []);
             }
         } catch (error) {
-            console.error('Error fetching users:', error);
+            console.error(`${props.t('error_fetching_data', {type: 'users'})}:`, error);
         } finally {
             setIsSearching(false);
         }
@@ -161,7 +159,7 @@ const Users = (props: any) => {
         setSearch('')
         setRegisterType(null)
         setStatus(null)
-       setPage(1);
+        setPage(1);
     }
 
     const resetUserPassword = (email: string) => {
@@ -174,6 +172,7 @@ const Users = (props: any) => {
 
     useEffect(() => {
         dispatch(usersThunks.getRegisterTypes());
+        dispatch(rolesThunks.fetch());
     }, []);
 
     useEffect(() => {
@@ -188,54 +187,54 @@ const Users = (props: any) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Users" pageTitle="Dashboards"/>
+                    <BreadCrumb title={props.t('users')} pageTitle={props.t('main')}/>
                     <div className='d-flex gap-1'>
                         <SearchInput
                             value={search}
                             onSearch={setSearch}
                         />
                         <CustomSelect
-                            placeholder='Select role...'
+                            placeholder={props.t('select_role')}
                             value={role}
                             options={rolesOptions}
                             onChange={setRole}
                         />
                         <CustomSelect
-                            placeholder="Select register type..."
+                            placeholder={props.t('select_register_type')}
                             value={registerType}
                             options={regTypesOptions}
                             onChange={setRegisterType}
                         />
                         <CustomSelect
-                            placeholder="Select status..."
+                            placeholder={props.t('select_status')}
                             value={status}
                             options={statusTypes}
                             onChange={setStatus}
                         />
                         <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                             <FeatherIcon color="white" size={12} icon="trash"/>
-                            Clear
+                            {props.t('clear')}
                         </Button>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mt-2 text-center'>
                         <thead>
                         <tr>
                             <th>№</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Register type</th>
-                            <th>Roles</th>
-                            <th>Status</th>
-                            <th>Phone</th>
-                            <th>Telegram Link</th>
-                            <th>Actions</th>
+                            <th>{props.t('first_name')}</th>
+                            <th>{props.t('last_name')}</th>
+                            <th>{props.t('email')}</th>
+                            <th>{props.t('register_type')}</th>
+                            <th>{props.t('roles')}</th>
+                            <th>{props.t('status')}</th>
+                            <th>{props.t('phone')}</th>
+                            <th>{props.t('tg_link')}</th>
+                            <th>{props.t('actions')}</th>
                         </tr>
                         </thead>
                         <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={10} className="text-center">Загрузка...</td>
+                                <td colSpan={10} className="text-center">{props.t('loading')}...</td>
                             </tr>
                         ) : localData && localData.length > 0 ? (
                             localData.map((user: any, idx: number) => (
@@ -251,13 +250,13 @@ const Users = (props: any) => {
                                                 key={item.id}
                                                 className={`badge ${roleTypeColors[item.name] ?? 'bg-secondary'} me-1`}
                                             >
-                                                {item.name}
+                                                {props.t(item.name)}
                                             </span>
                                         )) : '-'}
                                     </td>
                                     <td>{user.is_active
-                                        ? <span className='badge bg-success'>active</span>
-                                        : <span className='badge bg-danger'>passive</span>}
+                                        ? <span className='badge bg-success'>{props.t('active')}</span>
+                                        : <span className='badge bg-danger'>{props.t('passive')}</span>}
                                     </td>
                                     <td>{user.phone_number ? user.phone_number : '-'}</td>
                                     <td>
@@ -278,7 +277,7 @@ const Users = (props: any) => {
                                             <DropdownToggle
                                                 tag="button"
                                                 className="btn btn-light btn-icon btn-sm"
-                                                aria-label="Действия"
+                                                aria-label={props.t('actions')}
                                             >
                                                 <FeatherIcon icon="more-vertical" size={16}/>
                                             </DropdownToggle>
@@ -289,7 +288,7 @@ const Users = (props: any) => {
                                                     onClick={() => getData(user.id)}
                                                 >
                                                     <FeatherIcon icon="edit" size={14}/>
-                                                    Редактировать
+                                                     {props.t('edit')}
                                                 </DropdownItem>
 
                                                 <DropdownItem onClick={() => handleStatus(user.id, user.is_active)}>
@@ -297,13 +296,13 @@ const Users = (props: any) => {
                                                         (
                                                             <span className="d-flex align-items-center gap-2 text-info">
                                                                 <FeatherIcon icon="x" size={14}/>
-                                                                Деактивировать
+                                                                 {props.t('deactivate')}
                                                             </span>
                                                         ) :
                                                         (
                                                             <span className="d-flex align-items-center gap-2 text-info">
                                                                 <FeatherIcon icon="check" size={14}/>
-                                                                Активировать
+                                                                {props.t('activate')}
                                                             </span>
                                                         )}
                                                 </DropdownItem>
@@ -313,14 +312,14 @@ const Users = (props: any) => {
                                                     onClick={() => showDelete({id: user.id})}
                                                 >
                                                     <FeatherIcon icon="trash-2" size={14}/>
-                                                    Удалить
+                                                    {props.t('delete')}
                                                 </DropdownItem>
                                                 <DropdownItem
                                                     className="text-secondary d-flex align-items-center gap-2"
                                                     onClick={() => resetUserPassword(user.email)}
                                                 >
                                                     <FeatherIcon icon="lock" size={14}/>
-                                                    Сбросить пароль
+                                                    {props.t('reset_password')}
                                                 </DropdownItem>
                                             </DropdownMenu>
                                         </UncontrolledDropdown>
@@ -329,7 +328,7 @@ const Users = (props: any) => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={10} className="text-center">Нет данных</td>
+                                <td colSpan={10} className="text-center">{props.t('no_data_found')}</td>
                             </tr>
                         )}
                         </tbody>
@@ -353,4 +352,4 @@ const Users = (props: any) => {
         </React.Fragment>
     )
 }
-export default Users;
+export default withTranslation()(Users);

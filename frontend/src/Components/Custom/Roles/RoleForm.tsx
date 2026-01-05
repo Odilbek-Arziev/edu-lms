@@ -4,18 +4,10 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import FeatherIcon from "feather-icons-react";
 import {withTranslation} from "react-i18next";
+import {FormProps} from "../../../types/crud";
 
 
-interface RoleFormProps {
-    onSubmit: (data: any, actions: any) => Promise<void>
-    onCancel: () => void,
-    loader: boolean,
-    initialValues?: any,
-    title: string,
-    t: (key: string) => string;
-}
-
-function RoleForm({onSubmit, onCancel, loader, initialValues, title, t}: RoleFormProps) {
+function RoleForm({onSubmit, onCancel, loader, initialValues, action, t}: FormProps) {
     const validation: any = useFormik({
         enableReinitialize: true,
         initialValues: initialValues ?? {
@@ -29,7 +21,7 @@ function RoleForm({onSubmit, onCancel, loader, initialValues, title, t}: RoleFor
 
     return (
         <Form onSubmit={validation.handleSubmit}>
-            <p className="fw-bold fs-5">{t(title)}</p>
+            <p className="fw-bold fs-5">{t(action, {item: t('role_item')})}</p>
             <div className="mb-3">
                 <Label htmlFor="name" className="form-label">{t('name')}</Label>
                 <Input
@@ -59,4 +51,5 @@ function RoleForm({onSubmit, onCancel, loader, initialValues, title, t}: RoleFor
         </Form>
     )
 }
+
 export default withTranslation()(RoleForm);

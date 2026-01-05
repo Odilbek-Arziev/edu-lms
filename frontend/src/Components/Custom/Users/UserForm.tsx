@@ -6,17 +6,11 @@ import FeatherIcon from "feather-icons-react";
 import Select from "react-select";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../slices";
+import {FormProps} from "../../../types/crud";
+import {withTranslation} from "react-i18next";
 
 
-interface UserFormProps {
-    onSubmit: (data: any, actions: any) => Promise<void>
-    onCancel: () => void,
-    loader: boolean,
-    initialValues?: any,
-    title: string
-}
-
-export default function UserForm({onSubmit, onCancel, loader, initialValues, title}: UserFormProps) {
+function UserForm({onSubmit, onCancel, loader, initialValues, action, t}: FormProps) {
     const roles = useSelector((state: RootState) => state.Roles.items);
     const rolesOptions = roles.map((item: any) => ({
         value: item.id,
@@ -34,9 +28,9 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
             groups_ids: []
         },
         validationSchema: Yup.object({
-            first_name: Yup.string().required("Please enter first name"),
+            first_name: Yup.string().required(t('enter_first_name')),
             last_name: Yup.string().optional(),
-            email: Yup.string().required("Please enter email address"),
+            email: Yup.string().required(t('enter_email')),
             phone_number: Yup.string().nullable().notRequired(),
             telegram_link: Yup.string().nullable().notRequired(),
             groups_ids: Yup.array()
@@ -49,13 +43,13 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
 
     return (
         <Form onSubmit={validation.handleSubmit}>
-            <p className="fw-bold fs-5">{title}</p>
+            <p className="fw-bold fs-5">{t(action, {item: t('user')})}</p>
             <div className="mb-3">
-                <Label htmlFor="first_name" className="form-label">First Name</Label>
+                <Label htmlFor="first_name" className="form-label">{t('first_name')}</Label>
                 <Input
                     name="first_name"
                     className="form-control"
-                    placeholder="Enter First Name"
+                    placeholder={t('enter_first_name')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -68,11 +62,11 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
                 ) : null}
             </div>
             <div className="mb-3">
-                <Label htmlFor="last_name" className="form-label">Last Name</Label>
+                <Label htmlFor="last_name" className="form-label">{t('last_name')}</Label>
                 <Input
                     name="last_name"
                     className="form-control"
-                    placeholder="Enter Last Name"
+                    placeholder={t('enter_last_name')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -85,11 +79,11 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
                 ) : null}
             </div>
             <div className="mb-3">
-                <Label htmlFor="email" className="form-label">Email</Label>
+                <Label htmlFor="email" className="form-label">{t('email')}</Label>
                 <Input
                     name="email"
                     className="form-control"
-                    placeholder="Enter Email"
+                    placeholder={t('enter_email')}
                     type="email"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -102,11 +96,11 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
                 ) : null}
             </div>
             <div className="mb-3">
-                <Label htmlFor="phone_number" className="form-label">Phone number</Label>
+                <Label htmlFor="phone_number" className="form-label">{t('phone')}</Label>
                 <Input
                     name="phone_number"
                     className="form-control"
-                    placeholder="Enter Phone Number"
+                    placeholder={t('enter_phone_number')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -147,7 +141,7 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="groups_ids" className="form-label">Roles</Label>
+                <Label htmlFor="groups_ids" className="form-label">{t('select_role')}</Label>
                 <Select
                     isMulti
                     isClearable
@@ -171,12 +165,14 @@ export default function UserForm({onSubmit, onCancel, loader, initialValues, tit
             <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>
                 {loader && (
                     <Spinner size="sm" className="me-2">
-                        Loading...
+                        {t('loading')}...
                     </Spinner>
                 )}
                 <FeatherIcon icon="plus" size={12}/>
-                Submit
+                {t('submit')}
             </Button>
         </Form>
     )
 }
+
+export default withTranslation()(UserForm);

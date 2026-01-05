@@ -11,18 +11,10 @@ import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
 import {withTranslation} from "react-i18next";
+import {FormProps} from "../../../types/crud";
 
 
-interface MenuFormProps {
-    onSubmit: (data: any, actions: any) => Promise<void>
-    onCancel: () => void,
-    loader: boolean,
-    initialValues?: any,
-    title: string,
-    t: (key: string) => string;
-}
-
-function MenuForm({onSubmit, onCancel, loader, initialValues, title, t}: MenuFormProps) {
+function MenuForm({onSubmit, onCancel, loader, initialValues, action, t}: FormProps) {
     const dispatch = useDispatch<any>();
     const menu = useSelector((state: RootState) => state.Menu.items);
     const roles = useSelector((state: RootState) => state.Roles.items);
@@ -79,7 +71,7 @@ function MenuForm({onSubmit, onCancel, loader, initialValues, title, t}: MenuFor
 
     return (
         <Form onSubmit={validation.handleSubmit}>
-            <p className="fw-bold fs-5">{t(title)}</p>
+            <p className="fw-bold fs-5">{t(action, {item: t('menu_item')})}</p>
             <div className="mb-3">
                 <Label htmlFor="title" className="form-label">{t('title')} </Label>
                 <Input

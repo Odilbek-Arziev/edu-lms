@@ -3,13 +3,10 @@ import MenuForm from "./MenuForm";
 import {useDispatch} from "react-redux";
 import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
+import {CreateProps} from '../../../types/crud'
 
-interface MenuCreateProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-}
 
-export default function MenuCreate({onCancel, onSuccess}: MenuCreateProps) {
+export default function MenuCreate({onCancel, onSuccess}: CreateProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -29,6 +26,6 @@ export default function MenuCreate({onCancel, onSuccess}: MenuCreateProps) {
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='add_new_menu'/>
+            action='add'/>
     )
 }

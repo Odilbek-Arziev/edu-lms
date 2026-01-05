@@ -3,16 +3,10 @@ import MenuForm from "./MenuForm";
 import {useDispatch} from "react-redux";
 import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
-
-interface MenuEditProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number,
-    initialValues: any
-}
+import {EditProps} from "../../../types/crud";
 
 
-export default function MenuEdit({onCancel, onSuccess, id, initialValues}: MenuEditProps) {
+export default function MenuEdit({onCancel, onSuccess, id, initialValues}: EditProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -33,7 +27,7 @@ export default function MenuEdit({onCancel, onSuccess, id, initialValues}: MenuE
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='edit_menu'
+            action='update'
         />
     )
 }

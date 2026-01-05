@@ -4,16 +4,10 @@ import {Spinner} from "reactstrap";
 import {menuThunks} from "../../../slices/menu";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import {withTranslation} from "react-i18next";
-
-interface MenuDeleteProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number;
-    t: (key: string) => string;
-}
+import {DeleteProps} from "../../../types/crud";
 
 
-function MenuDelete({onCancel, onSuccess, id, t}: MenuDeleteProps) {
+function MenuDelete({onCancel, onSuccess, id, t}: DeleteProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -30,7 +24,7 @@ function MenuDelete({onCancel, onSuccess, id, t}: MenuDeleteProps) {
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
                 <p className="fw-bold fs-5">
-                    {t('delete_menu_confirm')}
+                    {t('delete_confirm', {item: t('menu_item')})}
                 </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">

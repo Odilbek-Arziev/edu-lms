@@ -18,12 +18,8 @@ import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
 import {withTranslation} from "react-i18next";
+import {EditModalProps} from "../../../types/editModal";
 
-
-type EditModalProps = {
-    id: number;
-    initialValues: any;
-};
 
 const Menu = (props: any) => {
     const [search, setSearch] = useState<string>('');

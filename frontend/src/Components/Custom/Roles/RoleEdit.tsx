@@ -3,15 +3,10 @@ import {useDispatch} from "react-redux";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import RoleForm from "./RoleForm";
 import {rolesThunks} from "../../../slices/roles";
+import {EditProps} from "../../../types/crud";
 
-interface RoleEditProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number,
-    initialValues: any
-}
 
-export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleEditProps) {
+export default function RoleEdit({onCancel, onSuccess, id, initialValues}: EditProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -32,6 +27,6 @@ export default function RoleEdit({onCancel, onSuccess, id, initialValues}: RoleE
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='edit_role'/>
+            action='update'/>
     )
 }

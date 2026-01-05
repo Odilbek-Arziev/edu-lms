@@ -3,14 +3,11 @@ import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import {usersThunks} from "../../../slices/users";
+import {DeleteProps} from "../../../types/crud";
+import {withTranslation} from "react-i18next";
 
-interface UserDeleteProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number;
-}
 
-export default function UserDelete({onCancel, onSuccess, id}: UserDeleteProps) {
+function UserDelete({onCancel, onSuccess, id, t}: DeleteProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -27,7 +24,7 @@ export default function UserDelete({onCancel, onSuccess, id}: UserDeleteProps) {
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
                 <p className="fw-bold fs-5">
-                    Вы уверены что хотите удалить этого пользователя?
+                    {t('delete_confirm', {item: t('user')})}
                 </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
@@ -37,7 +34,7 @@ export default function UserDelete({onCancel, onSuccess, id}: UserDeleteProps) {
                     data-bs-dismiss="modal"
                     onClick={onCancel}
                 >
-                    Закрыть
+                    {t('close')}
                 </button>
                 <button
                     type="button"
@@ -48,12 +45,13 @@ export default function UserDelete({onCancel, onSuccess, id}: UserDeleteProps) {
                 >
                     {loader && (
                         <Spinner size="sm" className="me-2">
-                            Loading...
+                            {t('loading')}...
                         </Spinner>
                     )}
-                    Да, удалить.
+                    {t('yes_delete')}
                 </button>
             </div>
         </div>
     )
 }
+export default withTranslation()(UserDelete);

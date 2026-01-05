@@ -13,11 +13,8 @@ import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
+import {EditModalProps} from "../../../types/editModal";
 
-type EditModalProps = {
-    id: number;
-    initialValues: any;
-};
 
 const LanguageLines = () => {
     const [search, setSearch] = useState<string>('');

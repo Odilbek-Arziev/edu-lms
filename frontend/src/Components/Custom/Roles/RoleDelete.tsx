@@ -4,15 +4,10 @@ import {Spinner} from "reactstrap";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import {rolesThunks} from "../../../slices/roles";
 import {withTranslation} from "react-i18next";
+import {DeleteProps} from "../../../types/crud";
 
-interface RoleDeleteProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number;
-    t: (key: string) => string;
-}
 
-function RoleDelete({onCancel, onSuccess, id, t}: RoleDeleteProps) {
+function RoleDelete({onCancel, onSuccess, id, t}: DeleteProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -29,7 +24,7 @@ function RoleDelete({onCancel, onSuccess, id, t}: RoleDeleteProps) {
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
                 <p className="fw-bold fs-5">
-                    {t('delete_role_confirm')}
+                     {t('delete_confirm', {item: t('role_item')})}
                 </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">

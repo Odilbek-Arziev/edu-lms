@@ -3,15 +3,9 @@ import {useDispatch} from "react-redux";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import UserForm from "./UserForm";
 import {usersThunks} from "../../../slices/users";
+import {EditProps} from "../../../types/crud";
 
-interface UserEditProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number,
-    initialValues: any
-}
-
-export default function UserEdit({onCancel, onSuccess, id, initialValues}: UserEditProps) {
+export default function UserEdit({onCancel, onSuccess, id, initialValues}: EditProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -32,7 +26,7 @@ export default function UserEdit({onCancel, onSuccess, id, initialValues}: UserE
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Отредактировать пользователя'
+            action='update'
         />
     )
 }
