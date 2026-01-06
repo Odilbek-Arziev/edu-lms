@@ -24,21 +24,24 @@ const LanguageLines = (props: any) => {
     const {items: languageLines, loading, count} = useSelector((state: RootState) => state.LanguageLines);
 
     const [showCreate, hideCreate] = useModal(
-        <LanguageLinesCreate onSuccess={() => {
-            dispatch(fetchLanguageLines())
-            hideCreate()
-            setPage(1)
-        }} onCancel={() => hideCreate()}/>,
-    )
+        () => (
+            <LanguageLinesCreate
+                onSuccess={() => {
+                    dispatch(fetchLanguageLines({page, search}));
+                    hideCreate();
+                }}
+                onCancel={() => hideCreate()}
+            />
+        )
+    );
 
     const [showDelete, hideDelete] = useModal<{ id: number }>(
         (props: { id: number }) => (
             <LanguageLineDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchLanguageLines());
+                    dispatch(fetchLanguageLines({page, search}));
                     hideDelete();
-                    setPage(1)
                 }}
                 onCancel={() => hideDelete()}
             />
@@ -50,9 +53,8 @@ const LanguageLines = (props: any) => {
             <LanguageLineEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(fetchLanguageLines());
+                    dispatch(fetchLanguageLines({page, search}));
                     hideEdit();
-                    setPage(1)
                 }}
                 onCancel={() => hideEdit()}
             />
@@ -87,7 +89,6 @@ const LanguageLines = (props: any) => {
 
     useEffect(() => {
         dispatch(fetchLanguageLines({page, search}));
-        handleSearchChange(search)
     }, [dispatch, page, search]);
 
     useEffect(() => {
@@ -130,7 +131,7 @@ const LanguageLines = (props: any) => {
                                 disabled={loading}
                             >
                                 <FeatherIcon color="white" size={12} icon="refresh-cw"/>
-                                 {props.t('refresh')}
+                                {props.t('refresh')}
                             </Button>
                         </div>
                     </div>
