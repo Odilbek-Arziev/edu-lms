@@ -71,7 +71,7 @@ const Users = (props: any) => {
             <UserDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(usersThunks.fetch());
+                    fetchData()
                     hideDelete();
                 }}
                 onCancel={() => hideDelete()}
@@ -84,7 +84,7 @@ const Users = (props: any) => {
             <UserEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(usersThunks.fetch());
+                   fetchData()
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
@@ -151,7 +151,7 @@ const Users = (props: any) => {
 
     async function handleStatus(id: number, isActive: boolean) {
         await dispatch(usersThunks.update(id, {is_active: !isActive}))
-        dispatch(usersThunks.fetch());
+        fetchData()
     }
 
     const clearFilter = () => {

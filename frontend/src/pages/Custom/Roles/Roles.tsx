@@ -25,12 +25,11 @@ const Roles = (props: any) => {
     const [perPage] = useState<number>(10);
 
     const dispatch = useDispatch<any>();
-
     const {items: roles, loading, count} = useSelector((state: RootState) => state.Roles);
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {
-            dispatch(rolesThunks.fetch());
+            fetchData();
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
@@ -40,7 +39,7 @@ const Roles = (props: any) => {
             <RoleDelete
                 {...props}
                 onSuccess={() => {
-                    dispatch(rolesThunks.fetch());
+                    fetchData();
                     hideDelete();
                 }}
                 onCancel={() => hideDelete()}
@@ -53,7 +52,7 @@ const Roles = (props: any) => {
             <RoleEdit
                 {...props}
                 onSuccess={() => {
-                    dispatch(rolesThunks.fetch());
+                    fetchData();
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
