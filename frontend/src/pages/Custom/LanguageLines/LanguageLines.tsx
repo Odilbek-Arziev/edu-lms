@@ -14,9 +14,10 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
 import {EditModalProps} from "../../../types/editModal";
+import {withTranslation} from "react-i18next";
 
 
-const LanguageLines = () => {
+const LanguageLines = (props: any) => {
     const [search, setSearch] = useState<string>('');
     const [page, setPage] = useState<number>(1);
     const dispatch = useDispatch<any>();
@@ -70,12 +71,12 @@ const LanguageLines = () => {
 
     const handleRefreshTranslations = async () => {
         try {
-            showLoading('Обновление переводов', 'Загружаем последние переводы...');
+            showLoading(props.t('updating'), `${props.t('loading')}...`);
             await dispatch(refreshLanguageLines());
             closeLoading();
         } catch (error) {
             closeLoading();
-            await showError('Ошибка', 'Не удалось обновить переводы')
+            await showError(props.t('error'), props.t('error_fetching_data', {type: 'language lines'}))
         }
     };
 
@@ -86,23 +87,23 @@ const LanguageLines = () => {
 
     useEffect(() => {
         dispatch(fetchLanguageLines({page, search}));
+        handleSearchChange(search)
     }, [dispatch, page, search]);
 
     useEffect(() => {
         if (loading) {
-            showLoading('Загрузка', 'Пожалуйста, подождите...');
+            showLoading(props.t('loading'), props.t('wait'));
         } else {
             closeLoading()
         }
     }, [loading]);
 
-
-    document.title = "Dashboard | Velzon - React Admin & Dashboard Template";
+    document.title = props.t('lang_page')
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Language" pageTitle="Dashboards"/>
+                    <BreadCrumb title={props.t('language')} pageTitle={props.t('main')}/>
                     <div className="d-flex justify-content-between my-2">
                         <div className='d-flex gap-1'>
                             <SearchInput
@@ -115,13 +116,13 @@ const LanguageLines = () => {
                                         setPage(1);
                                     }}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
-                                Clear
+                                {props.t('clear')}
                             </Button>
                         </div>
                         <div className='d-flex gap-1'>
                             <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                                 <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                                Create
+                                {props.t('create')}
                             </Button>
                             <Button
                                 className='btn btn-primary d-flex gap-1 align-items-center'
@@ -129,7 +130,7 @@ const LanguageLines = () => {
                                 disabled={loading}
                             >
                                 <FeatherIcon color="white" size={12} icon="refresh-cw"/>
-                                Refresh
+                                 {props.t('refresh')}
                             </Button>
                         </div>
                     </div>
@@ -137,11 +138,11 @@ const LanguageLines = () => {
                         <thead>
                         <tr>
                             <th>№</th>
-                            <th>Key</th>
-                            <th>English</th>
-                            <th>Russian</th>
-                            <th>Uzbek</th>
-                            <th>Actions</th>
+                            <th>{props.t('key')}</th>
+                            <th>{props.t('eng')}</th>
+                            <th>{props.t('ru')}</th>
+                            <th>{props.t('uz')}</th>
+                            <th>{props.t('actions')}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -186,4 +187,4 @@ const LanguageLines = () => {
     );
 };
 
-export default LanguageLines;
+export default withTranslation()(LanguageLines);

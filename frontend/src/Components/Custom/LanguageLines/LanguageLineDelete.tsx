@@ -3,15 +3,11 @@ import {useDispatch} from "react-redux";
 import {Spinner} from "reactstrap";
 import {useApiHandler} from "../../../hooks/useApiHandler";
 import {deleteLanguageLine} from "../../../slices/languageLines/thunk";
-
-interface deleteProps {
-    onCancel: () => void;
-    onSuccess: () => void;
-    id: number;
-}
+import {DeleteProps} from "../../../types/crud";
+import {withTranslation} from "react-i18next";
 
 
-export default function LanguageLineDelete({onCancel, onSuccess, id}: deleteProps) {
+function LanguageLineDelete({onCancel, onSuccess, id, t}: DeleteProps) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch<any>();
     const {handleRequest} = useApiHandler(setLoader);
@@ -28,7 +24,7 @@ export default function LanguageLineDelete({onCancel, onSuccess, id}: deleteProp
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
                 <p className="fw-bold fs-5">
-                    Вы уверены что хотите удалить этот пункт перевода?
+                     {t('delete_confirm', {item: t('lang_item')})}
                 </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
@@ -38,7 +34,7 @@ export default function LanguageLineDelete({onCancel, onSuccess, id}: deleteProp
                     data-bs-dismiss="modal"
                     onClick={onCancel}
                 >
-                    Закрыть
+                    {t('close')}
                 </button>
                 <button
                     type="button"
@@ -49,12 +45,13 @@ export default function LanguageLineDelete({onCancel, onSuccess, id}: deleteProp
                 >
                     {loader && (
                         <Spinner size="sm" className="me-2">
-                            Loading...
+                             {t('loading')}...
                         </Spinner>
                     )}
-                    Да, удалить.
+                     {t('yes_delete')}
                 </button>
             </div>
         </div>
     )
 }
+export default withTranslation()(LanguageLineDelete);

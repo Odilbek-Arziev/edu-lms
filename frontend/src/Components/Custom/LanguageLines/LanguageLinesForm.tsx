@@ -3,17 +3,11 @@ import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import FeatherIcon from "feather-icons-react";
+import {withTranslation} from "react-i18next";
+import {FormProps} from "../../../types/crud";
 
 
-interface LanguageLinesProps {
-    onSubmit: (data: any, actions: any) => Promise<void>
-    onCancel: () => void,
-    loader: boolean,
-    initialValues?: any,
-    title: string
-}
-
-export default function LanguageLinesForm({onSubmit, onCancel, loader, initialValues, title}: LanguageLinesProps) {
+function LanguageLinesForm({onSubmit, onCancel, loader, initialValues, action, t}: FormProps) {
     const validation: any = useFormik({
         enableReinitialize: true,
         initialValues: initialValues ?? {
@@ -25,11 +19,11 @@ export default function LanguageLinesForm({onSubmit, onCancel, loader, initialVa
             },
         },
         validationSchema: Yup.object({
-            key: Yup.string().required("Please enter key"),
+            key: Yup.string().required(t('enter_key')),
             value: Yup.object({
-                en: Yup.string().required("English translation is required"),
-                ru: Yup.string().required("Russian translation is required"),
-                uz: Yup.string().required("Uzbek translation is required"),
+                en: Yup.string().required(t('is_required', {field: t('eng_trans')})),
+                ru: Yup.string().required(t('is_required', {field: t('ru_trans')})),
+                uz: Yup.string().required(t('is_required', {field: t('uz_trans')})),
             })
         }),
         onSubmit: onSubmit
@@ -37,13 +31,13 @@ export default function LanguageLinesForm({onSubmit, onCancel, loader, initialVa
 
     return (
         <Form onSubmit={validation.handleSubmit}>
-            <p className="fw-bold fs-5">{title}</p>
+           <p className="fw-bold fs-5">{t(action, {item: t('lang_item')})}</p>
             <div className="mb-3">
-                <Label htmlFor="key" className="form-label">Key</Label>
+                <Label htmlFor="key" className="form-label">{t('key')}</Label>
                 <Input
                     name="key"
                     className="form-control"
-                    placeholder="Enter key"
+                    placeholder={t('enter_key')}
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
@@ -56,11 +50,11 @@ export default function LanguageLinesForm({onSubmit, onCancel, loader, initialVa
                 ) : null}
             </div>
             <div className="mb-3">
-                <Label htmlFor="value.en" className="form-label">English</Label>
+                <Label htmlFor="value.en" className="form-label">{t('eng')}</Label>
                 <Input
                    name="value.en"
                     className="form-control"
-                    placeholder="Enter English translation"
+                    placeholder={t('enter_value', {value: t('eng_trans')})}
                     type="text"
                     value={validation.values.value.en}
                     onChange={validation.handleChange}
@@ -75,11 +69,11 @@ export default function LanguageLinesForm({onSubmit, onCancel, loader, initialVa
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="value.ru" className="form-label">Russian</Label>
+                <Label htmlFor="value.ru" className="form-label">{t('ru')}</Label>
                 <Input
                     name="value.ru"
                     className="form-control"
-                    placeholder="Enter Russian translation"
+                    placeholder={t('enter_value', {value: t('ru_trans')})}
                     type="text"
                     value={validation.values.value.ru}
                     onChange={validation.handleChange}
@@ -94,11 +88,11 @@ export default function LanguageLinesForm({onSubmit, onCancel, loader, initialVa
             </div>
 
             <div className="mb-3">
-                <Label htmlFor="value.uz" className="form-label">Uzbek</Label>
+                <Label htmlFor="value.uz" className="form-label">{t('uz')}</Label>
                 <Input
                     name="value.uz"
                     className="form-control"
-                    placeholder="Enter Uzbek translation"
+                     placeholder={t('enter_value', {value: t('uz_trans')})}
                     type="text"
                     value={validation.values.value.uz}
                     onChange={validation.handleChange}
@@ -115,12 +109,13 @@ export default function LanguageLinesForm({onSubmit, onCancel, loader, initialVa
             <Button className='btn btn-success d-flex gap-1 align-items-center' type='submit' disabled={loader}>
                 {loader && (
                     <Spinner size="sm" className="me-2">
-                        Loading...
+                        {t('loading')}...
                     </Spinner>
                 )}
                 <FeatherIcon icon="plus" size={12}/>
-                Submit
+                {t('submit')}
             </Button>
         </Form>
     )
 }
+export default withTranslation()(LanguageLinesForm);

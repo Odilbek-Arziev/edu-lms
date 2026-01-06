@@ -32,7 +32,7 @@ export default function LanguageLineEdit({onCancel, onSuccess, id, initialValues
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Отредактировать перевод'
+            action='update'
         />
     )
 }

@@ -29,6 +29,6 @@ export default function LanguageLinesCreate({onCancel, onSuccess}: LanguageLines
             loader={loader}
             onSubmit={onSubmit}
             onCancel={onCancel}
-            title='Добавить новый пункт перевода'/>
+            action='add'/>
     )
 }
