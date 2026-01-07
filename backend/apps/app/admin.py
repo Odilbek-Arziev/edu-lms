@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "author", "level", "language", "is_active", "start_date", "end_date")
+    list_display = ("id", "title", "author", "icon", "level", "language", "is_active", "start_date", "end_date")
     search_fields = ("title", "description")
     list_filter = ("level", "language", "is_active", "is_public")
 
@@ -113,7 +113,7 @@ class SubmissionCriterionResultAdmin(admin.ModelAdmin):
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "url_path", "status", "icon", "parent", "show_groups")
+    list_display = ("id", "title", "url_path", "status", "icon", "parent", "show_groups", "order")
     search_fields = ('title',)
 
     def show_groups(self, obj):

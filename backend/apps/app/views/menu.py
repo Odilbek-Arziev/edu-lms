@@ -17,4 +17,4 @@ class MenuViewSet(BaseModelViewSet):
             search=self.request.query_params.get('search')
         ).by_role(
             self.request.query_params.get('role')
-        )
+        ).order_by('order')

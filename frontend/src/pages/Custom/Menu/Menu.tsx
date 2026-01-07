@@ -12,7 +12,7 @@ import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/RoleSelect";
+import CustomSelect from "../../../Components/Common/CustomSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";

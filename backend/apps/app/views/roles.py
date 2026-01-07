@@ -34,6 +34,6 @@ class RoleViewSet(BaseModelViewSet):
         role = self.get_object()
         serializer = RolePermissionsUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        permissions = serializer.validated_data['permissions']
-        role.permissions.set(permissions)
+        permissions_data = serializer.validated_data['permissions']
+        role.permissions.set(permissions_data)
         return Response(RoleDetailSerializer(role).data)

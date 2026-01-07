@@ -25,7 +25,7 @@ const Roles = (props: any) => {
     const [perPage] = useState<number>(10);
 
     const dispatch = useDispatch<any>();
-    const {items: roles, loading, count} = useSelector((state: RootState) => state.Roles);
+    const {items, loading, count} = useSelector((state: RootState) => state.Roles);
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {
@@ -110,7 +110,7 @@ const Roles = (props: any) => {
     }, [search, page])
 
     useEffect(() => {
-        if (loading) {
+        if (loading || isSearching) {
             showLoading()
         } else {
             closeLoading()

@@ -32,8 +32,10 @@ class CourseViewSet(BaseModelViewSet):
         params = self.request.query_params
         search = params.get('search')
         category = params.get('category')
+        level = params.get('level')
+        language = params.get('language')
 
-        return Course.objects.list(search=search, category=category)
+        return Course.objects.list(search=search, category=category, level=level, language=language)
 
     @action(detail=True, methods=['GET'])
     def students(self, request, slug=None):
@@ -83,3 +85,13 @@ class CourseViewSet(BaseModelViewSet):
         modules = Module.objects.filter(course=course)
         serializer = ModuleSerializer(modules, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['GET'])
+    def levels(self, request):
+        model = self.serializer_class.Meta.model
+        return Response([{'value': choice[0], 'label': choice[1]} for choice in model._meta.get_field('level').choices])
+
+    @action(detail=False, methods=['GET'])
+    def languages(self, request):
+        model = self.serializer_class.Meta.model
+        return Response([{'value': choice[0], 'label': choice[1]} for choice in model._meta.get_field('language').choices])

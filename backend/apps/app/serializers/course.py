@@ -20,5 +20,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'price',
             'start_date',
             'end_date',
-            'category'
+            'category',
+            'icon'
         ]

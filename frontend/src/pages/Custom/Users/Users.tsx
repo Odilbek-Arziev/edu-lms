@@ -21,7 +21,7 @@ import {userForgetPassword} from "../../../slices/auth/forgetpwd/thunk";
 import ReCAPTCHA from "react-google-recaptcha";
 import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/RoleSelect";
+import CustomSelect from "../../../Components/Common/CustomSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {usersThunks} from "../../../slices/users";
@@ -41,7 +41,7 @@ const Users = (props: any) => {
 
     const dispatch = useDispatch<any>();
 
-    const {items: users = [], loading, registerTypes = [], count} = useSelector((state: RootState) => state.Users);
+    const {items, loading, registerTypes = [], count} = useSelector((state: RootState) => state.Users);
     const {items: roles} = useSelector((state: RootState) => state.Roles);
 
     const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
@@ -176,7 +176,7 @@ const Users = (props: any) => {
     }, []);
 
     useEffect(() => {
-        if (loading) {
+        if (loading || isSearching) {
             showLoading()
         } else {
             closeLoading()

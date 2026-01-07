@@ -41,6 +41,7 @@ class Course(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     author = models.ForeignKey('users.CustomUser', on_delete=models.PROTECT)
+    icon = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     duration = models.PositiveSmallIntegerField()
     slug = models.SlugField(unique=True, null=True, blank=True)

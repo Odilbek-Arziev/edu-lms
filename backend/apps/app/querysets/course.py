@@ -15,12 +15,24 @@ class CourseQuerySet(BaseQuerySet):
     def for_category(self, category):
         if not category:
             return self
-        return self.filter(category__title__icontains=category)
+        return self.filter(category=category)
 
-    def list(self, search=None, category=None):
+    def for_language(self, language):
+        if not language:
+            return self
+        return self.filter(language=language)
+
+    def for_level(self, level):
+        if not level:
+            return self
+        return self.filter(level=level)
+
+    def list(self, search=None, category=None, language=None, level=None):
         return (
             self.active()
                 .search(search)
                 .for_category(category)
+                .for_language(language)
+                .for_level(level)
                 .order_by("-is_active", "-created_at")
         )
