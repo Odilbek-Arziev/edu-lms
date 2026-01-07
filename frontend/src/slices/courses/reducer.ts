@@ -74,7 +74,13 @@ export const coursesThunks = {
 
         try {
             const response = await api.get('/categories/');
-            dispatch(coursesActions.setCategories(response));
+
+            const categories = response?.map((item: any) => ({
+                value: item.id,
+                label: item.title,
+            })) || [];
+
+            dispatch(coursesActions.setCategories(categories));
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки категорий';

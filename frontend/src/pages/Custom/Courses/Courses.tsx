@@ -10,6 +10,8 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/CustomSelect";
 import FeatherIcon from "feather-icons-react";
 import {closeLoading, showLoading} from "../../../utils/swal";
+import {useModal} from "../../../Components/Hooks/useModal";
+import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
 
 
 const Courses = (props: any) => {
@@ -21,12 +23,14 @@ const Courses = (props: any) => {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
     const dispatch = useDispatch<any>();
-    const {items, loading, count, languages, levels, categories} = useSelector((state: RootState) => state.Courses);
+    const {loading, languages, levels, categories} = useSelector((state: RootState) => state.Courses);
 
-    const categoriesOptions = categories?.map((item: any) => ({
-        value: item.id,
-        label: item.title,
-    })) || [];
+    const [showCreate, hideCreate] = useModal(
+        <CourseCreate onSuccess={() => {
+            fetchData();
+            hideCreate()
+        }} onCancel={() => hideCreate()}/>,
+    )
 
     const fetchData = async () => {
         setIsSearching(true);
@@ -67,6 +71,9 @@ const Courses = (props: any) => {
 
     const clearFilter = () => {
         setSearch('')
+        setSelectedCategory(null)
+        setSelectedLevel(null)
+        setSelectedLang(null)
     }
 
     useEffect(() => {
@@ -113,7 +120,7 @@ const Courses = (props: any) => {
                             <CustomSelect
                                 placeholder={`${props.t('select_category')}...`}
                                 value={selectedCategory}
-                                options={categoriesOptions || []}
+                                options={categories || []}
                                 onChange={setSelectedCategory}
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
@@ -121,7 +128,7 @@ const Courses = (props: any) => {
                                 {props.t('clear')}
                             </Button>
                         </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center'>
+                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
                             {props.t('create')}
                         </Button>
@@ -134,7 +141,7 @@ const Courses = (props: any) => {
                                         <div className="d-flex align-items-center">
                                             <div className="flex-grow-1 overflow-hidden">
                                                 <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                                    {item.category.title}
+                                                    {item.category_detail?.title}
                                                 </p>
                                             </div>
                                             <div className="flex-shrink-0">

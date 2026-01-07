@@ -39,8 +39,8 @@ ENROLLMENT_STATUS_CHOICES = [
 
 class Course(BaseModel):
     title = models.CharField(max_length=255)
-    description = models.TextField()
-    author = models.ForeignKey('users.CustomUser', on_delete=models.PROTECT)
+    description = models.TextField(null=True, blank=True)
+    author = models.ForeignKey('users.CustomUser', on_delete=models.PROTECT, null=True, blank=True)
     icon = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     duration = models.PositiveSmallIntegerField()

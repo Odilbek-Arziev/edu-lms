@@ -5,7 +5,16 @@ from app.serializers.category import CategorySerializer
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True
+    )
+    category_detail = CategorySerializer(
+        source='category',
+        read_only=True
+    )
 
     class Meta:
         model = Course
@@ -21,5 +30,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'start_date',
             'end_date',
             'category',
+            'category_detail',
             'icon'
         ]
