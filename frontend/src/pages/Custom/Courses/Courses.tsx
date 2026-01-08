@@ -24,7 +24,10 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
 import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
 import {useFetchData} from "../../../hooks/useFetchData";
-import {usersThunks} from "../../../slices/users";
+import {EditModalProps} from "../../../types/editModal";
+import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
+import UserDelete from "../../../Components/Custom/Users/UserDelete";
+import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
 
 
 const Courses = (props: any) => {
@@ -56,6 +59,52 @@ const Courses = (props: any) => {
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
+
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <CourseEdit
+                {...props}
+                onSuccess={() => {
+                    fetchData()
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <CourseDelete
+                {...props}
+                onSuccess={() => {
+                    fetchData()
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
+
+    async function getData(id: number) {
+        const response = await dispatch(coursesThunks.getById(id));
+
+        if (response) {
+            showEdit({
+                id: id,
+                initialValues: {
+                    title: response.title,
+                    description: response.description,
+                    duration: response.duration,
+                    language: response.language,
+                    price: response.price,
+                    category: response.category_detail.id,
+                    level: response.level,
+                    icon: response.icon
+                }
+            });
+        }
+    }
 
     const clearFilter = () => {
         setSearch('')
@@ -177,7 +226,7 @@ const Courses = (props: any) => {
 
                                                 <DropdownMenu end>
                                                     <DropdownItem
-                                                        onClick={() => console.log('edit', item.id)}
+                                                        onClick={() => getData(item.id)}
                                                         className="d-flex align-items-center gap-2"
                                                     >
                                                         <FeatherIcon size={14} icon="edit"/>
@@ -201,7 +250,7 @@ const Courses = (props: any) => {
                                                         )}
                                                     </DropdownItem>
                                                     <DropdownItem
-                                                        onClick={() => console.log('delete', item.id)}
+                                                        onClick={() => showDelete({id: item.id})}
                                                         className="d-flex align-items-center gap-2 text-danger"
                                                     >
                                                         <FeatherIcon size={14} icon="trash"/>
