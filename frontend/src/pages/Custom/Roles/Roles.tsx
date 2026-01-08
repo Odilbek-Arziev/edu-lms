@@ -15,17 +15,25 @@ import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {withTranslation} from "react-i18next";
 import {EditModalProps} from "../../../types/editModal";
+import {useFetchData} from "../../../hooks/useFetchData";
 
 
 const Roles = (props: any) => {
     const [search, setSearch] = useState<string>('');
     const [page, setPage] = useState<number>(1);
-    const [localData, setLocalData] = useState<any[]>([]);
-    const [isSearching, setIsSearching] = useState<boolean>(false);
     const [perPage] = useState<number>(10);
 
     const dispatch = useDispatch<any>();
-    const {items, loading, count} = useSelector((state: RootState) => state.Roles);
+    const {loading, count} = useSelector((state: RootState) => state.Roles);
+    const {localData, isSearching, fetchData} = useFetchData(
+        rolesThunks.fetch,
+        'roles',
+        () => ({
+            page,
+            perPage,
+            ...(search && {search}),
+        })
+    );
 
     const [showCreate, hideCreate] = useModal(
         <RoleCreate onSuccess={() => {
@@ -63,35 +71,7 @@ const Roles = (props: any) => {
     const clearFilter = () => {
         setSearch('')
         setPage(1);
-        setLocalData([]);
     }
-
-    const fetchData = async () => {
-        setIsSearching(true);
-
-        try {
-            const params: any = {
-                page,
-                perPage,
-                skipReduxUpdate: true,
-            };
-
-            if (search) {
-                params.search = search;
-            }
-
-            const response = await dispatch(rolesThunks.fetch(params));
-
-            if (response) {
-                const data = response.results || response.data || response;
-                setLocalData(Array.isArray(data) ? data : []);
-            }
-        } catch (error) {
-                console.error(`${props.t('error_fetching_data', {type: 'roles'})}:`, error);
-        } finally {
-            setIsSearching(false);
-        }
-    };
 
     async function getData(id: number) {
         const response = await dispatch(rolesThunks.getById(id));
@@ -138,7 +118,7 @@ const Roles = (props: any) => {
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create')}
+                            {props.t('create', {item: props.t('role')})}
                         </Button>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>

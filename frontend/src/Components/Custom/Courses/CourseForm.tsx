@@ -21,7 +21,8 @@ function CourseForm({onSubmit, onCancel, loader, initialValues, action, t}: Form
             language: null,
             price: 0,
             category: null,
-            level: null
+            level: null,
+            icon: ''
         },
         validationSchema: Yup.object({
             title: Yup.string().required(t('enter_name')),
@@ -146,7 +147,7 @@ function CourseForm({onSubmit, onCancel, loader, initialValues, action, t}: Form
                 />
             </div>
             <div className="mb-3">
-                <Label htmlFor="icon" className="form-label">{t('select_icon')}</Label>
+                <Label htmlFor="icon" className="form-label">{t('icon')}</Label>
                 <Input
                     name="icon"
                     className="form-control"

@@ -1,5 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, CardBody, Col, Container, Row} from "reactstrap";
+import {
+    Button,
+    Card,
+    CardBody,
+    Col,
+    Container,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Row
+} from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {withTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
@@ -12,15 +23,29 @@ import FeatherIcon from "feather-icons-react";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {useModal} from "../../../Components/Hooks/useModal";
 import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
+import {useFetchData} from "../../../hooks/useFetchData";
+import {usersThunks} from "../../../slices/users";
 
 
 const Courses = (props: any) => {
     const [search, setSearch] = useState<string>('');
-    const [isSearching, setIsSearching] = useState<boolean>(false);
-    const [localData, setLocalData] = useState<any[]>([]);
+    const [isActive, setIsActive] = useState<any>(null);
     const [selectedLang, setSelectedLang] = useState<number | null>(null);
     const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [openActionsId, setOpenActionsId] = useState<number | null>(null);
+
+    const {localData, isSearching, fetchData} = useFetchData(
+        coursesThunks.fetch,
+        'courses',
+        () => ({
+            ...(search && {search}),
+            ...(selectedLang && {language: selectedLang}),
+            ...(selectedLevel && {level: selectedLevel}),
+            ...(selectedCategory && {category: selectedCategory}),
+            ...(isActive && {is_active: isActive}),
+        })
+    );
 
     const dispatch = useDispatch<any>();
     const {loading, languages, levels, categories} = useSelector((state: RootState) => state.Courses);
@@ -32,49 +57,27 @@ const Courses = (props: any) => {
         }} onCancel={() => hideCreate()}/>,
     )
 
-    const fetchData = async () => {
-        setIsSearching(true);
-
-        try {
-            const params: any = {
-                skipReduxUpdate: true
-            };
-
-            if (search) {
-                params.search = search;
-            }
-
-            if (selectedLang) {
-                params.language = selectedLang;
-            }
-
-            if (selectedCategory) {
-                params.category = selectedCategory;
-            }
-
-            if (selectedLevel) {
-                params.level = selectedLevel;
-            }
-
-            const response = await dispatch(coursesThunks.fetch(params));
-
-            if (response) {
-                const data = response.results || response.data || response;
-                setLocalData(Array.isArray(data) ? data : []);
-            }
-        } catch (error) {
-            console.error(`${props.t('error_fetching_data', {type: 'courses'})}:`, error);
-        } finally {
-            setIsSearching(false);
-        }
-    };
-
     const clearFilter = () => {
         setSearch('')
         setSelectedCategory(null)
         setSelectedLevel(null)
         setSelectedLang(null)
+        setIsActive(null)
     }
+
+    const toggleActions = (id: number) => {
+        setOpenActionsId(prev => prev === id ? null : id);
+    };
+
+    async function handleStatus(id: number, isActive: boolean) {
+        await dispatch(coursesThunks.update(id, {is_active: !isActive}))
+        fetchData()
+    }
+
+    const statusTypes = [
+        {value: 'True', label: 'active'},
+        {value: 'False', label: 'passive'}
+    ];
 
     useEffect(() => {
         dispatch(coursesThunks.getCategories())
@@ -84,7 +87,7 @@ const Courses = (props: any) => {
 
     useEffect(() => {
         fetchData()
-    }, [search, selectedLang, selectedCategory, selectedLevel])
+    }, [search, selectedLang, selectedCategory, selectedLevel, isActive])
 
     useEffect(() => {
         if (isSearching || loading) {
@@ -123,6 +126,13 @@ const Courses = (props: any) => {
                                 options={categories || []}
                                 onChange={setSelectedCategory}
                             />
+                            <CustomSelect
+                                placeholder={props.t('select_status')}
+                                value={isActive}
+                                options={statusTypes}
+                                onChange={setIsActive}
+                                width='10vw'
+                            />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>
                                 {props.t('clear')}
@@ -130,7 +140,7 @@ const Courses = (props: any) => {
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create')}
+                            {props.t('create', {item: props.t('course')})}
                         </Button>
                     </div>
                     <Row>
@@ -140,22 +150,72 @@ const Courses = (props: any) => {
                                     <CardBody>
                                         <div className="d-flex align-items-center">
                                             <div className="flex-grow-1 overflow-hidden">
-                                                <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                                <div className="d-flex align-items-center gap-2 mb-0">
+                                                  <span className="badge bg-light text-dark">
                                                     {item.category_detail?.title}
-                                                </p>
-                                            </div>
-                                            <div className="flex-shrink-0">
-                                                <h5 className="fs-14 mb-0">
+                                                  </span>
+                                                    <span className="badge bg-light text-dark">
                                                     {item.level}
-                                                </h5>
+                                                  </span>
+                                                    <span
+                                                        className={`badge ${item.is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}`}>
+                                                    {item.is_active ? '● Active' : '● Passive'}
+                                                  </span>
+                                                </div>
                                             </div>
+                                            <Dropdown
+                                                isOpen={openActionsId === item.id}
+                                                toggle={() => toggleActions(item.id)}
+                                                direction="down"
+                                            >
+                                                <DropdownToggle
+                                                    tag="button"
+                                                    className="btn btn-sm btn-light"
+                                                >
+                                                    <FeatherIcon icon="more-vertical" size={16}/>
+                                                </DropdownToggle>
+
+                                                <DropdownMenu end>
+                                                    <DropdownItem
+                                                        onClick={() => console.log('edit', item.id)}
+                                                        className="d-flex align-items-center gap-2"
+                                                    >
+                                                        <FeatherIcon size={14} icon="edit"/>
+                                                        {props.t('edit')}
+                                                    </DropdownItem>
+
+                                                    <DropdownItem
+                                                        onClick={() => handleStatus(item.id, item.is_active)}
+                                                        className="d-flex align-items-center gap-2"
+                                                    >
+                                                        {item.is_active ? (
+                                                            <>
+                                                                <FeatherIcon size={14} icon="slash"/>
+                                                                {props.t('deactivate')}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <FeatherIcon size={14} icon="check-circle"/>
+                                                                {props.t('activate')}
+                                                            </>
+                                                        )}
+                                                    </DropdownItem>
+                                                    <DropdownItem
+                                                        onClick={() => console.log('delete', item.id)}
+                                                        className="d-flex align-items-center gap-2 text-danger"
+                                                    >
+                                                        <FeatherIcon size={14} icon="trash"/>
+                                                        {props.t('delete')}
+                                                    </DropdownItem>
+                                                </DropdownMenu>
+                                            </Dropdown>
                                         </div>
                                         <div className="d-flex align-items-end justify-content-between mt-4">
                                             <div>
                                                 <h4 className="fs-22 fw-semibold ff-secondary mb-4">
                                                     {item.title}
                                                 </h4>
-                                                <Link to="#"
+                                                <Link to={`/course/${item.id}`}
                                                       className="text-decoration-underline link-secondary">
                                                     {props.t('view_course')}
                                                 </Link>

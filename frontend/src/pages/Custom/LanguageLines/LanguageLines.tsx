@@ -123,7 +123,7 @@ const LanguageLines = (props: any) => {
                         <div className='d-flex gap-1'>
                             <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                                 <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                                {props.t('create')}
+                                {props.t('create', {item: props.t('lang_item')})}
                             </Button>
                             <Button
                                 className='btn btn-primary d-flex gap-1 align-items-center'

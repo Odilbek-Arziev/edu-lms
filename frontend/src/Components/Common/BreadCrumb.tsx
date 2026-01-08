@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'reactstrap';
 
-const BreadCrumb = ({ title, pageTitle }: any) => {
+const BreadCrumb = ({ title, pageTitle, link }: any) => {
     return (
         <React.Fragment>
             <Row>
@@ -12,7 +12,9 @@ const BreadCrumb = ({ title, pageTitle }: any) => {
 
                         <div className="page-title-right">
                             <ol className="breadcrumb m-0">
-                                <li className="breadcrumb-item"><Link to="#">{pageTitle}</Link></li>
+                                <li className="breadcrumb-item">
+                                    <Link to={link}>{pageTitle}</Link>
+                                </li>
                                 <li className="breadcrumb-item active">{title}</li>
                             </ol>
                         </div>

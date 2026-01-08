@@ -9,8 +9,10 @@ class CourseQuerySet(BaseQuerySet):
             return self
         return self.filter(Q(title__icontains=term))
 
-    def active(self):
-        return self.filter(is_active=True)
+    def is_active(self, is_active):
+        if not is_active:
+            return self
+        return self.filter(is_active=is_active)
 
     def for_category(self, category):
         if not category:
@@ -27,12 +29,12 @@ class CourseQuerySet(BaseQuerySet):
             return self
         return self.filter(level=level)
 
-    def list(self, search=None, category=None, language=None, level=None):
+    def list(self, search=None, category=None, language=None, level=None, is_active=True):
         return (
-            self.active()
-                .search(search)
-                .for_category(category)
+            self.for_category(category)
                 .for_language(language)
                 .for_level(level)
+                .is_active(is_active)
+                .search(search)
                 .order_by("-is_active", "-created_at")
         )

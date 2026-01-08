@@ -26,7 +26,6 @@ from apps.users.serializers.user import UserSerializer
 
 class CourseViewSet(BaseModelViewSet):
     serializer_class = CourseSerializer
-    lookup_field = 'slug'
 
     def get_queryset(self):
         params = self.request.query_params
@@ -34,8 +33,15 @@ class CourseViewSet(BaseModelViewSet):
         category = params.get('category')
         level = params.get('level')
         language = params.get('language')
+        is_active = params.get('is_active')
 
-        return Course.objects.list(search=search, category=category, level=level, language=language)
+        return Course.objects.list(
+            search=search,
+            category=category,
+            level=level,
+            language=language,
+            is_active=is_active
+        )
 
     @action(detail=True, methods=['GET'])
     def students(self, request, slug=None):
@@ -45,7 +51,7 @@ class CourseViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['GET'])
-    def lessons(self, request, slug=None):
+    def lessons(self, request, pk=None):
         course = self.get_object()
         lessons = Lesson.objects.filter(module__course=course)
         serializer = LessonSerializer(lessons, many=True)
@@ -94,4 +100,5 @@ class CourseViewSet(BaseModelViewSet):
     @action(detail=False, methods=['GET'])
     def languages(self, request):
         model = self.serializer_class.Meta.model
-        return Response([{'value': choice[0], 'label': choice[1]} for choice in model._meta.get_field('language').choices])
+        return Response(
+            [{'value': choice[0], 'label': choice[1]} for choice in model._meta.get_field('language').choices])

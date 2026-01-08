@@ -31,5 +31,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'end_date',
             'category',
             'category_detail',
-            'icon'
+            'icon',
+            'is_active'
         ]

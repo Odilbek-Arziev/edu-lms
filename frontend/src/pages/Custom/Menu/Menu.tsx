@@ -19,6 +19,7 @@ import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
 import {withTranslation} from "react-i18next";
 import {EditModalProps} from "../../../types/editModal";
+import {useFetchData} from "../../../hooks/useFetchData";
 
 
 const Menu = (props: any) => {
@@ -28,12 +29,21 @@ const Menu = (props: any) => {
     const [perPage] = useState<number>(10);
 
     const [localMenuData, setLocalMenuData] = useState<any[]>([]);
-    const [totalCount, setTotalCount] = useState<number>(0);
-    const [isSearching, setIsSearching] = useState<boolean>(false);
 
     const dispatch = useDispatch<any>();
     const {items: menu, loading} = useSelector((state: RootState) => state.Menu);
     const roles = useSelector((state: any) => state.Roles.items);
+
+    const { localData, totalCount, isSearching, fetchData } = useFetchData(
+        menuThunks.fetch,
+        'menu',
+        () => ({
+            page,
+            perPage,
+            ...(search && { search }),
+            ...(role && { roleId: role })
+        })
+    );
 
     const hasActiveFilters = search || role !== null;
 
@@ -45,7 +55,7 @@ const Menu = (props: any) => {
     const [showCreate, hideCreate] = useModal(
         <MenuCreate onSuccess={() => {
             if (hasActiveFilters) {
-                fetchMenuData();
+                fetchData();
             } else {
                 dispatch(menuThunks.fetch());
             }
@@ -59,7 +69,7 @@ const Menu = (props: any) => {
                 {...props}
                 onSuccess={() => {
                     if (hasActiveFilters) {
-                        fetchMenuData();
+                        fetchData();
                     } else {
                         dispatch(menuThunks.fetch());
                     }
@@ -76,7 +86,7 @@ const Menu = (props: any) => {
                 {...props}
                 onSuccess={() => {
                     if (hasActiveFilters) {
-                        fetchMenuData();
+                        fetchData();
                     } else {
                         dispatch(menuThunks.fetch());
                     }
@@ -86,40 +96,6 @@ const Menu = (props: any) => {
             />
         )
     );
-
-    const fetchMenuData = async () => {
-        setIsSearching(true);
-
-        try {
-            const params: any = {
-                page,
-                perPage,
-                skipReduxUpdate: true,
-            };
-
-            if (search) {
-                params.search = search;
-            }
-
-            if (role) {
-                params.roleId = role;
-            }
-
-            const response = await dispatch(menuThunks.fetch(params));
-
-            if (response) {
-                const data = response.results || response.data || response;
-                const total = response.count || response.total || (Array.isArray(data) ? data.length : 0);
-
-                setLocalMenuData(Array.isArray(data) ? data : []);
-                setTotalCount(total);
-            }
-        } catch (error) {
-            console.error(`${props.t('error_fetching_data', {type: 'menu'})}:`, error);
-        } finally {
-            setIsSearching(false);
-        }
-    };
 
     async function getData(id: number) {
         const response = await dispatch(menuThunks.getById(id))
@@ -139,7 +115,6 @@ const Menu = (props: any) => {
         setSearch('')
         setPage(1);
         setLocalMenuData([]);
-        setTotalCount(0);
     }
 
     useEffect(() => {
@@ -150,7 +125,7 @@ const Menu = (props: any) => {
 
     useEffect(() => {
         if (hasActiveFilters) {
-            fetchMenuData();
+            fetchData();
         }
     }, [search, role, page]);
 
@@ -196,7 +171,7 @@ const Menu = (props: any) => {
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create')}
+                            {props.t('create', {item: props.t('menu')})}
                         </Button>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>

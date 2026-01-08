@@ -79,7 +79,7 @@ const RolePermissions = (props: any) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title={props.t('permissions_page')} pageTitle={props.t('main')}/>
+                    <BreadCrumb title={props.t('permissions_page')} pageTitle={props.t('roles_page')} link='/roles'/>
 
                     <div className="mt-4">
                         <div className="row g-4">

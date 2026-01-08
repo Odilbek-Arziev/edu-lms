@@ -16,12 +16,23 @@ const coursesSlice = createCrudSlice<Course>('courses', {
         setCategories(state: Draft<any>, action: PayloadAction<any>) {
             state.categories = action.payload
         },
+        setLessons(state: Draft<any>, action: PayloadAction<any>) {
+            state.lessons = action.payload
+        },
     }
 });
 
 export const coursesReducer = coursesSlice.reducer;
 
-const {request, success, error, setLanguages, setLevels, setCategories} = coursesSlice.actions;
+const {
+    request,
+    success,
+    error,
+    setLanguages,
+    setLevels,
+    setCategories,
+    setLessons
+} = coursesSlice.actions;
 
 export const coursesActions = {
     request: request as ActionCreatorWithoutPayload,
@@ -30,6 +41,7 @@ export const coursesActions = {
     setLanguages: setLanguages as ActionCreatorWithPayload<any>,
     setLevels: setLevels as ActionCreatorWithPayload<any>,
     setCategories: setCategories as ActionCreatorWithPayload<any>,
+    setLessons: setLessons as ActionCreatorWithPayload<any>,
 }
 
 const baseThunks = createCrudThunks('/courses/', {
@@ -84,6 +96,21 @@ export const coursesThunks = {
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки категорий';
+            dispatch(coursesActions.error(message));
+            return null;
+        }
+    },
+
+    getLessons: (id: number) => async (dispatch: any) => {
+        const api = new APIClient();
+
+        try {
+            const response = await api.get(`/courses/${id}/lessons`);
+
+            dispatch(coursesActions.setLessons(response));
+            return response;
+        } catch (error: any) {
+            const message = error.response?.data || 'Ошибка загрузки уроков курса';
             dispatch(coursesActions.error(message));
             return null;
         }

@@ -1,5 +1,5 @@
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Container,
@@ -27,6 +27,7 @@ import {rolesThunks} from "../../../slices/roles";
 import {usersThunks} from "../../../slices/users";
 import {withTranslation} from "react-i18next";
 import {EditModalProps} from "../../../types/editModal";
+import {useFetchData} from "../../../hooks/useFetchData";
 
 
 const Users = (props: any) => {
@@ -35,14 +36,25 @@ const Users = (props: any) => {
     const [page, setPage] = useState<number>(1);
     const [registerType, setRegisterType] = useState<any>(null);
     const [status, setStatus] = useState<any>(null);
-    const [localData, setLocalData] = useState<any[]>([]);
-    const [isSearching, setIsSearching] = useState<boolean>(false);
     const [perPage] = useState<number>(10);
 
     const dispatch = useDispatch<any>();
 
-    const {items, loading, registerTypes = [], count} = useSelector((state: RootState) => state.Users);
+    const {loading, registerTypes = [], count} = useSelector((state: RootState) => state.Users);
     const {items: roles} = useSelector((state: RootState) => state.Roles);
+
+    const {localData, isSearching, fetchData} = useFetchData(
+        usersThunks.fetch,
+        'users',
+        () => ({
+            page,
+            perPage,
+            ...(search && {search}),
+            ...(registerType && {register_type: registerType}),
+            ...(role && {role}),
+            ...(status && {status})
+        })
+    );
 
     const {handleSubmit: handlePasswordReset, isLoading, recaptchaRef} = useRecaptchaSubmit({
         onSubmit: (payload) => dispatch(userForgetPassword(payload, props.history)),
@@ -84,7 +96,7 @@ const Users = (props: any) => {
             <UserEdit
                 {...props}
                 onSuccess={() => {
-                   fetchData()
+                    fetchData()
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
@@ -109,45 +121,6 @@ const Users = (props: any) => {
             });
         }
     }
-
-    const fetchData = async () => {
-        setIsSearching(true);
-
-        try {
-            const params: any = {
-                page,
-                perPage,
-                skipReduxUpdate: true,
-            };
-
-            if (search) {
-                params.search = search;
-            }
-
-            if (registerType) {
-                params.register_type = registerType;
-            }
-
-            if (role) {
-                params.role = role;
-            }
-
-            if (status) {
-                params.status = status;
-            }
-
-            const response = await dispatch(usersThunks.fetch(params));
-
-            if (response) {
-                const data = response.results || response.data || response;
-                setLocalData(Array.isArray(data) ? data : []);
-            }
-        } catch (error) {
-            console.error(`${props.t('error_fetching_data', {type: 'users'})}:`, error);
-        } finally {
-            setIsSearching(false);
-        }
-    };
 
     async function handleStatus(id: number, isActive: boolean) {
         await dispatch(usersThunks.update(id, {is_active: !isActive}))
@@ -288,7 +261,7 @@ const Users = (props: any) => {
                                                     onClick={() => getData(user.id)}
                                                 >
                                                     <FeatherIcon icon="edit" size={14}/>
-                                                     {props.t('edit')}
+                                                    {props.t('edit')}
                                                 </DropdownItem>
 
                                                 <DropdownItem onClick={() => handleStatus(user.id, user.is_active)}>
@@ -296,7 +269,7 @@ const Users = (props: any) => {
                                                         (
                                                             <span className="d-flex align-items-center gap-2 text-info">
                                                                 <FeatherIcon icon="x" size={14}/>
-                                                                 {props.t('deactivate')}
+                                                                {props.t('deactivate')}
                                                             </span>
                                                         ) :
                                                         (
