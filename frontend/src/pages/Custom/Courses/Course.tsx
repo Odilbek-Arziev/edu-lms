@@ -7,6 +7,7 @@ import {coursesThunks} from "../../../slices/courses";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../slices";
+import {closeLoading, showLoading} from "../../../utils/swal";
 
 
 const Course = (props: any) => {
@@ -14,7 +15,7 @@ const Course = (props: any) => {
     const courseId = id ? Number(id) : 0;
 
     const dispatch = useDispatch<any>();
-    const {lessons} = useSelector((state: RootState) => state.Courses);
+    const {lessons, loading} = useSelector((state: RootState) => state.Courses);
 
     useEffect(() => {
         dispatch(coursesThunks.getLessons(courseId))
@@ -30,6 +31,14 @@ const Course = (props: any) => {
             </div>
         );
     }
+
+    useEffect(() => {
+        if (loading) {
+            showLoading()
+        } else {
+            closeLoading()
+        }
+    }, [loading]);
 
     return (
         <React.Fragment>

@@ -201,14 +201,14 @@ const Courses = (props: any) => {
                                             <div className="flex-grow-1 overflow-hidden">
                                                 <div className="d-flex align-items-center gap-2 mb-0">
                                                   <span className="badge bg-light text-dark">
-                                                    {item.category_detail?.title}
+                                                    {props.t(item.category_detail?.title)}
                                                   </span>
                                                     <span className="badge bg-light text-dark">
-                                                    {item.level}
+                                                        {props.t(item.level)}
                                                   </span>
                                                     <span
                                                         className={`badge ${item.is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}`}>
-                                                    {item.is_active ? '● Active' : '● Passive'}
+                                                    {item.is_active ? `● ${props.t('active')}` : `● ${props.t('passive')}`}
                                                   </span>
                                                 </div>
                                             </div>

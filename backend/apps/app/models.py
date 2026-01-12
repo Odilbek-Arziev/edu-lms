@@ -77,7 +77,7 @@ class Module(BaseModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
     objects = ModuleQuerySet.as_manager()
 
-    course = models.ForeignKey('app.Course', on_delete=models.CASCADE)
+    course = models.ForeignKey('app.Course', on_delete=models.CASCADE, related_name='modules')
 
     class Meta:
         ordering = ["order"]

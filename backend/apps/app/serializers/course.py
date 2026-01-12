@@ -3,6 +3,8 @@ from rest_framework import serializers
 from app.models import Course, Category
 from app.serializers.category import CategorySerializer
 
+from app.serializers.module import ModuleSerializer
+
 
 class CourseSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
@@ -33,4 +35,17 @@ class CourseSerializer(serializers.ModelSerializer):
             'category_detail',
             'icon',
             'is_active'
+        ]
+
+
+class CourseNestedSerializer(serializers.ModelSerializer):
+    modules = ModuleSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Course
+        fields = [
+            'id',
+            'title',
+            'description',
+            'modules',
         ]

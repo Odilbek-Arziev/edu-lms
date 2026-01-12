@@ -13,19 +13,22 @@ from app.models import (
     Module
 )
 
-from app.serializers.course import CourseSerializer
-from app.serializers.lesson import LessonSerializer
+from app.serializers.course import CourseSerializer, CourseNestedSerializer
 from app.serializers.enrollment import EnrollmentSerializer
 from app.serializers.homework import HomeworkSerializer
 from app.serializers.homework_submission import HomeworkSubmissionSerializer
 from app.serializers.live_session import LiveSessionSerializer
-from app.serializers.module import ModuleSerializer
 
 from apps.users.serializers.user import UserSerializer
 
 
 class CourseViewSet(BaseModelViewSet):
     serializer_class = CourseSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return CourseNestedSerializer
+        return CourseSerializer
 
     def get_queryset(self):
         params = self.request.query_params
@@ -48,13 +51,6 @@ class CourseViewSet(BaseModelViewSet):
         course = self.get_object()
         students = course.students.all()
         serializer = UserSerializer(students, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['GET'])
-    def lessons(self, request, pk=None):
-        course = self.get_object()
-        lessons = Lesson.objects.filter(module__course=course)
-        serializer = LessonSerializer(lessons, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=['GET'])
@@ -83,13 +79,6 @@ class CourseViewSet(BaseModelViewSet):
         course = self.get_object()
         live_sessions = LiveSession.objects.filter(course=course)
         serializer = LiveSessionSerializer(live_sessions, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['GET'])
-    def modules(self, request, slug=None):
-        course = self.get_object()
-        modules = Module.objects.filter(course=course)
-        serializer = ModuleSerializer(modules, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['GET'])

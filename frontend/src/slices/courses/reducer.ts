@@ -56,9 +56,12 @@ export const coursesThunks = {
     getLanguages: () => async (dispatch: any) => {
         const api = new APIClient();
 
+        dispatch(coursesActions.request());
+
         try {
             const response = await api.get('/courses/languages/');
             dispatch(coursesActions.setLanguages(response));
+            dispatch(coursesActions.success(response));
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки языков';
@@ -70,9 +73,12 @@ export const coursesThunks = {
     getLevels: () => async (dispatch: any) => {
         const api = new APIClient();
 
+        dispatch(coursesActions.request());
+
         try {
             const response = await api.get('/courses/levels/');
             dispatch(coursesActions.setLevels(response));
+            dispatch(coursesActions.success(response));
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки уровней курсов';
@@ -84,6 +90,8 @@ export const coursesThunks = {
     getCategories: () => async (dispatch: any) => {
         const api = new APIClient();
 
+        dispatch(coursesActions.request());
+
         try {
             const response = await api.get('/categories/');
 
@@ -93,6 +101,7 @@ export const coursesThunks = {
             })) || [];
 
             dispatch(coursesActions.setCategories(categories));
+            dispatch(coursesActions.success(response));
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки категорий';
@@ -104,10 +113,13 @@ export const coursesThunks = {
     getLessons: (id: number) => async (dispatch: any) => {
         const api = new APIClient();
 
+        dispatch(coursesActions.request());
+
         try {
             const response = await api.get(`/courses/${id}/lessons`);
 
             dispatch(coursesActions.setLessons(response));
+            dispatch(coursesActions.success(response));
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки уроков курса';
