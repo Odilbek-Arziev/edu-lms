@@ -16,9 +16,9 @@ const coursesSlice = createCrudSlice<Course>('courses', {
         setCategories(state: Draft<any>, action: PayloadAction<any>) {
             state.categories = action.payload
         },
-        setLessons(state: Draft<any>, action: PayloadAction<any>) {
-            state.lessons = action.payload
-        },
+        setCurrentCourse(state: Draft<any>, action: PayloadAction<Course>) {
+            state.currentCourse = action.payload;
+        }
     }
 });
 
@@ -31,7 +31,7 @@ const {
     setLanguages,
     setLevels,
     setCategories,
-    setLessons
+    setCurrentCourse
 } = coursesSlice.actions;
 
 export const coursesActions = {
@@ -41,7 +41,7 @@ export const coursesActions = {
     setLanguages: setLanguages as ActionCreatorWithPayload<any>,
     setLevels: setLevels as ActionCreatorWithPayload<any>,
     setCategories: setCategories as ActionCreatorWithPayload<any>,
-    setLessons: setLessons as ActionCreatorWithPayload<any>,
+    setCurrentCourse: setCurrentCourse as ActionCreatorWithPayload<any>,
 }
 
 const baseThunks = createCrudThunks('/courses/', {
@@ -110,21 +110,20 @@ export const coursesThunks = {
         }
     },
 
-    getLessons: (id: number) => async (dispatch: any) => {
+    getById: (id: number) => async (dispatch: any) => {
         const api = new APIClient();
-
         dispatch(coursesActions.request());
 
         try {
-            const response = await api.get(`/courses/${id}/lessons`);
-
-            dispatch(coursesActions.setLessons(response));
+            const response = await api.get(`/courses/${id}/`);
+            dispatch(coursesActions.setCurrentCourse(response));
             dispatch(coursesActions.success(response));
             return response;
         } catch (error: any) {
-            const message = error.response?.data || 'Ошибка загрузки уроков курса';
+            const message = error.response?.data || 'Ошибка загрузки курса';
             dispatch(coursesActions.error(message));
             return null;
         }
     }
+
 };

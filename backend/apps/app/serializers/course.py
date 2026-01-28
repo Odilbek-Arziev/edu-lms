@@ -1,8 +1,6 @@
 from rest_framework import serializers
-
 from app.models import Course, Category
 from app.serializers.category import CategorySerializer
-
 from app.serializers.module import ModuleSerializer
 
 
@@ -38,14 +36,8 @@ class CourseSerializer(serializers.ModelSerializer):
         ]
 
 
-class CourseNestedSerializer(serializers.ModelSerializer):
+class CourseNestedSerializer(CourseSerializer):
     modules = ModuleSerializer(many=True, read_only=True)
 
-    class Meta:
-        model = Course
-        fields = [
-            'id',
-            'title',
-            'description',
-            'modules',
-        ]
+    class Meta(CourseSerializer.Meta):
+        fields = CourseSerializer.Meta.fields + ['modules']

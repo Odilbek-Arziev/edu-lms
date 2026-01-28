@@ -36,5 +36,5 @@ class CourseQuerySet(BaseQuerySet):
                 .for_level(level)
                 .is_active(is_active)
                 .search(search)
-                .order_by("-is_active", "-created_at")
+                .order_by("created_at")
         )
