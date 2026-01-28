@@ -16,5 +16,6 @@ class ModuleSerializer(serializers.ModelSerializer):
             'description',
             'is_active',
             'slug',
-            'lessons'
+            'lessons',
+            'course'
         ]

@@ -1,12 +1,74 @@
+// _course.scss
+$tree-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$hover-bg-color: #f8f9fa;
+$primary-color: #0d6efd;
+$transition-speed: 0.2s;
+
 .tree-view {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
+    font-family: $tree-font-family;
 
-.tree-hover:hover {
-    background-color: #f8f9fa !important;
-}
+    .tree-hover {
+        transition: background-color $transition-speed;
 
-.tree-leaf-hover:hover {
-    background-color: #f8f9fa;
-    border-left-color: #0d6efd !important;
+        &:hover {
+            background-color: $hover-bg-color !important;
+        }
+    }
+
+    .tree-leaf-hover {
+        transition: all $transition-speed;
+
+        &:hover {
+            background-color: $hover-bg-color;
+            border-left-color: $primary-color !important;
+
+            .lesson-actions {
+                opacity: 1;
+            }
+        }
+    }
+
+    .lesson-actions {
+        opacity: 0;
+        transition: opacity $transition-speed;
+    }
+
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            color: #6c757d !important;
+        }
+
+        &:hover {
+            background-color: #e9ecef !important;
+
+            svg {
+                color: #495057 !important;
+            }
+        }
+
+        &:active {
+            background-color: #dee2e6 !important;
+        }
+
+        &.text-danger {
+            svg {
+                color: #dc3545 !important;
+            }
+
+            &:hover {
+                background-color: #f8d7da !important;
+
+                svg {
+                    color: #bd2130 !important;
+                }
+            }
+        }
+    }
 }
