@@ -5,7 +5,6 @@ from core.views.viewsets import BaseModelViewSet
 
 class ModuleViewSet(BaseModelViewSet):
     serializer_class = ModuleSerializer
-    lookup_field = 'slug'
 
     def get_queryset(self):
         course = self.request.query_params.get('course')

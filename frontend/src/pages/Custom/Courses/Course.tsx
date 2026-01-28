@@ -20,6 +20,7 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import '../../../assets/scss/pages/_course.scss';
 import {useModal} from "../../../Components/Hooks/useModal";
 import ModuleCreate from "../../../Components/Custom/Modules/ModuleCreate";
+import ModuleDelete from "../../../Components/Custom/Modules/ModuleDelete";
 
 const Course = (props: any) => {
     const {id} = useParams<{ id: string }>();
@@ -27,7 +28,6 @@ const Course = (props: any) => {
 
     const dispatch = useDispatch<any>();
     const {loading, currentCourse} = useSelector((state: RootState) => state.Courses);
-
     const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 
     const toggleNode = (nodeId: string) => {
@@ -48,6 +48,19 @@ const Course = (props: any) => {
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <ModuleDelete
+                {...props}
+                onSuccess={() => {
+                    dispatch(coursesThunks.getById(courseId));
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
 
     const isExpanded = (nodeId: string) => expandedNodes.has(nodeId);
 
@@ -174,7 +187,6 @@ const Course = (props: any) => {
                                                                     </span>
                                                                 </div>
 
-                                                                {/* Действия для модуля */}
                                                                 <div className="d-flex gap-1 ms-auto">
                                                                     <Button
                                                                         color="light"
@@ -201,7 +213,10 @@ const Course = (props: any) => {
                                                                                 {props.t('edit')}
                                                                             </DropdownItem>
                                                                             <DropdownItem divider/>
-                                                                            <DropdownItem className="text-danger">
+                                                                            <DropdownItem
+                                                                                className="text-danger"
+                                                                                onClick={() => showDelete({id: module.id})}
+                                                                            >
                                                                                 <FeatherIcon icon="trash-2" size={14}
                                                                                              className="me-2"/>
                                                                                 {props.t('delete')}
