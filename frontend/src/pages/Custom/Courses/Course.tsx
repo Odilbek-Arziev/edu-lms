@@ -21,6 +21,12 @@ import '../../../assets/scss/pages/_course.scss';
 import {useModal} from "../../../Components/Hooks/useModal";
 import ModuleCreate from "../../../Components/Custom/Modules/ModuleCreate";
 import ModuleDelete from "../../../Components/Custom/Modules/ModuleDelete";
+import {EditModalProps} from "../../../types/editModal";
+import MenuEdit from "../../../Components/Custom/Menu/MenuEdit";
+import {menuThunks} from "../../../slices/menu";
+import {co} from "@fullcalendar/core/internal-common";
+import ModuleEdit from "../../../Components/Custom/Modules/ModuleEdit";
+import {modulesThunks} from "../../../slices/modules";
 
 const Course = (props: any) => {
     const {id} = useParams<{ id: string }>();
@@ -61,6 +67,33 @@ const Course = (props: any) => {
             />
         )
     );
+
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <ModuleEdit
+                {...props}
+                onSuccess={() => {
+                    dispatch(coursesThunks.getById(courseId));
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    async function getData(id: number) {
+        const response = await dispatch(modulesThunks.getById(id));
+
+        if (response) {
+            showEdit({
+                id: id,
+                initialValues: {
+                    title: response.title,
+                    description: response.description,
+                }
+            });
+        }
+    }
 
     const isExpanded = (nodeId: string) => expandedNodes.has(nodeId);
 
@@ -207,7 +240,8 @@ const Course = (props: any) => {
                                                                                          size={14}/>
                                                                         </DropdownToggle>
                                                                         <DropdownMenu end>
-                                                                            <DropdownItem>
+                                                                            <DropdownItem
+                                                                                onClick={() => getData(module.id)}>
                                                                                 <FeatherIcon icon="edit-2" size={14}
                                                                                              className="me-2"/>
                                                                                 {props.t('edit')}
@@ -284,11 +318,6 @@ const Course = (props: any) => {
                                                                                              className="me-1"/>
                                                                                 {props.t('no_lessons')}
                                                                             </div>
-                                                                            <Button color="success" size="sm">
-                                                                                <FeatherIcon icon="plus" size={12}
-                                                                                             className="me-1"/>
-                                                                                {props.t('add_first_lesson')}
-                                                                            </Button>
                                                                         </div>
                                                                     )}
                                                                 </div>
