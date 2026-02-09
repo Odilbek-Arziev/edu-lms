@@ -22,11 +22,10 @@ import {useModal} from "../../../Components/Hooks/useModal";
 import ModuleCreate from "../../../Components/Custom/Modules/ModuleCreate";
 import ModuleDelete from "../../../Components/Custom/Modules/ModuleDelete";
 import {EditModalProps} from "../../../types/editModal";
-import MenuEdit from "../../../Components/Custom/Menu/MenuEdit";
-import {menuThunks} from "../../../slices/menu";
-import {co} from "@fullcalendar/core/internal-common";
 import ModuleEdit from "../../../Components/Custom/Modules/ModuleEdit";
 import {modulesThunks} from "../../../slices/modules";
+import {lessonsThunks} from "../../../slices/lessons";
+import LessonDelete from "../../../Components/Custom/Lessons/LessonDelete";
 
 const Course = (props: any) => {
     const {id} = useParams<{ id: string }>();
@@ -77,6 +76,19 @@ const Course = (props: any) => {
                     hideEdit();
                 }}
                 onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    const [showLessonDelete, hideLessonDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <LessonDelete
+                {...props}
+                onSuccess={() => {
+                    dispatch(coursesThunks.getById(courseId));
+                    hideLessonDelete();
+                }}
+                onCancel={() => hideLessonDelete()}
             />
         )
     );
@@ -303,6 +315,7 @@ const Course = (props: any) => {
                                                                                         size="sm"
                                                                                         className="btn-icon text-danger"
                                                                                         title={props.t('delete')}
+                                                                                        onClick={() => showLessonDelete({id: lesson.id})}
                                                                                     >
                                                                                         <FeatherIcon icon="trash-2"
                                                                                                      size={12}/>

@@ -79,6 +79,7 @@ import {coursesReducer} from "./courses";
 import {modulesReducer} from "./modules";
 import LanguageLinesReducer from './languageLines/reducer'
 import {LOGOUT} from "./auth/login/actions";
+import {lessonsReducer} from "./lessons";
 
 const appReducer = combineReducers({
     Layout: LayoutReducer,
@@ -115,6 +116,7 @@ const appReducer = combineReducers({
     LanguageLines: LanguageLinesReducer,
     Courses: coursesReducer,
     Modules: modulesReducer,
+    Lessons: lessonsReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
