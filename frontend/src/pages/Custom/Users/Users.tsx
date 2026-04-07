@@ -65,17 +65,17 @@ const Users = (props: any) => {
 
     const rolesOptions = roles?.map((item: any) => ({
         value: item.id,
-        label: item.name,
+        label: props.t(item.name),
     })) || [];
 
     const regTypesOptions = registerTypes?.map((item: any) => ({
         value: item.id,
-        label: item.name,
+        label: props.t(item.name),
     })) || [];
 
     const statusTypes = [
-        {value: 'active', label: 'active'},
-        {value: 'passive', label: 'passive'}
+        {value: 'active', label: props.t('active')},
+        {value: 'passive', label: props.t('passive')}
     ];
 
     const [showDelete, hideDelete] = useModal<{ id: number }>(

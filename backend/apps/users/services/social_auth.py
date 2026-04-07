@@ -1,7 +1,7 @@
 import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.models import CustomUser
+from users.models import CustomUser, RegisterType
 
 
 class SocialAuthService:
@@ -75,6 +75,8 @@ class SocialAuthService:
         if not email:
             raise ValueError('No email provided by OAuth provider')
 
+        register_type = RegisterType.objects.get(name='oauth')
+
         user, created = CustomUser.objects.get_or_create(
             email=email,
             defaults={
@@ -82,7 +84,7 @@ class SocialAuthService:
                 'first_name': user_info.get('first_name', ''),
                 'last_name': user_info.get('last_name', ''),
                 'is_active': True,
-                'register_type': 'oauth'
+                'register_type': register_type
             }
         )
         refresh = RefreshToken.for_user(user)

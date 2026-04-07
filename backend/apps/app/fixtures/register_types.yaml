@@ -1,0 +1,9 @@
+- model: users.registertype
+  pk: 1
+  fields:
+    name: "email"
+
+- model: users.registertype
+  pk: 2
+  fields:
+    name: "oauth"

@@ -8,8 +8,10 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
+            'short_description',
+            'duration',
             'content',
             'is_preview',
             'slug',
-            'module',
+            'module'
         ]

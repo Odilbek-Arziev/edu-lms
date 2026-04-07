@@ -1,0 +1,1610 @@
+- model: app.languageline
+  pk: 1
+  fields:
+    key: "8_characters"
+    value:
+      ru: "8 символов"
+      uz: "8 ta belgi"
+      en: "8 characters"
+
+- model: app.languageline
+  pk: 2
+  fields:
+    key: "account_confirmed"
+    value:
+      ru: "Аккаунт подтверждён"
+      uz: "Hisob tasdiqlandi"
+      en: "Account confirmed"
+
+- model: app.languageline
+  pk: 3
+  fields:
+    key: "account_confirmed_success"
+    value:
+      ru: "Аккаунт успешно подтверждён"
+      uz: "Hisob muvaffaqiyatli tasdiqlandi"
+      en: "Account confirmed successfully"
+
+- model: app.languageline
+  pk: 4
+  fields:
+    key: "actions"
+    value:
+      ru: "Действия"
+      uz: "Harakatlar"
+      en: "Actions"
+
+- model: app.languageline
+  pk: 5
+  fields:
+    key: "activate"
+    value:
+      ru: "Активировать"
+      uz: "Faollashtirish"
+      en: "Activate"
+
+- model: app.languageline
+  pk: 6
+  fields:
+    key: "active"
+    value:
+      ru: "Активный"
+      uz: "Faol"
+      en: "Active"
+
+- model: app.languageline
+  pk: 7
+  fields:
+    key: "available_in"
+    value:
+      ru: "Доступно в"
+      uz: "Mavjud:"
+      en: "Available in"
+
+- model: app.languageline
+  pk: 8
+  fields:
+    key: "brief_summary"
+    value:
+      ru: "Краткое описание"
+      uz: "Qisqa xulosa"
+      en: "Brief summary"
+
+- model: app.languageline
+  pk: 9
+  fields:
+    key: "cancel"
+    value:
+      ru: "Отмена"
+      uz: "Bekor qilish"
+      en: "Cancel"
+
+- model: app.languageline
+  pk: 10
+  fields:
+    key: "checking"
+    value:
+      ru: "Проверка"
+      uz: "Tekshirish"
+      en: "Checking"
+
+- model: app.languageline
+  pk: 11
+  fields:
+    key: "clear"
+    value:
+      ru: "Очистить"
+      uz: "Tozalash"
+      en: "Clear"
+
+- model: app.languageline
+  pk: 12
+  fields:
+    key: "click_here"
+    value:
+      ru: "Нажмите здесь"
+      uz: "Bu yerga bosing"
+      en: "Click here"
+
+- model: app.languageline
+  pk: 13
+  fields:
+    key: "close"
+    value:
+      ru: "Закрыть"
+      uz: "Yopish"
+      en: "Close"
+
+- model: app.languageline
+  pk: 14
+  fields:
+    key: "code_not_received"
+    value:
+      ru: "Код не получен"
+      uz: "Kod olinmadi"
+      en: "Code not received"
+
+- model: app.languageline
+  pk: 15
+  fields:
+    key: "code_sent"
+    value:
+      ru: "Код отправлен"
+      uz: "Kod yuborildi"
+      en: "Code sent"
+
+- model: app.languageline
+  pk: 16
+  fields:
+    key: "code_sent_again"
+    value:
+      ru: "Код отправлен повторно"
+      uz: "Kod qayta yuborildi"
+      en: "Code sent again"
+
+- model: app.languageline
+  pk: 17
+  fields:
+    key: "code_sent_to_email"
+    value:
+      ru: "Код отправлен на email"
+      uz: "Kod emailga yuborildi"
+      en: "Code sent to email"
+
+- model: app.languageline
+  pk: 18
+  fields:
+    key: "collapse_all"
+    value:
+      ru: "Свернуть всё"
+      uz: "Hammasini yig'ish"
+      en: "Collapse all"
+
+- model: app.languageline
+  pk: 19
+  fields:
+    key: "confirm"
+    value:
+      ru: "Подтвердить"
+      uz: "Tasdiqlash"
+      en: "Confirm"
+
+- model: app.languageline
+  pk: 20
+  fields:
+    key: "confirm_account"
+    value:
+      ru: "Подтвердить аккаунт"
+      uz: "Hisobni tasdiqlash"
+      en: "Confirm account"
+
+- model: app.languageline
+  pk: 21
+  fields:
+    key: "confirm_password"
+    value:
+      ru: "Подтвердите пароль"
+      uz: "Parolni tasdiqlang"
+      en: "Confirm password"
+
+- model: app.languageline
+  pk: 22
+  fields:
+    key: "course"
+    value:
+      ru: "Курс"
+      uz: "Kurs"
+      en: "Course"
+
+- model: app.languageline
+  pk: 23
+  fields:
+    key: "course_item"
+    value:
+      ru: "Элемент курса"
+      uz: "Kurs elementi"
+      en: "Course item"
+
+- model: app.languageline
+  pk: 24
+  fields:
+    key: "course_page"
+    value:
+      ru: "Страница курса"
+      uz: "Kurs sahifasi"
+      en: "Course page"
+
+- model: app.languageline
+  pk: 25
+  fields:
+    key: "courses"
+    value:
+      ru: "Курсы"
+      uz: "Kurslar"
+      en: "Courses"
+
+- model: app.languageline
+  pk: 26
+  fields:
+    key: "create"
+    value:
+      ru: "Создать"
+      uz: "Yaratish"
+      en: "Create"
+
+- model: app.languageline
+  pk: 27
+  fields:
+    key: "create_account"
+    value:
+      ru: "Создать аккаунт"
+      uz: "Hisob yaratish"
+      en: "Create account"
+
+- model: app.languageline
+  pk: 28
+  fields:
+    key: "create_first_module"
+    value:
+      ru: "Создать первый модуль"
+      uz: "Birinchi modulni yaratish"
+      en: "Create first module"
+
+- model: app.languageline
+  pk: 29
+  fields:
+    key: "create_lesson"
+    value:
+      ru: "Создать урок"
+      uz: "Dars yaratish"
+      en: "Create lesson"
+
+- model: app.languageline
+  pk: 30
+  fields:
+    key: "create_password"
+    value:
+      ru: "Создать пароль"
+      uz: "Parol yaratish"
+      en: "Create password"
+
+- model: app.languageline
+  pk: 31
+  fields:
+    key: "data"
+    value:
+      ru: "Данные"
+      uz: "Ma'lumotlar"
+      en: "Data"
+
+- model: app.languageline
+  pk: 32
+  fields:
+    key: "deactivate"
+    value:
+      ru: "Деактивировать"
+      uz: "Faolsizlantirish"
+      en: "Deactivate"
+
+- model: app.languageline
+  pk: 33
+  fields:
+    key: "delete"
+    value:
+      ru: "Удалить"
+      uz: "O'chirish"
+      en: "Delete"
+
+- model: app.languageline
+  pk: 34
+  fields:
+    key: "delete_confirm"
+    value:
+      ru: "Подтвердить удаление"
+      uz: "O'chirishni tasdiqlash"
+      en: "Confirm deletion"
+
+- model: app.languageline
+  pk: 35
+  fields:
+    key: "description"
+    value:
+      ru: "Описание"
+      uz: "Tavsif"
+      en: "Description"
+
+- model: app.languageline
+  pk: 36
+  fields:
+    key: "duration"
+    value:
+      ru: "Длительность"
+      uz: "Davomiylik"
+      en: "Duration"
+
+- model: app.languageline
+  pk: 37
+  fields:
+    key: "edit"
+    value:
+      ru: "Редактировать"
+      uz: "Tahrirlash"
+      en: "Edit"
+
+- model: app.languageline
+  pk: 38
+  fields:
+    key: "email"
+    value:
+      ru: "Электронная почта"
+      uz: "Elektron pochta"
+      en: "Email"
+
+- model: app.languageline
+  pk: 39
+  fields:
+    key: "email_login_page"
+    value:
+      ru: "Вход по email"
+      uz: "Email orqali kirish"
+      en: "Email login page"
+
+- model: app.languageline
+  pk: 40
+  fields:
+    key: "email_or_username"
+    value:
+      ru: "Email или имя пользователя"
+      uz: "Email yoki foydalanuvchi nomi"
+      en: "Email or username"
+
+- model: app.languageline
+  pk: 41
+  fields:
+    key: "eng"
+    value:
+      ru: "Англ"
+      uz: "Ing"
+      en: "Eng"
+
+- model: app.languageline
+  pk: 42
+  fields:
+    key: "eng_trans"
+    value:
+      ru: "Английский"
+      uz: "Inglizcha"
+      en: "English"
+
+- model: app.languageline
+  pk: 43
+  fields:
+    key: "enter_4_digit"
+    value:
+      ru: "Введите 4-значный код"
+      uz: "4 xonali kodni kiriting"
+      en: "Enter 4-digit code"
+
+- model: app.languageline
+  pk: 44
+  fields:
+    key: "enter_description"
+    value:
+      ru: "Введите описание"
+      uz: "Tavsifni kiriting"
+      en: "Enter description"
+
+- model: app.languageline
+  pk: 45
+  fields:
+    key: "enter_duration"
+    value:
+      ru: "Введите длительность"
+      uz: "Davomiylikni kiriting"
+      en: "Enter duration"
+
+- model: app.languageline
+  pk: 46
+  fields:
+    key: "enter_email"
+    value:
+      ru: "Введите email"
+      uz: "Emailni kiriting"
+      en: "Enter email"
+
+- model: app.languageline
+  pk: 47
+  fields:
+    key: "enter_email_or_username"
+    value:
+      ru: "Введите email или имя пользователя"
+      uz: "Email yoki foydalanuvchi nomini kiriting"
+      en: "Enter email or username"
+
+- model: app.languageline
+  pk: 48
+  fields:
+    key: "enter_first_name"
+    value:
+      ru: "Введите имя"
+      uz: "Ismingizni kiriting"
+      en: "Enter first name"
+
+- model: app.languageline
+  pk: 49
+  fields:
+    key: "enter_icon"
+    value:
+      ru: "Выберите иконку"
+      uz: "Belgini kiriting"
+      en: "Enter icon"
+
+- model: app.languageline
+  pk: 50
+  fields:
+    key: "enter_key"
+    value:
+      ru: "Введите ключ"
+      uz: "Kalitni kiriting"
+      en: "Enter key"
+
+- model: app.languageline
+  pk: 51
+  fields:
+    key: "enter_last_name"
+    value:
+      ru: "Введите фамилию"
+      uz: "Familiyangizni kiriting"
+      en: "Enter last name"
+
+- model: app.languageline
+  pk: 52
+  fields:
+    key: "enter_minutes"
+    value:
+      ru: "Введите минуты"
+      uz: "Daqiqalarni kiriting"
+      en: "Enter minutes"
+
+- model: app.languageline
+  pk: 53
+  fields:
+    key: "enter_name"
+    value:
+      ru: "Введите название"
+      uz: "Nomni kiriting"
+      en: "Enter name"
+
+- model: app.languageline
+  pk: 54
+  fields:
+    key: "enter_password"
+    value:
+      ru: "Введите пароль"
+      uz: "Parolni kiriting"
+      en: "Enter password"
+
+- model: app.languageline
+  pk: 55
+  fields:
+    key: "enter_phone_number"
+    value:
+      ru: "Введите номер телефона"
+      uz: "Telefon raqamini kiriting"
+      en: "Enter phone number"
+
+- model: app.languageline
+  pk: 56
+  fields:
+    key: "enter_price"
+    value:
+      ru: "Введите цену"
+      uz: "Narxni kiriting"
+      en: "Enter price"
+
+- model: app.languageline
+  pk: 57
+  fields:
+    key: "enter_title"
+    value:
+      ru: "Введите заголовок"
+      uz: "Sarlavhani kiriting"
+      en: "Enter title"
+
+- model: app.languageline
+  pk: 58
+  fields:
+    key: "enter_url_path"
+    value:
+      ru: "Введите URL-путь"
+      uz: "URL manzilini kiriting"
+      en: "Enter URL path"
+
+- model: app.languageline
+  pk: 59
+  fields:
+    key: "enter_username"
+    value:
+      ru: "Введите имя пользователя"
+      uz: "Foydalanuvchi nomini kiriting"
+      en: "Enter username"
+
+- model: app.languageline
+  pk: 60
+  fields:
+    key: "enter_valid_email"
+    value:
+      ru: "Введите корректный email"
+      uz: "To'g'ri email kiriting"
+      en: "Enter valid email"
+
+- model: app.languageline
+  pk: 61
+  fields:
+    key: "enter_value"
+    value:
+      ru: "Введите значение"
+      uz: "Qiymatni kiriting"
+      en: "Enter value"
+
+- model: app.languageline
+  pk: 62
+  fields:
+    key: "error"
+    value:
+      ru: "Ошибка"
+      uz: "Xato"
+      en: "Error"
+
+- model: app.languageline
+  pk: 63
+  fields:
+    key: "error_fetching_data"
+    value:
+      ru: "Ошибка загрузки данных"
+      uz: "Ma'lumotlarni olishda xato"
+      en: "Error fetching data"
+
+- model: app.languageline
+  pk: 64
+  fields:
+    key: "error_saving_data"
+    value:
+      ru: "Ошибка сохранения данных"
+      uz: "Ma'lumotlarni saqlashda xato"
+      en: "Error saving data"
+
+- model: app.languageline
+  pk: 65
+  fields:
+    key: "error_updating_permissions"
+    value:
+      ru: "Ошибка обновления прав"
+      uz: "Ruxsatlarni yangilashda xato"
+      en: "Error updating permissions"
+
+- model: app.languageline
+  pk: 66
+  fields:
+    key: "expand_all"
+    value:
+      ru: "Развернуть всё"
+      uz: "Hammasini kengaytirish"
+      en: "Expand all"
+
+- model: app.languageline
+  pk: 67
+  fields:
+    key: "expired_or_used_link"
+    value:
+      ru: "Ссылка истекла или уже использована"
+      uz: "Havola muddati o'tgan yoki ishlatilgan"
+      en: "Expired or used link"
+
+- model: app.languageline
+  pk: 68
+  fields:
+    key: "field_required"
+    value:
+      ru: "Поле обязательно"
+      uz: "Maydon to'ldirilishi shart"
+      en: "Field required"
+
+- model: app.languageline
+  pk: 69
+  fields:
+    key: "first_name"
+    value:
+      ru: "Имя"
+      uz: "Ism"
+      en: "First name"
+
+- model: app.languageline
+  pk: 70
+  fields:
+    key: "forgot_password"
+    value:
+      ru: "Забыли пароль?"
+      uz: "Parolni unutdingizmi?"
+      en: "Forgot password?"
+
+- model: app.languageline
+  pk: 71
+  fields:
+    key: "get_account"
+    value:
+      ru: "Получить аккаунт"
+      uz: "Hisob olish"
+      en: "Get account"
+
+- model: app.languageline
+  pk: 72
+  fields:
+    key: "have_account"
+    value:
+      ru: "Уже есть аккаунт?"
+      uz: "Hisobingiz bormi?"
+      en: "Have an account?"
+
+- model: app.languageline
+  pk: 73
+  fields:
+    key: "icon"
+    value:
+      ru: "Иконка"
+      uz: "Belgi"
+      en: "Icon"
+
+- model: app.languageline
+  pk: 74
+  fields:
+    key: "instructions_will_sent"
+    value:
+      ru: "Инструкции будут отправлены"
+      uz: "Ko'rsatmalar yuboriladi"
+      en: "Instructions will be sent"
+
+- model: app.languageline
+  pk: 75
+  fields:
+    key: "invalid_course_id"
+    value:
+      ru: "Неверный ID курса"
+      uz: "Kurs ID noto'g'ri"
+      en: "Invalid course ID"
+
+- model: app.languageline
+  pk: 76
+  fields:
+    key: "invalid_role_id"
+    value:
+      ru: "Неверный ID роли"
+      uz: "Rol ID noto'g'ri"
+      en: "Invalid role ID"
+
+- model: app.languageline
+  pk: 77
+  fields:
+    key: "is_required"
+    value:
+      ru: "обязательно"
+      uz: "majburiy"
+      en: "is required"
+
+- model: app.languageline
+  pk: 78
+  fields:
+    key: "key"
+    value:
+      ru: "Ключ"
+      uz: "Kalit"
+      en: "Key"
+
+- model: app.languageline
+  pk: 79
+  fields:
+    key: "lang_item"
+    value:
+      ru: "Элемент языка"
+      uz: "Til elementi"
+      en: "Language item"
+
+- model: app.languageline
+  pk: 80
+  fields:
+    key: "lang_page"
+    value:
+      ru: "Страница языков"
+      uz: "Til sahifasi"
+      en: "Language page"
+
+- model: app.languageline
+  pk: 81
+  fields:
+    key: "language"
+    value:
+      ru: "Язык"
+      uz: "Til"
+      en: "Language"
+
+- model: app.languageline
+  pk: 82
+  fields:
+    key: "last_name"
+    value:
+      ru: "Фамилия"
+      uz: "Familiya"
+      en: "Last name"
+
+- model: app.languageline
+  pk: 83
+  fields:
+    key: "lesson"
+    value:
+      ru: "Урок"
+      uz: "Dars"
+      en: "Lesson"
+
+- model: app.languageline
+  pk: 84
+  fields:
+    key: "lesson_content"
+    value:
+      ru: "Содержание урока"
+      uz: "Dars mazmuni"
+      en: "Lesson content"
+
+- model: app.languageline
+  pk: 85
+  fields:
+    key: "lesson_title_placeholder"
+    value:
+      ru: "Введите название урока"
+      uz: "Dars sarlavhasini kiriting"
+      en: "Enter lesson title"
+
+- model: app.languageline
+  pk: 86
+  fields:
+    key: "lessons"
+    value:
+      ru: "Уроки"
+      uz: "Darslar"
+      en: "Lessons"
+
+- model: app.languageline
+  pk: 87
+  fields:
+    key: "link_will_sent"
+    value:
+      ru: "Ссылка будет отправлена"
+      uz: "Havola yuboriladi"
+      en: "Link will be sent"
+
+- model: app.languageline
+  pk: 88
+  fields:
+    key: "loading"
+    value:
+      ru: "Загрузка..."
+      uz: "Yuklanmoqda..."
+      en: "Loading..."
+
+- model: app.languageline
+  pk: 89
+  fields:
+    key: "login_page"
+    value:
+      ru: "Страница входа"
+      uz: "Kirish sahifasi"
+      en: "Login page"
+
+- model: app.languageline
+  pk: 90
+  fields:
+    key: "login_to_continue"
+    value:
+      ru: "Войдите, чтобы продолжить"
+      uz: "Davom etish uchun kiring"
+      en: "Login to continue"
+
+- model: app.languageline
+  pk: 91
+  fields:
+    key: "lowercase_letter"
+    value:
+      ru: "Строчная буква"
+      uz: "Kichik harf"
+      en: "Lowercase letter"
+
+- model: app.languageline
+  pk: 92
+  fields:
+    key: "main"
+    value:
+      ru: "Главная"
+      uz: "Asosiy"
+      en: "Main"
+
+- model: app.languageline
+  pk: 93
+  fields:
+    key: "menu"
+    value:
+      ru: "Меню"
+      uz: "Menyu"
+      en: "Menu"
+
+- model: app.languageline
+  pk: 94
+  fields:
+    key: "menu_item"
+    value:
+      ru: "Элемент меню"
+      uz: "Menyu elementi"
+      en: "Menu item"
+
+- model: app.languageline
+  pk: 95
+  fields:
+    key: "menu_page"
+    value:
+      ru: "Страница меню"
+      uz: "Menyu sahifasi"
+      en: "Menu page"
+
+- model: app.languageline
+  pk: 96
+  fields:
+    key: "message_sending"
+    value:
+      ru: "Отправка сообщения"
+      uz: "Xabar yuborilmoqda"
+      en: "Sending message"
+
+- model: app.languageline
+  pk: 97
+  fields:
+    key: "min"
+    value:
+      ru: "мин"
+      uz: "daq"
+      en: "min"
+
+- model: app.languageline
+  pk: 98
+  fields:
+    key: "min_duration"
+    value:
+      ru: "Минимальная длительность"
+      uz: "Minimal davomiylik"
+      en: "Minimum duration"
+
+- model: app.languageline
+  pk: 99
+  fields:
+    key: "module"
+    value:
+      ru: "Модуль"
+      uz: "Modul"
+      en: "Module"
+
+- model: app.languageline
+  pk: 100
+  fields:
+    key: "name"
+    value:
+      ru: "Название"
+      uz: "Nom"
+      en: "Name"
+
+- model: app.languageline
+  pk: 101
+  fields:
+    key: "no_account"
+    value:
+      ru: "Нет аккаунта?"
+      uz: "Hisobingiz yo'qmi?"
+      en: "No account?"
+
+- model: app.languageline
+  pk: 102
+  fields:
+    key: "no_data_found"
+    value:
+      ru: "Данные не найдены"
+      uz: "Ma'lumot topilmadi"
+      en: "No data found"
+
+- model: app.languageline
+  pk: 103
+  fields:
+    key: "no_lessons"
+    value:
+      ru: "Нет уроков"
+      uz: "Darslar yo'q"
+      en: "No lessons"
+
+- model: app.languageline
+  pk: 104
+  fields:
+    key: "no_modules"
+    value:
+      ru: "Нет модулей"
+      uz: "Modullar yo'q"
+      en: "No modules"
+
+- model: app.languageline
+  pk: 105
+  fields:
+    key: "one_number"
+    value:
+      ru: "Одна цифра"
+      uz: "Bitta raqam"
+      en: "One number"
+
+- model: app.languageline
+  pk: 106
+  fields:
+    key: "parent"
+    value:
+      ru: "Родитель"
+      uz: "Ota-element"
+      en: "Parent"
+
+- model: app.languageline
+  pk: 107
+  fields:
+    key: "passive"
+    value:
+      ru: "Пассивный"
+      uz: "Passiv"
+      en: "Passive"
+
+- model: app.languageline
+  pk: 108
+  fields:
+    key: "password"
+    value:
+      ru: "Пароль"
+      uz: "Parol"
+      en: "Password"
+
+- model: app.languageline
+  pk: 109
+  fields:
+    key: "password_changed"
+    value:
+      ru: "Пароль изменён"
+      uz: "Parol o'zgartirildi"
+      en: "Password changed"
+
+- model: app.languageline
+  pk: 110
+  fields:
+    key: "password_confirm"
+    value:
+      ru: "Подтверждение пароля"
+      uz: "Parolni tasdiqlash"
+      en: "Password confirm"
+
+- model: app.languageline
+  pk: 111
+  fields:
+    key: "passwordless_login"
+    value:
+      ru: "Вход без пароля"
+      uz: "Parolsiz kirish"
+      en: "Passwordless login"
+
+- model: app.languageline
+  pk: 112
+  fields:
+    key: "passwords_mismatch"
+    value:
+      ru: "Пароли не совпадают"
+      uz: "Parollar mos kelmaydi"
+      en: "Passwords do not match"
+
+- model: app.languageline
+  pk: 113
+  fields:
+    key: "passwords_must_different"
+    value:
+      ru: "Пароли должны отличаться"
+      uz: "Parollar har xil bo'lishi kerak"
+      en: "Passwords must be different"
+
+- model: app.languageline
+  pk: 114
+  fields:
+    key: "permissions"
+    value:
+      ru: "Права доступа"
+      uz: "Ruxsatlar"
+      en: "Permissions"
+
+- model: app.languageline
+  pk: 115
+  fields:
+    key: "permissions_page"
+    value:
+      ru: "Страница прав доступа"
+      uz: "Ruxsatlar sahifasi"
+      en: "Permissions page"
+
+- model: app.languageline
+  pk: 116
+  fields:
+    key: "permissions_updated"
+    value:
+      ru: "Права доступа обновлены"
+      uz: "Ruxsatlar yangilandi"
+      en: "Permissions updated"
+
+- model: app.languageline
+  pk: 117
+  fields:
+    key: "phone"
+    value:
+      ru: "Телефон"
+      uz: "Telefon"
+      en: "Phone"
+
+- model: app.languageline
+  pk: 118
+  fields:
+    key: "preview_lesson"
+    value:
+      ru: "Предварительный просмотр урока"
+      uz: "Darsni ko'rib chiqish"
+      en: "Preview lesson"
+
+- model: app.languageline
+  pk: 119
+  fields:
+    key: "preview_lesson_description"
+    value:
+      ru: "Описание предпросмотра урока"
+      uz: "Dars ko'rib chiqish tavsifi"
+      en: "Preview lesson description"
+
+- model: app.languageline
+  pk: 120
+  fields:
+    key: "price"
+    value:
+      ru: "Цена"
+      uz: "Narx"
+      en: "Price"
+
+- model: app.languageline
+  pk: 121
+  fields:
+    key: "publish_lesson"
+    value:
+      ru: "Опубликовать урок"
+      uz: "Darsni nashr etish"
+      en: "Publish lesson"
+
+- model: app.languageline
+  pk: 122
+  fields:
+    key: "refresh"
+    value:
+      ru: "Обновить"
+      uz: "Yangilash"
+      en: "Refresh"
+
+- model: app.languageline
+  pk: 123
+  fields:
+    key: "register_page"
+    value:
+      ru: "Страница регистрации"
+      uz: "Ro'yxatdan o'tish sahifasi"
+      en: "Register page"
+
+- model: app.languageline
+  pk: 124
+  fields:
+    key: "register_type"
+    value:
+      ru: "Тип регистрации"
+      uz: "Ro'yxatdan o'tish turi"
+      en: "Register type"
+
+- model: app.languageline
+  pk: 125
+  fields:
+    key: "remember_me"
+    value:
+      ru: "Запомнить меня"
+      uz: "Meni eslab qol"
+      en: "Remember me"
+
+- model: app.languageline
+  pk: 126
+  fields:
+    key: "remember_password"
+    value:
+      ru: "Вспомнили пароль?"
+      uz: "Parolni esladingizmi?"
+      en: "Remember password?"
+
+- model: app.languageline
+  pk: 127
+  fields:
+    key: "resend"
+    value:
+      ru: "Отправить повторно"
+      uz: "Qayta yuborish"
+      en: "Resend"
+
+- model: app.languageline
+  pk: 128
+  fields:
+    key: "reset_password"
+    value:
+      ru: "Сбросить пароль"
+      uz: "Parolni tiklash"
+      en: "Reset password"
+
+- model: app.languageline
+  pk: 129
+  fields:
+    key: "resetting"
+    value:
+      ru: "Сброс..."
+      uz: "Tiklanmoqda..."
+      en: "Resetting..."
+
+- model: app.languageline
+  pk: 130
+  fields:
+    key: "role"
+    value:
+      ru: "Роль"
+      uz: "Rol"
+      en: "Role"
+
+- model: app.languageline
+  pk: 131
+  fields:
+    key: "role_item"
+    value:
+      ru: "Элемент роли"
+      uz: "Rol elementi"
+      en: "Role item"
+
+- model: app.languageline
+  pk: 132
+  fields:
+    key: "roles"
+    value:
+      ru: "Роли"
+      uz: "Rollar"
+      en: "Roles"
+
+- model: app.languageline
+  pk: 133
+  fields:
+    key: "roles_page"
+    value:
+      ru: "Страница ролей"
+      uz: "Rollar sahifasi"
+      en: "Roles page"
+
+- model: app.languageline
+  pk: 134
+  fields:
+    key: "ru"
+    value:
+      ru: "Рус"
+      uz: "Rus"
+      en: "Ru"
+
+- model: app.languageline
+  pk: 135
+  fields:
+    key: "ru_trans"
+    value:
+      ru: "Русский"
+      uz: "Ruscha"
+      en: "Russian"
+
+- model: app.languageline
+  pk: 136
+  fields:
+    key: "save"
+    value:
+      ru: "Сохранить"
+      uz: "Saqlash"
+      en: "Save"
+
+- model: app.languageline
+  pk: 137
+  fields:
+    key: "saving"
+    value:
+      ru: "Сохранение..."
+      uz: "Saqlanmoqda..."
+      en: "Saving..."
+
+- model: app.languageline
+  pk: 138
+  fields:
+    key: "search"
+    value:
+      ru: "Поиск"
+      uz: "Qidirish"
+      en: "Search"
+
+- model: app.languageline
+  pk: 139
+  fields:
+    key: "select_category"
+    value:
+      ru: "Выберите категорию"
+      uz: "Kategoriyani tanlang"
+      en: "Select category"
+
+- model: app.languageline
+  pk: 140
+  fields:
+    key: "select_icon"
+    value:
+      ru: "Выберите иконку"
+      uz: "Belgini tanlang"
+      en: "Select icon"
+
+- model: app.languageline
+  pk: 141
+  fields:
+    key: "select_lang"
+    value:
+      ru: "Выберите язык"
+      uz: "Tilni tanlang"
+      en: "Select language"
+
+- model: app.languageline
+  pk: 142
+  fields:
+    key: "select_level"
+    value:
+      ru: "Выберите уровень"
+      uz: "Darajani tanlang"
+      en: "Select level"
+
+- model: app.languageline
+  pk: 143
+  fields:
+    key: "select_register_type"
+    value:
+      ru: "Выберите тип регистрации"
+      uz: "Ro'yxatdan o'tish turini tanlang"
+      en: "Select register type"
+
+- model: app.languageline
+  pk: 144
+  fields:
+    key: "select_role"
+    value:
+      ru: "Выберите роль"
+      uz: "Rolni tanlang"
+      en: "Select role"
+
+- model: app.languageline
+  pk: 145
+  fields:
+    key: "select_status"
+    value:
+      ru: "Выберите статус"
+      uz: "Statusni tanlang"
+      en: "Select status"
+
+- model: app.languageline
+  pk: 146
+  fields:
+    key: "send_link"
+    value:
+      ru: "Отправить ссылку"
+      uz: "Havolani yuborish"
+      en: "Send link"
+
+- model: app.languageline
+  pk: 147
+  fields:
+    key: "set_password_page"
+    value:
+      ru: "Страница установки пароля"
+      uz: "Parol o'rnatish sahifasi"
+      en: "Set password page"
+
+- model: app.languageline
+  pk: 148
+  fields:
+    key: "short_description"
+    value:
+      ru: "Краткое описание"
+      uz: "Qisqa tavsif"
+      en: "Short description"
+
+- model: app.languageline
+  pk: 149
+  fields:
+    key: "sign_in"
+    value:
+      ru: "Войти"
+      uz: "Kirish"
+      en: "Sign in"
+
+- model: app.languageline
+  pk: 150
+  fields:
+    key: "sign_in_with"
+    value:
+      ru: "Войти через"
+      uz: "Orqali kirish"
+      en: "Sign in with"
+
+- model: app.languageline
+  pk: 151
+  fields:
+    key: "sign_up"
+    value:
+      ru: "Зарегистрироваться"
+      uz: "Ro'yxatdan o'tish"
+      en: "Sign up"
+
+- model: app.languageline
+  pk: 152
+  fields:
+    key: "slogan"
+    value:
+      ru: "Слоган"
+      uz: "Shior"
+      en: "Slogan"
+
+- model: app.languageline
+  pk: 153
+  fields:
+    key: "start_writing_your_lesson"
+    value:
+      ru: "Начните писать ваш урок..."
+      uz: "Darsni yozishni boshlang..."
+      en: "Start writing your lesson..."
+
+- model: app.languageline
+  pk: 154
+  fields:
+    key: "status"
+    value:
+      ru: "Статус"
+      uz: "Status"
+      en: "Status"
+
+- model: app.languageline
+  pk: 155
+  fields:
+    key: "style"
+    value:
+      ru: "Стиль"
+      uz: "Uslub"
+      en: "Style"
+
+- model: app.languageline
+  pk: 156
+  fields:
+    key: "submit"
+    value:
+      ru: "Отправить"
+      uz: "Yuborish"
+      en: "Submit"
+
+- model: app.languageline
+  pk: 157
+  fields:
+    key: "success"
+    value:
+      ru: "Успешно"
+      uz: "Muvaffaqiyatli"
+      en: "Success"
+
+- model: app.languageline
+  pk: 158
+  fields:
+    key: "tg_link"
+    value:
+      ru: "Ссылка на Telegram"
+      uz: "Telegram havolasi"
+      en: "Telegram link"
+
+- model: app.languageline
+  pk: 159
+  fields:
+    key: "title"
+    value:
+      ru: "Заголовок"
+      uz: "Sarlavha"
+      en: "Title"
+
+- model: app.languageline
+  pk: 160
+  fields:
+    key: "token"
+    value:
+      ru: "Токен"
+      uz: "Token"
+      en: "Token"
+
+- model: app.languageline
+  pk: 161
+  fields:
+    key: "updating"
+    value:
+      ru: "Обновление..."
+      uz: "Yangilanmoqda..."
+      en: "Updating..."
+
+- model: app.languageline
+  pk: 162
+  fields:
+    key: "uppercase_letter"
+    value:
+      ru: "Заглавная буква"
+      uz: "Katta harf"
+      en: "Uppercase letter"
+
+- model: app.languageline
+  pk: 163
+  fields:
+    key: "url_path"
+    value:
+      ru: "URL-путь"
+      uz: "URL manzil"
+      en: "URL path"
+
+- model: app.languageline
+  pk: 164
+  fields:
+    key: "user"
+    value:
+      ru: "Пользователь"
+      uz: "Foydalanuvchi"
+      en: "User"
+
+- model: app.languageline
+  pk: 165
+  fields:
+    key: "username"
+    value:
+      ru: "Имя пользователя"
+      uz: "Foydalanuvchi nomi"
+      en: "Username"
+
+- model: app.languageline
+  pk: 166
+  fields:
+    key: "users"
+    value:
+      ru: "Пользователи"
+      uz: "Foydalanuvchilar"
+      en: "Users"
+
+- model: app.languageline
+  pk: 167
+  fields:
+    key: "uz"
+    value:
+      ru: "Узб"
+      uz: "O'zb"
+      en: "Uz"
+
+- model: app.languageline
+  pk: 168
+  fields:
+    key: "uz_trans"
+    value:
+      ru: "Узбекский"
+      uz: "O'zbekcha"
+      en: "Uzbek"
+
+- model: app.languageline
+  pk: 169
+  fields:
+    key: "verify_email"
+    value:
+      ru: "Подтвердить email"
+      uz: "Emailni tasdiqlash"
+      en: "Verify email"
+
+- model: app.languageline
+  pk: 170
+  fields:
+    key: "verify_email_page"
+    value:
+      ru: "Страница подтверждения email"
+      uz: "Email tasdiqlash sahifasi"
+      en: "Verify email page"
+
+- model: app.languageline
+  pk: 171
+  fields:
+    key: "view_course"
+    value:
+      ru: "Просмотр курса"
+      uz: "Kursni ko'rish"
+      en: "View course"
+
+- model: app.languageline
+  pk: 172
+  fields:
+    key: "wait"
+    value:
+      ru: "Подождите..."
+      uz: "Kuting..."
+      en: "Wait..."
+
+- model: app.languageline
+  pk: 173
+  fields:
+    key: "welcome_back"
+    value:
+      ru: "С возвращением!"
+      uz: "Xush kelibsiz!"
+      en: "Welcome back!"
+
+- model: app.languageline
+  pk: 174
+  fields:
+    key: "yes_delete"
+    value:
+      ru: "Да, удалить"
+      uz: "Ha, o'chirish"
+      en: "Yes, delete"
+
+- model: app.languageline
+  pk: 175
+  fields:
+    key: "settings"
+    value:
+      ru: "Настройки"
+      uz: "Sozlamalar"
+      en: "Settings"
+
+- model: app.languageline
+  pk: 176
+  fields:
+    key: "teacher"
+    value:
+      ru: "Преподаватель"
+      uz: "O'qituvchi"
+      en: "Teacher"
+
+- model: app.languageline
+  pk: 177
+  fields:
+    key: "student"
+    value:
+      ru: "Студент"
+      uz: "O'quvchi"
+      en: "Student"
+
+- model: app.languageline
+  pk: 178
+  fields:
+    key: "manager"
+    value:
+      ru: "Менеджер"
+      uz: "Menejer"
+      en: "Manager"
+
+- model: app.languageline
+  pk: 179
+  fields:
+    key: "oauth"
+    value:
+      ru: "Соцсети"
+      uz: "Ijtimoiy tarmoqlar"
+      en: "Social networks"

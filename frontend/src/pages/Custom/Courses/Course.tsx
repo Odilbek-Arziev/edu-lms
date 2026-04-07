@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {withTranslation} from "react-i18next";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {coursesThunks} from "../../../slices/courses";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
@@ -24,10 +24,10 @@ import ModuleDelete from "../../../Components/Custom/Modules/ModuleDelete";
 import {EditModalProps} from "../../../types/editModal";
 import ModuleEdit from "../../../Components/Custom/Modules/ModuleEdit";
 import {modulesThunks} from "../../../slices/modules";
-import {lessonsThunks} from "../../../slices/lessons";
 import LessonDelete from "../../../Components/Custom/Lessons/LessonDelete";
 
 const Course = (props: any) => {
+    const navigate = useNavigate();
     const {id} = useParams<{ id: string }>();
     const courseId = id ? Number(id) : 0;
 
@@ -238,6 +238,10 @@ const Course = (props: any) => {
                                                                         size="sm"
                                                                         className="btn-icon"
                                                                         title={props.t('create', {item: props.t('lesson')})}
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            navigate(`/lessons/create/${module.id}`);
+                                                                        }}
                                                                     >
                                                                         <FeatherIcon icon="plus" size={14}/>
                                                                     </Button>
@@ -306,6 +310,10 @@ const Course = (props: any) => {
                                                                                         size="sm"
                                                                                         className="btn-icon"
                                                                                         title={props.t('edit')}
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            navigate(`/lessons/edit/${lesson.id}`);
+                                                                                        }}
                                                                                     >
                                                                                         <FeatherIcon icon="edit-2"
                                                                                                      size={12}/>

@@ -10,6 +10,7 @@
   fields:
     title: "Menu"
     order: 0
+    parent: 1
     url_path: "/menu"
     icon: 1
 
@@ -18,6 +19,7 @@
   fields:
     title: "Roles"
     order: 1
+    parent: 1
     url_path: "/roles"
     icon: 164
 
@@ -26,5 +28,23 @@
   fields:
     title: "Users"
     order: 2
+    parent: 1
     url_path: "/users"
     icon: 262
+
+- model: app.Menu
+  pk: 5
+  fields:
+    title: "Language"
+    order: 3
+    parent: 1
+    url_path: "/language-lines"
+    icon: 35
+
+- model: app.Menu
+  pk: 6
+  fields:
+    title: "Courses"
+    order: 4
+    url_path: "/courses"
+    icon: 142

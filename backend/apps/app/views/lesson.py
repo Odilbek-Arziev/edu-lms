@@ -14,7 +14,6 @@ from app.serializers.material import MaterialSerializer
 
 class LessonViewSet(BaseModelViewSet):
     serializer_class = LessonSerializer
-    lookup_field = 'slug'
 
     def get_queryset(self):
         params = self.request.query_params

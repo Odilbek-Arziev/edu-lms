@@ -134,6 +134,8 @@ class Enrollment(BaseModel):
 
 class Lesson(BaseModel):
     title = models.CharField(max_length=255)
+    short_description = models.CharField(max_length=255)
+    duration = models.IntegerField(null=True)
     content = models.TextField()
     is_preview = models.BooleanField(default=False)
     slug = models.SlugField(unique=True, null=True, blank=True)

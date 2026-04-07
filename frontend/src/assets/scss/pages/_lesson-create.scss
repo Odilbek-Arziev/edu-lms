@@ -1,0 +1,208 @@
+/* Lesson Create Page Styles - Airy Design */
+
+/* Общий фон страницы */
+.page-content {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+}
+
+/* Карточки с контентом */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Поле заголовка */
+.form-control-lg.fs-1 {
+    transition: all 0.2s ease;
+}
+
+.form-control-lg.fs-1:focus {
+    outline: none;
+    border-bottom: 2px solid #0ab39c !important;
+}
+
+/* Метаданные полей */
+.form-control {
+    transition: all 0.2s ease;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+    background-color: #ffffff !important;
+    border-color: #0ab39c !important;
+    box-shadow: 0 0 0 0.15rem rgba(10, 179, 156, 0.15) !important;
+}
+
+/* Редактор контента */
+.modern-editor-wrapper {
+    transition: all 0.2s ease;
+    padding: 1.5rem;
+}
+
+.modern-editor-wrapper:focus-within {
+    border-color: #0ab39c !important;
+    box-shadow: 0 0 0 0.15rem rgba(10, 179, 156, 0.1);
+}
+
+/* EditorJS стили - ПРОСТОЕ РЕШЕНИЕ */
+.codex-editor {
+    padding: 0 !important;
+}
+
+.codex-editor__redactor {
+    padding-bottom: 100px !important;
+}
+
+/* Убираем центрирование - выравниваем всё слева */
+.ce-block__content,
+.ce-toolbar__content {
+    max-width: none !important;
+    margin-left: 0 !important;
+}
+
+.ce-toolbar__actions {
+    right: 0 !important;
+}
+
+.ce-toolbar__plus {
+    left: 0 !important;
+}
+
+/* Расширяем редактор на всю ширину */
+#editorjs-create {
+    width: 100%;
+}
+
+.modern-editor-wrapper {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Кнопки */
+.btn {
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-success {
+    background-color: #0ab39c;
+    border-color: #0ab39c;
+}
+
+.btn-success:hover {
+    background-color: #099885;
+    border-color: #099885;
+    transform: translateY(-1px);
+    box-shadow: 0 0.25rem 0.75rem rgba(10, 179, 156, 0.3);
+}
+
+.btn-light {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+}
+
+.btn-light:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.btn-link:hover {
+    color: #0ab39c !important;
+}
+
+/* Sticky footer для панели действий */
+.sticky-bottom {
+    position: sticky;
+    bottom: 1rem;
+    z-index: 100;
+}
+
+/* Checkbox стили */
+.form-check-input:checked {
+    background-color: #0ab39c;
+    border-color: #0ab39c;
+}
+
+.form-check-input:focus {
+    border-color: #0ab39c;
+    box-shadow: 0 0 0 0.15rem rgba(10, 179, 156, 0.25);
+}
+
+/* Labels */
+.text-uppercase {
+    letter-spacing: 0.5px;
+}
+
+/* Иконки */
+.feather {
+    transition: all 0.2s ease;
+}
+
+.btn:hover .feather {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-control-lg.fs-1 {
+        font-size: 1.75rem !important;
+    }
+
+    .sticky-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .sticky-bottom .card-body {
+        padding: 1rem !important;
+    }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Границы */
+.border-bottom {
+    border-color: #e9ecef !important;
+}
+
+/* Spacing improvements */
+.mb-5 {
+    margin-bottom: 2rem !important;
+}
+
+.pb-4 {
+    padding-bottom: 1.5rem !important;
+}
+
+.p-4 {
+    padding: 1.5rem !important;
+}
+
+@media (min-width: 768px) {
+    .p-md-5 {
+        padding: 2.5rem !important;
+    }
+}

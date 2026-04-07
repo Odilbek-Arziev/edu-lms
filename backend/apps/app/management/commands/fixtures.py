@@ -8,4 +8,4 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-        call_command("loaddata", "icons", "roles", "menu")
+        call_command("loaddata", "icons", "roles", "menu", "language", "register_types")

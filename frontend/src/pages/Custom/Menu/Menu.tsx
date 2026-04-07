@@ -49,7 +49,7 @@ const Menu = (props: any) => {
 
     const rolesOptions = roles.map((item: any) => ({
         value: item.id,
-        label: item.name,
+        label: props.t(item.name),
     }))
 
     const [showCreate, hideCreate] = useModal(

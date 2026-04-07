@@ -249,11 +249,10 @@ import Users from "../pages/Custom/Users/Users";
 import LanguageLines from "../pages/Custom/LanguageLines/LanguageLines";
 import Courses from "../pages/Custom/Courses/Courses";
 import Course from "../pages/Custom/Courses/Course";
+import LessonForm from "../pages/Custom/Lessons/LessonForm";
 
 
 const authProtectedRoutes = [
-    {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
-    {path: "/dashboard-crm", element: <DashboardCrm/>},
     {path: "/dashboard", element: <DashboardEcommerce/>},
     {path: "/menu", element: <Menu/>},
     {path: "/language-lines", element: <LanguageLines/>},
@@ -262,6 +261,12 @@ const authProtectedRoutes = [
     {path: "/role-permissions/:id", element: <RolePermissions/>},
     {path: "/courses", element: <Courses/>},
     {path: "/course/:id", element: <Course/>},
+    {path: "/course/:id", element: <Course/>},
+    {path: "/lessons/create/:moduleId", element: <LessonForm/>},
+    {path: "/lessons/edit/:lessonId", element: <LessonForm/>},
+
+    {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
+    {path: "/dashboard-crm", element: <DashboardCrm/>},
     {path: "/index", element: <DashboardEcommerce/>},
     {path: "/dashboard-crypto", element: <DashboardCrypto/>},
     {path: "/dashboard-projects", element: <DashboardProject/>},

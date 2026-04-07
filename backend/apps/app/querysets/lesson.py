@@ -9,7 +9,7 @@ class LessonQuerySet(BaseQuerySet):
 
     def for_course(self, course):
         if not course:
-            return course
+            return self
         return self.filter(module__course__title__icontains=course)
 
     def list(self, search=None, course=None):

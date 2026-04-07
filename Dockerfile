@@ -7,11 +7,11 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+RUN pip install poetry
+
 COPY pyproject.toml poetry.lock /app/
 
-RUN pip install --upgrade pip \
-    && pip install poetry \
-    && poetry config virtualenvs.create false \
+RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
 COPY backend/ /app/backend/

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from users.models import CustomUser
+from users.models import CustomUser, RegisterType
 from users.utils.recaptcha import verify_recaptcha
 
 
@@ -23,11 +23,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        register_type = RegisterType.objects.get(name='email')
+
         return CustomUser.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'].lower(),
             password=validated_data['password'],
-            register_type='email'
+            register_type=register_type
         )
 
     class Meta:
