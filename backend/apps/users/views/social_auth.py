@@ -1,5 +1,6 @@
 import json
 import urllib
+import os
 from urllib.parse import urlencode
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 from drf_spectacular.types import OpenApiTypes
@@ -18,7 +19,7 @@ from config.providers_config import provider_configs
 class SocialLoginViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
     service = SocialAuthService(provider_configs)
-    frontend_url = 'http://localhost:3000'
+    frontend_url = os.environ.get("FRONTEND_URL", "")
 
     @extend_schema(
         summary="Redirect to Social Provider Auth",

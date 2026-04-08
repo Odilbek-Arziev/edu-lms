@@ -103,7 +103,7 @@ const LessonForm = (props: any) => {
                     image: {
                         class: ImageTool,
                         config: {
-                            endpoints: {byFile: 'http://localhost:8000/api/upload-image/'}
+                            endpoints: {byFile: `${process.env.REACT_APP_HOST_API_URL}/api/upload-image/`}
                         }
                     }
                 },
