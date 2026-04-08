@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from users.serializers.code import EmailVerificationCodeSerializer
 from users.serializers.verify_code import VerifyCodeSerializer
@@ -13,6 +14,14 @@ from users.services.code import handle_user_verification
 
 
 class CodeViewSet(viewsets.ViewSet):
+    @extend_schema(
+        summary="Sending a confirmation code by email",
+        request=EmailVerificationCodeSerializer,
+        responses={
+            200: OpenApiResponse(description="Code sent successfully"),
+            400: OpenApiResponse(description="Email error or timeout")
+        }
+    )
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def send_verification_code(self, request):
         serializer = EmailVerificationCodeSerializer(
@@ -30,6 +39,14 @@ class CodeViewSet(viewsets.ViewSet):
         send_email_code(verification_code)
         return Response({"msg": "Code sent successfully"}, status=200)
 
+    @extend_schema(
+        summary="Verify account by entering the code from your email",
+        request=VerifyCodeSerializer,
+        responses={
+            200: OpenApiResponse(description="Code received successfully"),
+            400: OpenApiResponse(description="Email error or timeout")
+        }
+    )
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def verify_code(self, request):
         serializer = VerifyCodeSerializer(data=request.data)

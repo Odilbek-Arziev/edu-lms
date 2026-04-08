@@ -18,7 +18,7 @@ const MagicLoginPage = (props: any) => {
             return;
         }
 
-        axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/users/magic_link/verify_magic_token/`, {
+        axios.get(`${process.env.REACT_APP_HOST_API_URL}/users/magic_link/verify_magic_token/`, {
             params: {token}
         })
             .then(res => {

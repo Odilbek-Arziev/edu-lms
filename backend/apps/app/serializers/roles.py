@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 
 from app.serializers.permissions import PermissionSerializer
 
@@ -12,9 +13,13 @@ class RoleDetailSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id', 'name', 'permissions', 'role_permissions']
 
+    @extend_schema_field(serializers.ListField(child=serializers.IntegerField()))
     def get_role_permissions(self, obj):
         return list(obj.permissions.values_list('id', flat=True))
 
+    @extend_schema_field(serializers.DictField(
+        child=serializers.ListField(child=PermissionSerializer())
+    ))
     def get_permissions(self, obj):
 
         permissions = Permission.objects.select_related('content_type').order_by(

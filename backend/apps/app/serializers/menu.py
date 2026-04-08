@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import Group
 from app.models import Menu, Icon
 from app.serializers.roles import RoleListSerializer
+from drf_spectacular.utils import extend_schema_field
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -38,6 +39,7 @@ class MenuSerializer(serializers.ModelSerializer):
             'children'
         ]
 
+    @extend_schema_field(serializers.ListSerializer(child=serializers.DictField()))
     def get_children(self, obj):
         qs = Menu.objects.filter(parent=obj, status=True)
         return MenuSerializer(qs, many=True).data
