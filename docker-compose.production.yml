@@ -34,6 +34,13 @@ services:
       - DJANGO_SETTINGS_MODULE=config.settings
     command: gunicorn --config gunicorn.conf.py config.wsgi:application
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/build:/app/build
+
   nginx:
     image: nginx:stable-alpine
     ports:
