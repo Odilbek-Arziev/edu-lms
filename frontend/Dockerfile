@@ -2,11 +2,13 @@ FROM node:20-alpine as build-stage
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY package.json yarn.lock* ./
+
+RUN yarn install --frozen-lockfile --network-timeout 100000
 
 COPY . .
-RUN npm run build
+
+RUN yarn build
 
 FROM alpine:latest
 WORKDIR /app
