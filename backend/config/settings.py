@@ -27,6 +27,7 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
