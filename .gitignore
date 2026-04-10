@@ -10,8 +10,6 @@ venv/
 .env
 .env.*
 
-# Poetry
-backend/poetry.lock
 
 # Django
 *.log
