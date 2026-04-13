@@ -39,7 +39,8 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     volumes:
-      - frontend_dist:/app/dist
+      - frontend_dist:/mnt/dist
+    restart: "no"
 
   nginx:
     image: nginx:stable-alpine
@@ -52,6 +53,7 @@ services:
       - media_volume:/app/media
     depends_on:
       - web
+      - frontend
 
 volumes:
   postgres_data:
