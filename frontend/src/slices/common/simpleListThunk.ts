@@ -4,13 +4,13 @@ export function createSimpleListThunks(
     endpoint: string,
     actions: any
 ) {
-    const api = new APIClient();
+    const getApi = () => new APIClient();
 
     return {
         fetch: (params: any = {}) => async (dispatch: any) => {
             dispatch(actions.request());
             try {
-                const response = await api.get(endpoint, params);
+                const response = await getApi().get(endpoint, params);
                 dispatch(actions.success(response));
                 return response;
             } catch (e: any) {

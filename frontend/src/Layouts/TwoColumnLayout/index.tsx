@@ -44,7 +44,7 @@ const TwoColumnLayout = (props : any) => {
     const path = props.router.location.pathname;
 
     const initMenu = useCallback(() => {
-        const pathName = process.env.PUBLIC_URL + path;
+        const pathName = import.meta.env.PUBLIC_URL + path;
         const ul = document.getElementById("navbar-nav") as HTMLElement;
         const items : any = ul.getElementsByTagName("a");
         let itemsArray = [...items]; // converts NodeList to Array
@@ -55,8 +55,8 @@ const TwoColumnLayout = (props : any) => {
         if (matchingMenuItem) {
             activateParentDropdown(matchingMenuItem);
         } else {
-            if (process.env.PUBLIC_URL) {
-                var id = pathName.replace(process.env.PUBLIC_URL, '');
+            if (import.meta.env.PUBLIC_URL) {
+                var id = pathName.replace(import.meta.env.PUBLIC_URL, '');
                 id = id.replace("/", "");
             } else {
                 id = pathName.replace("/", "");

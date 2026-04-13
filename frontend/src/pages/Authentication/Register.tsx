@@ -228,7 +228,7 @@ const Register = (props: any) => {
                                             <div className="mt-4 d-flex justify-content-center">
                                                 <ReCAPTCHA
                                                     ref={recaptchaRef}
-                                                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                                                    sitekey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY!}
                                                     size="invisible"
                                                 />
                                             </div>

@@ -28,12 +28,12 @@ const ProfileDropdown = () => {
         const obj = JSON.parse(authUser);
         let name = "Admin";
 
-        if (process.env.REACT_APP_DEFAULTAUTH === "fake") {
+        if (import.meta.env.VITE_APP_DEFAULTAUTH === "fake") {
             name = obj.username
                 ?? user.first_name
                 ?? obj.data?.first_name
                 ?? "Admin";
-        } else if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
+        } else if (import.meta.env.VITE_APP_DEFAULTAUTH === "firebase") {
             name = obj.email ?? "Admin";
         }
 

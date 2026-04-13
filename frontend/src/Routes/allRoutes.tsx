@@ -205,8 +205,8 @@ import RadialbarCharts from "../pages/Charts/ApexCharts/RadialbarCharts";
 import RadarCharts from "../pages/Charts/ApexCharts/RadarCharts";
 import PolarCharts from "../pages/Charts/ApexCharts/PolarCharts";
 
-import ChartsJs from "../pages/Charts/ChartsJs/index";
-import Echarts from "../pages/Charts/ECharts/index";
+import ChartsJs from "../pages/Charts/ChartsJs";
+import Echarts from "../pages/Charts/ECharts";
 
 //Job pages
 import Statistics from "../pages/Jobs/Statistics";

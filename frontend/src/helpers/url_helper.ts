@@ -1,4 +1,4 @@
-export const HOST_API_URL = process.env.REACT_APP_HOST_API_URL;
+export const HOST_API_URL = import.meta.env.VITE_APP_HOST_API_URL;
 
 //REGISTER
 export const POST_FAKE_REGISTER = "/auth/signup";

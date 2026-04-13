@@ -319,7 +319,7 @@ const Users = (props: any) => {
             </div>
             <ReCAPTCHA
                 ref={recaptchaRef}
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                sitekey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY!}
                 size="invisible"
             />
         </React.Fragment>

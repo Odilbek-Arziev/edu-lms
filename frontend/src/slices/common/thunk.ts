@@ -4,20 +4,21 @@ export function createCrudThunks(
     endpoint: string,
     actions: any
 ) {
-    const api = new APIClient();
+    const getApi = () => new APIClient();
 
     return {
         fetch:
             (params: any = {}) =>
                 async (dispatch: any) => {
-                    const { skipReduxUpdate, ...apiParams } = params;
+                    const {skipReduxUpdate, ...apiParams} = params;
 
                     if (!skipReduxUpdate) {
                         dispatch(actions.request());
                     }
 
                     try {
-                        const response = await api.get(endpoint, apiParams);
+                        // Используем getApi() вместо api
+                        const response = await getApi().get(endpoint, apiParams);
 
                         if (!skipReduxUpdate) {
                             dispatch(actions.success(response));
@@ -36,7 +37,7 @@ export function createCrudThunks(
             (data: any) =>
                 async (dispatch: any) => {
                     try {
-                        return await api.create(endpoint, data);
+                        return await getApi().create(endpoint, data);
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
                     }
@@ -46,7 +47,7 @@ export function createCrudThunks(
             (id: number, data: any) =>
                 async (dispatch: any) => {
                     try {
-                        return await api.update(`${endpoint}${id}/`, data);
+                        return await getApi().update(`${endpoint}${id}/`, data);
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
                     }
@@ -56,7 +57,7 @@ export function createCrudThunks(
             (id: number) =>
                 async (dispatch: any) => {
                     try {
-                        return await api.delete(`${endpoint}${id}/`);
+                        return await getApi().delete(`${endpoint}${id}/`);
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
                     }
@@ -66,7 +67,7 @@ export function createCrudThunks(
             (id: number) =>
                 async (dispatch: any) => {
                     try {
-                        return await api.get(`${endpoint}${id}/`);
+                        return await getApi().get(`${endpoint}${id}/`);
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
                     }

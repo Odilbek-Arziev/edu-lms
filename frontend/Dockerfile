@@ -12,4 +12,4 @@ RUN yarn build
 
 FROM alpine:latest
 WORKDIR /app
-COPY --from=build-stage /app/build ./build
+COPY --from=build-stage /app/dist ./dist

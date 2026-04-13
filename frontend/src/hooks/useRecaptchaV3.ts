@@ -21,7 +21,7 @@ export const useRecaptchaV3 = () => {
             });
 
             const token = await window.grecaptcha.execute(
-                process.env.REACT_APP_RECAPTCHA_SITE_KEY,
+                import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY,
                 {action}
             );
 

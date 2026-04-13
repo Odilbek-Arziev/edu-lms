@@ -127,8 +127,8 @@ const Login = (props: any) => {
 
     useEffect(() => {
         if (user && user) {
-            const updatedUserData = process.env.REACT_APP_DEFAULTAUTH === "firebase" ? user.multiFactor.user.email : user.email;
-            const updatedUserPassword = process.env.REACT_APP_DEFAULTAUTH === "firebase" ? "" : user.confirm_password;
+            const updatedUserData =  user.email;
+            const updatedUserPassword = user.confirm_password;
             setUserLogin({
                 email: updatedUserData,
                 password: updatedUserPassword
@@ -248,7 +248,7 @@ const Login = (props: any) => {
                                                 <div className="mt-4 d-flex justify-content-center">
                                                     <ReCAPTCHA
                                                         ref={recaptchaRef}
-                                                        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+                                                        sitekey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY!}
                                                         size="invisible"
                                                     />
                                                 </div>

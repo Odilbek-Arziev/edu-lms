@@ -20,11 +20,11 @@ interface Config {
 
 const config = {
   google: {
-    API_KEY: process.env.REACT_APP_GOOGLE_API_KEY ?? "",
-    CLIENT_ID: process.env.REACT_APP_GOOGLE_CLIENT_ID ?? "",
+    API_KEY: import.meta.env.VITE_APP_GOOGLE_API_KEY ?? "",
+    CLIENT_ID: import.meta.env.REACT_APP_GOOGLE_CLIENT_ID ?? "",
   },
   api: {
-    API_URL: process.env.REACT_APP_HOST_API_URL ?? "http://localhost:8000/api/v1/",
+    API_URL: import.meta.env.VITE_APP_HOST_API_URL ?? "http://localhost:8000/api/v1/",
   },
 };
 

@@ -103,7 +103,7 @@ const LessonForm = (props: any) => {
                     image: {
                         class: ImageTool,
                         config: {
-                            endpoints: {byFile: `${process.env.REACT_APP_HOST_API_URL}/api/upload-image/`}
+                            endpoints: {byFile: `${import.meta.env.VITE_APP_HOST_API_URL}/api/upload-image/`}
                         }
                     }
                 },

@@ -1,7 +1,7 @@
 import axios, {AxiosRequestConfig} from "axios";
 import config from "../config";
 import {logoutUser} from "../slices/auth/login/thunk";
-import {store} from "../index";
+import {store} from "../store";
 
 const {api} = config;
 
