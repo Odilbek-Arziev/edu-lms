@@ -29,6 +29,7 @@ import ImageTool from '@editorjs/image';
 
 import {lessonsThunks} from "../../../slices/lessons";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
+import {HOST_API_URL} from "../../../helpers/url_helper";
 
 const LessonForm = (props: any) => {
     const {moduleId, lessonId} = useParams<{ moduleId?: string, lessonId?: string }>();
@@ -103,7 +104,7 @@ const LessonForm = (props: any) => {
                     image: {
                         class: ImageTool,
                         config: {
-                            endpoints: {byFile: `${import.meta.env.VITE_APP_HOST_API_URL}/api/upload-image/`}
+                            endpoints: {byFile: `${HOST_API_URL}/upload-image/`}
                         }
                     }
                 },

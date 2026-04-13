@@ -3,6 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {showError} from "../../utils/swal";
 import {withTranslation} from "react-i18next";
+import {HOST_API_URL} from "../../helpers/url_helper";
 
 
 const MagicLoginPage = (props: any) => {
@@ -18,7 +19,7 @@ const MagicLoginPage = (props: any) => {
             return;
         }
 
-        axios.get(`${import.meta.env.VITE_APP_HOST_API_URL}/users/magic_link/verify_magic_token/`, {
+        axios.get(`${HOST_API_URL}users/magic_link/verify_magic_token/`, {
             params: {token}
         })
             .then(res => {

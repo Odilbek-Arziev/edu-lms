@@ -1,3 +1,5 @@
+import {HOST_API_URL} from "./helpers/url_helper";
+
 interface GoogleConfig {
   API_KEY: string;
   CLIENT_ID: string;
@@ -24,7 +26,7 @@ const config = {
     CLIENT_ID: import.meta.env.REACT_APP_GOOGLE_CLIENT_ID ?? "",
   },
   api: {
-    API_URL: import.meta.env.VITE_APP_HOST_API_URL ?? "http://localhost:8000/api/v1/",
+    API_URL: HOST_API_URL ?? "http://localhost:8000/api/v1/",
   },
 };
 
