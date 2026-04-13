@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:16
+    restart: unless-stopped
     env_file:
       - backend/.env.production
     volumes:
@@ -10,6 +11,7 @@ services:
 
   redis:
     image: redis:7
+    restart: unless-stopped
     networks:
       - app_network
 
@@ -17,8 +19,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    restart: unless-stopped
     volumes:
-      - ./backend:/app
       - static_volume:/app/static
       - media_volume:/app/media
     depends_on:
@@ -46,6 +48,7 @@ services:
 
   nginx:
     image: nginx:stable-alpine
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:

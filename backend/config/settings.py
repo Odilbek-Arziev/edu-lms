@@ -48,9 +48,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     "axes.middleware.AxesMiddleware",
@@ -225,6 +225,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 
+
+def _filter_gunicorn_noise(event, hint):
+    if event.get("logger") == "gunicorn.error":
+        msg = event.get("logentry", {}).get("formatted", "")
+        if "no URI read" in msg or "premature client disconnection" in msg:
+            return None
+    return event
+
+
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
@@ -237,11 +246,3 @@ if SENTRY_DSN:
         ],
         before_send=lambda event, hint: _filter_gunicorn_noise(event, hint),
     )
-
-
-def _filter_gunicorn_noise(event, hint):
-    if event.get("logger") == "gunicorn.error":
-        msg = event.get("logentry", {}).get("formatted", "")
-        if "no URI read" in msg or "premature client disconnection" in msg:
-            return None
-    return event

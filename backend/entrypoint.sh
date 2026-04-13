@@ -1,7 +1,12 @@
 #!/bin/sh
+
 set -e
 
 python manage.py collectstatic --noinput
-python manage.py migrate
+
+until python manage.py migrate 2>&1; do
+  echo "DB not ready, retrying..."
+  sleep 2
+done
 
 exec "$@"
