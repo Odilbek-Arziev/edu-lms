@@ -1,15 +1,11 @@
-FROM node:20-alpine as build-stage
+FROM nginx:stable-alpine
 
-WORKDIR /app
+RUN rm -rf /usr/share/nginx/html/*
 
-COPY package.json yarn.lock* ./
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-RUN yarn install --frozen-lockfile --network-timeout 100000
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY . .
+EXPOSE 80
 
-RUN yarn build
-
-FROM alpine:latest
-WORKDIR /app
-COPY --from=build-stage /app/dist ./dist
+CMD ["nginx", "-g", "daemon off;"]
