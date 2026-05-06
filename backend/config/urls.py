@@ -3,7 +3,7 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from backend.apps.core.views.health import health
+from ..apps.core.views.health import health
 
 urlpatterns = [
     path('admin/', admin.site.urls),
