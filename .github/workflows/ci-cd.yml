@@ -160,7 +160,7 @@ jobs:
       - name: Copy compose & configs to server
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avz --delete --exclude='.git' --exclude='backend' --exclude='frontend' --exclude='node_modules'
+          switches: -avz --delete --exclude='.git' --exclude='backend' --exclude='frontend' --exclude='node_modules' --exclude='certbot'
           path: ./
           remote_path: ${{ secrets.SERVER_PATH }}
           remote_host: ${{ secrets.SERVER_HOST }}
