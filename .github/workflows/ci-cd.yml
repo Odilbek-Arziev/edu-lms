@@ -199,6 +199,9 @@ jobs:
             echo "==> Restarting nginx..."
             docker compose -f docker-compose.production.yml restart nginx
 
+            sleep 3
+            docker compose -f docker-compose.production.yml ps nginx | grep -q "Up" || { echo "nginx is down"; exit 1; }
+
             echo "==> Done."
 
       - name: Health check
