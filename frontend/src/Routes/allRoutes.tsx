@@ -187,27 +187,6 @@ import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
 import Logout from "../pages/Authentication/Logout";
 import Register from "../pages/Authentication/Register";
 
-//Charts
-import LineCharts from "../pages/Charts/ApexCharts/LineCharts";
-import AreaCharts from "../pages/Charts/ApexCharts/AreaCharts";
-import ColumnCharts from "../pages/Charts/ApexCharts/ColumnCharts";
-import BarCharts from "../pages/Charts/ApexCharts/BarCharts";
-import MixedCharts from "../pages/Charts/ApexCharts/MixedCharts";
-import TimelineCharts from "../pages/Charts/ApexCharts/TimelineCharts";
-import CandlestickChart from "../pages/Charts/ApexCharts/CandlestickChart";
-import BoxplotCharts from "../pages/Charts/ApexCharts/BoxplotCharts";
-import BubbleChart from "../pages/Charts/ApexCharts/BubbleChart";
-import ScatterCharts from "../pages/Charts/ApexCharts/ScatterCharts";
-import HeatmapCharts from "../pages/Charts/ApexCharts/HeatmapCharts";
-import TreemapCharts from "../pages/Charts/ApexCharts/TreemapCharts";
-import PieCharts from "../pages/Charts/ApexCharts/PieCharts";
-import RadialbarCharts from "../pages/Charts/ApexCharts/RadialbarCharts";
-import RadarCharts from "../pages/Charts/ApexCharts/RadarCharts";
-import PolarCharts from "../pages/Charts/ApexCharts/PolarCharts";
-
-import ChartsJs from "../pages/Charts/ChartsJs";
-import Echarts from "../pages/Charts/ECharts";
-
 //Job pages
 import Statistics from "../pages/Jobs/Statistics";
 import JobList from "../pages/Jobs/JobList/List";
@@ -233,8 +212,6 @@ import UserProfile from "../pages/Authentication/user-profile";
 import FileManager from "../pages/FileManager";
 import ToDoList from "../pages/ToDo";
 import UiLink from "../pages/BaseUi/UiLinks/UiLinks";
-import RangeArea from "../pages/Charts/ApexCharts/RangeAreaCharts"
-import FunnelCharts from "../pages/Charts/ApexCharts/FunnelCharts";
 import DashboardJob from "pages/Dashboardjob";
 import Kanbanboard from "pages/Tasks/KanbanBoard";
 import VerifyEmail from "../pages/Authentication/VerifyEmail";
@@ -340,30 +317,6 @@ const authProtectedRoutes = [
     {path: "/apps-nft-auction", element: <LiveAuction/>},
     {path: "/apps-nft-ranking", element: <Ranking/>},
     {path: "/apps-nft-wallet", element: <WalletConnect/>},
-
-    //charts
-    {path: "/charts-apex-line", element: <LineCharts/>},
-    {path: "/charts-apex-area", element: <AreaCharts/>},
-    {path: "/charts-apex-column", element: <ColumnCharts/>},
-    {path: "/charts-apex-bar", element: <BarCharts/>},
-    {path: "/charts-apex-mixed", element: <MixedCharts/>},
-    {path: "/charts-apex-timeline", element: <TimelineCharts/>},
-    {path: "/charts-apex-range-area", element: <RangeArea/>},
-    {path: "/charts-apex-funnel", element: <FunnelCharts/>},
-    {path: "/charts-apex-candlestick", element: <CandlestickChart/>},
-    {path: "/charts-apex-boxplot", element: <BoxplotCharts/>},
-    {path: "/charts-apex-bubble", element: <BubbleChart/>},
-    {path: "/charts-apex-scatter", element: <ScatterCharts/>},
-    {path: "/charts-apex-heatmap", element: <HeatmapCharts/>},
-    {path: "/charts-apex-treemap", element: <TreemapCharts/>},
-    {path: "/charts-apex-pie", element: <PieCharts/>},
-    {path: "/charts-apex-radialbar", element: <RadialbarCharts/>},
-    {path: "/charts-apex-radar", element: <RadarCharts/>},
-    {path: "/charts-apex-polar", element: <PolarCharts/>},
-
-    {path: "/charts-chartjs", element: <ChartsJs/>},
-    {path: "/charts-echarts", element: <Echarts/>},
-
 
     // Base Ui
     {path: "/ui-alerts", element: <UiAlerts/>},

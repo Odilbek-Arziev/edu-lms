@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
+    "types": [
+      "vite/client"
+    ],
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
     ],
-    "target": "es5",
+    "target": "ES2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -19,14 +22,13 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "baseUrl": "./src",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx"
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "src/config.ts"
