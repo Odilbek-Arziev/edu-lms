@@ -170,14 +170,36 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.SERVER_PATH }}
+
+            echo "==> Cleaning up Docker..."
+            docker image prune -af --filter "until=24h" || true
+            docker builder prune -af --filter "until=24h" || true
+            docker container prune -f || true
+            df -h / | tail -1
+
+            echo "==> Logging in to GHCR..."
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            echo "==> Pulling new images..."
             docker compose -f docker-compose.production.yml pull web frontend
+
+            echo "==> Running migrations..."
+            docker compose -f docker-compose.production.yml run --rm web python manage.py migrate --no-input
+
+            echo "==> Updating frontend (generates static)..."
             docker compose -f docker-compose.production.yml up -d --no-deps frontend
             docker compose -f docker-compose.production.yml wait frontend
-            docker compose -f docker-compose.production.yml run --rm web python manage.py migrate --no-input
+
+            echo "==> Updating web..."
             docker compose -f docker-compose.production.yml up -d --no-deps web
+
+            echo "==> Collecting static..."
             docker compose -f docker-compose.production.yml exec -T web python manage.py collectstatic --no-input
+
+            echo "==> Restarting nginx..."
             docker compose -f docker-compose.production.yml restart nginx
+
+            echo "==> Done."
 
       - name: Health check
         run: |
