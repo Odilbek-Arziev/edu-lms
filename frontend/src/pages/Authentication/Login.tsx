@@ -160,7 +160,7 @@ const Login = (props: any) => {
                                 <Card className="mt-4">
                                     <CardBody className="p-4">
                                         <div className="text-center mt-2">
-                                            <h5 className="text-primary">{props.t('welcome_back')}!</h5>
+                                            <h5 className="text-primary">{props.t('welcome_back')}</h5>
                                             <p className="text-muted">{props.t('login_to_continue')}.</p>
                                         </div>
                                         {error && error ? (<Alert color="danger"> {error} </Alert>) : null}
@@ -197,7 +197,7 @@ const Login = (props: any) => {
                                                 <div className="mb-3">
                                                     <div className="float-end">
                                                         <Link to="/forgot-password" className="text-muted">
-                                                            {props.t('forgot_password')}?
+                                                            {props.t('forgot_password')}
                                                         </Link>
                                                     </div>
                                                     <Label className="form-label"
