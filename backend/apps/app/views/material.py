@@ -1,3 +1,4 @@
+from rest_framework.parsers import MultiPartParser, FormParser
 from app.models import Material
 from app.serializers.material import MaterialSerializer
 from core.views.viewsets import BaseModelViewSet
@@ -5,7 +6,7 @@ from core.views.viewsets import BaseModelViewSet
 
 class MaterialViewSet(BaseModelViewSet):
     serializer_class = MaterialSerializer
-    lookup_field = 'slug'
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_queryset(self):
         params = self.request.query_params

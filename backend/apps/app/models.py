@@ -170,6 +170,7 @@ class Material(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     url = models.URLField(blank=True)
+    file = models.FileField(upload_to='materials/', blank=True, null=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
     objects = MaterialQuerySet.as_manager()
 
