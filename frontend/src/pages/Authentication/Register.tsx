@@ -237,16 +237,13 @@ const Register = (props: any) => {
                                 </CardBody>
                             </Card>
                             <div className="mt-4 text-center">
-                                <p className="mb-0">
-                                    {props.t('have_account')}?
-                                    <Link
-                                        to="/login"
-                                        className="fw-semibold text-primary text-decoration-underline"
-                                    >
-                                        {" "}
-                                        {props.t('sign_in')}
-                                    </Link>
-                                </p>
+                                <span className="mb-0 mx-2">{props.t('have_account')}</span>
+                                <Link
+                                    to="/login"
+                                    className="fw-semibold text-primary text-decoration-underline"
+                                >
+                                    {props.t('sign_in')}
+                                </Link>
                             </div>
                         </Col>
                     </Row>

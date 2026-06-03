@@ -1,0 +1,1 @@
+export {categoriesReducer, categoriesActions, categoriesThunk} from "./reducer";

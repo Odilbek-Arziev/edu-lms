@@ -127,7 +127,7 @@ const Login = (props: any) => {
 
     useEffect(() => {
         if (user && user) {
-            const updatedUserData =  user.email;
+            const updatedUserData = user.email;
             const updatedUserPassword = user.confirm_password;
             setUserLogin({
                 email: updatedUserData,
@@ -294,12 +294,11 @@ const Login = (props: any) => {
                                 </Card>
 
                                 <div className="mt-4 text-center">
-                                    <p className="mb-0">{props.t('no_account')}
-                                        ? <Link to="/register"
-                                                className="fw-semibold text-primary text-decoration-underline">
-                                            {props.t('sign_up')}
-                                        </Link>
-                                    </p>
+                                    <span className="mb-0 mx-2">{props.t('no_account')}</span>
+                                    <Link to="/register"
+                                          className="fw-semibold text-primary text-decoration-underline">
+                                        {props.t('sign_up')}
+                                    </Link>
                                 </div>
 
                             </Col>

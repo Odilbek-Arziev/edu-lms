@@ -14,9 +14,11 @@ services:
       - "6379:6379"
 
   web:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - .:/app/backend
+     - ./backend:/app/backend
     ports:
       - "8000:8000"
     depends_on:

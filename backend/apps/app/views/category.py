@@ -9,7 +9,6 @@ from app.serializers.course import CourseSerializer
 
 class CategoryViewSet(BaseModelViewSet):
     serializer_class = CategorySerializer
-    lookup_field = 'slug'
     pagination_class = None
 
     def get_queryset(self):

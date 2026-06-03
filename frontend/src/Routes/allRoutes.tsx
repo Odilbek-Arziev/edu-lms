@@ -227,6 +227,7 @@ import LanguageLines from "../pages/Custom/LanguageLines/LanguageLines";
 import Courses from "../pages/Custom/Courses/Courses";
 import Course from "../pages/Custom/Courses/Course";
 import LessonForm from "../pages/Custom/Lessons/LessonForm";
+import Categories from "../pages/Custom/Categories/Categories";
 
 
 const authProtectedRoutes = [
@@ -241,6 +242,7 @@ const authProtectedRoutes = [
     {path: "/course/:id", element: <Course/>},
     {path: "/lessons/create/:moduleId", element: <LessonForm/>},
     {path: "/lessons/edit/:lessonId", element: <LessonForm/>},
+    {path: "/categories", element: <Categories/>},
 
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},
