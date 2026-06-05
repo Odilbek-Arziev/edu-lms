@@ -128,12 +128,12 @@ class APIClient {
         return this.client.get(url, {params});
     };
 
-    create = (url: string, data: any): Promise<any> => {
-        return this.client.post(url, data);
+    create = (url: string, data: any, config?: AxiosRequestConfig): Promise<any> => {
+        return this.client.post(url, data, config);
     };
 
-    update = (url: string, data: any): Promise<any> => {
-        return this.client.patch(url, data);
+    update = (url: string, data: any, config?: AxiosRequestConfig): Promise<any> => {
+        return this.client.patch(url, data, config);
     };
 
     put = (url: string, data: any): Promise<any> => {

@@ -37,17 +37,27 @@ export function createCrudThunks(
             (data: any) =>
                 async (dispatch: any) => {
                     try {
-                        return await getApi().create(endpoint, data);
+                        const isFormData = data instanceof FormData;
+                        return await getApi().create(endpoint, data, {
+                            headers: isFormData
+                                ? {'Content-Type': 'multipart/form-data'}
+                                : {'Content-Type': 'application/json'}
+                        });
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
                     }
                 },
 
         update:
-            (id: number, data: any) =>
+            (data: any) =>
                 async (dispatch: any) => {
                     try {
-                        return await getApi().update(`${endpoint}${id}/`, data);
+                        const isFormData = data instanceof FormData;
+                        return await getApi().update(endpoint, data, {
+                            headers: isFormData
+                                ? {'Content-Type': 'multipart/form-data'}
+                                : {'Content-Type': 'application/json'}
+                        });
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
                     }

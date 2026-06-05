@@ -1,0 +1,1 @@
+export {materialsReducer, materialsActions, materialsThunk} from "./reducer";
