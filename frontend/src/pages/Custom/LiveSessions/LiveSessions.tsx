@@ -19,6 +19,10 @@ import {usersThunks} from "../../../slices/users/reducer";
 import {coursesThunks} from "../../../slices/courses/reducer";
 import Flatpickr from "react-flatpickr";
 
+interface Student { id: number; first_name: string; last_name: string; }
+interface Course { id: number; title: string; }
+
+
 const LiveSessions = (props: any) => {
     const dispatch = useDispatch<any>();
     const [search, setSearch] = useState<string>('');
@@ -86,18 +90,18 @@ const LiveSessions = (props: any) => {
                     link: response.link,
                     course_id: response.course.id,
                     teacher_id: response.teacher?.id,
-                    student_ids: response.students.map((student: object) => student.id)
+                    student_ids: response.students.map((student: Student) => student.id)
                 }
             });
         }
     }
 
-    const studentsOptions = students?.map((student: object) => ({
+    const studentsOptions = students?.map((student: Student) => ({
         value: student.id,
         label: `${student.first_name} ${student.last_name}`,
     })) || [];
 
-    const coursesOptions = courses?.map((course: object) => ({
+    const coursesOptions = courses?.map((course: Course) => ({
         value: course.title,
         label: course.title,
     })) || [];
@@ -247,7 +251,7 @@ const LiveSessions = (props: any) => {
                                 </td>
                                 <td>
                                     <div className="d-flex flex-wrap gap-1 justify-content-center">
-                                        {row.students.map((student) => (
+                                        {row.students.map((student: Student) => (
                                             <span
                                                 key={student.id}
                                                 className="badge bg-primary-subtle text-primary d-inline-flex align-items-center gap-1"
