@@ -4,10 +4,24 @@ from app.models import LiveSession, Course
 from app.serializers.course import CourseSerializer
 from users.serializers.user import UserSerializer
 
+from users.models import CustomUser
+
 
 class LiveSessionSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
-    students = UserSerializer(read_only=True)
+    students = UserSerializer(read_only=True, many=True)
+
+    course_id = serializers.PrimaryKeyRelatedField(
+        queryset=Course.objects.all(),
+        source='course',
+        write_only=True,
+    )
+    student_ids = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.all(),
+        source='students',
+        many=True,
+        write_only=True,
+    )
 
     class Meta:
         model = LiveSession
@@ -19,4 +33,6 @@ class LiveSessionSerializer(serializers.ModelSerializer):
             'link',
             'students',
             'course',
+            'course_id',
+            'student_ids'
         ]

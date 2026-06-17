@@ -9,7 +9,7 @@ from app.serializers.roles import RoleListSerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name']
+        fields = ['id', 'first_name', 'last_name']
 
 
 class UserAdminSerializer(serializers.ModelSerializer):

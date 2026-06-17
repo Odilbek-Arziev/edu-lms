@@ -82,6 +82,7 @@ import {LOGOUT} from "./auth/login/actions";
 import {lessonsReducer} from "./lessons";
 import {categoriesReducer} from "./categories";
 import {materialsReducer} from "./materials";
+import {liveSessionsReducer} from "./liveSessions/reducer";
 
 const appReducer = combineReducers({
     Layout: LayoutReducer,
@@ -121,6 +122,7 @@ const appReducer = combineReducers({
     Lessons: lessonsReducer,
     Categories: categoriesReducer,
     Materials: materialsReducer,
+    LiveSessions: liveSessionsReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

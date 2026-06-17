@@ -1,7 +1,7 @@
-import { createCrudSlice } from "../common/reducer";
-import { createCrudThunks } from "../common/thunk";
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload, Draft, PayloadAction } from "@reduxjs/toolkit";
-import { APIClient } from "../../helpers/api_helper";
+import {createCrudSlice} from "../common/reducer";
+import {createCrudThunks} from "../common/thunk";
+import {ActionCreatorWithoutPayload, ActionCreatorWithPayload, Draft, PayloadAction} from "@reduxjs/toolkit";
+import {APIClient} from "../../helpers/api_helper";
 import {UsersState} from "../../types/User";
 
 
@@ -11,19 +11,26 @@ const usersSlice = createCrudSlice<any>('users', {
             state.registerTypes = Array.isArray(action.payload)
                 ? action.payload
                 : action.payload?.results ?? [];
+        },
+
+        setUsers(state: Draft<UsersState<any>>, action: PayloadAction<any>) {
+            state.users = Array.isArray(action.payload)
+                ? action.payload
+                : action.payload?.results ?? [];
         }
     }
 });
 
 export const usersReducer = usersSlice.reducer;
 
-const { request, success, error, setRegisterTypes } = usersSlice.actions;
+const {request, success, error, setRegisterTypes, setUsers} = usersSlice.actions;
 
 export const usersActions = {
     request: request as ActionCreatorWithoutPayload,
     success: success as ActionCreatorWithPayload<any>,
     error: error as ActionCreatorWithPayload<string>,
-    setRegisterTypes: setRegisterTypes as ActionCreatorWithPayload<any>
+    setRegisterTypes: setRegisterTypes as ActionCreatorWithPayload<any>,
+    setUsers: setUsers as ActionCreatorWithPayload<any>,
 };
 
 const baseThunks = createCrudThunks('/users/', {
@@ -44,6 +51,20 @@ export const usersThunks = {
             return response;
         } catch (error: any) {
             const message = error.response?.data || 'Ошибка загрузки типов регистрации';
+            dispatch(usersActions.error(message));
+            return null;
+        }
+    },
+
+    getUsers: (type) => async (dispatch: any) => {
+        const api = new APIClient();
+
+        try {
+            const response = await api.get(`/users?role=${type}`);
+            dispatch(usersActions.setUsers(response));
+            return response;
+        } catch (error: any) {
+            const message = error.response?.data || 'Ошибка загрузки пользователей';
             dispatch(usersActions.error(message));
             return null;
         }

@@ -49,11 +49,11 @@ export function createCrudThunks(
                 },
 
         update:
-            (data: any) =>
+            (id: any, data: any) =>
                 async (dispatch: any) => {
                     try {
                         const isFormData = data instanceof FormData;
-                        return await getApi().update(endpoint, data, {
+                        return await getApi().update(`${endpoint}${id}/`, data, {
                             headers: isFormData
                                 ? {'Content-Type': 'multipart/form-data'}
                                 : {'Content-Type': 'application/json'}

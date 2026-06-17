@@ -229,6 +229,7 @@ import Course from "../pages/Custom/Courses/Course";
 import LessonForm from "../pages/Custom/Lessons/LessonForm";
 import Categories from "../pages/Custom/Categories/Categories";
 import Materials from "../pages/Custom/Materials/Materials";
+import LiveSessions from "../pages/Custom/LiveSessions/LiveSessions";
 
 
 const authProtectedRoutes = [
@@ -245,6 +246,7 @@ const authProtectedRoutes = [
     {path: "/lessons/edit/:lessonId", element: <LessonForm/>},
     {path: "/categories", element: <Categories/>},
     {path: "/materials", element: <Materials/>},
+    {path: "/live-sessions", element: <LiveSessions/>},
 
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},

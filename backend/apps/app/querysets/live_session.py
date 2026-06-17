@@ -21,11 +21,7 @@ class LiveSessionQuerySet(BaseQuerySet):
     def by_student(self, student):
         if not student:
             return self
-
-        return self.filter(
-            Q(student__first_name__icontains=student) |
-            Q(student__last_name__icontains=student)
-        )
+        return self.filter(students__id=student).distinct()
 
     def for_course(self, course):
         if not course:
