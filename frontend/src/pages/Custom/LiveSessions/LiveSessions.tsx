@@ -86,18 +86,18 @@ const LiveSessions = (props: any) => {
                     link: response.link,
                     course_id: response.course.id,
                     teacher_id: response.teacher?.id,
-                    student_ids: response.students.map((student) => student.id)
+                    student_ids: response.students.map((student: object) => student.id)
                 }
             });
         }
     }
 
-    const studentsOptions = students?.map((student: any) => ({
+    const studentsOptions = students?.map((student: object) => ({
         value: student.id,
         label: `${student.first_name} ${student.last_name}`,
     })) || [];
 
-    const coursesOptions = courses?.map((course: any) => ({
+    const coursesOptions = courses?.map((course: object) => ({
         value: course.title,
         label: course.title,
     })) || [];
@@ -187,8 +187,8 @@ const LiveSessions = (props: any) => {
                                     setSearch('');
                                     setStudentFilter(null);
                                     setCourseFilter(null);
-                                    setDateFrom('');
-                                    setDateTo('');
+                                    setDateFrom(null);
+                                    setDateTo(null);
                                 }}
                             >
                                 <FeatherIcon size={14} icon="x"/>

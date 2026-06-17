@@ -185,7 +185,10 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
                     multiple
                     name="student_ids"
                     onChange={(e) => {
-                        const selected = Array.from(e.target.selectedOptions, (o) => o.value);
+                        const selected = Array.from(
+                            (e.target as unknown as HTMLSelectElement).selectedOptions,
+                            (o) => (o as HTMLOptionElement).value
+                        );
                         validation.setFieldValue('student_ids', selected);
                     }}
                     onBlur={validation.handleBlur}

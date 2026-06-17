@@ -56,7 +56,7 @@ export const usersThunks = {
         }
     },
 
-    getUsers: (type) => async (dispatch: any) => {
+    getUsers: (type: string) => async (dispatch: any) => {
         const api = new APIClient();
 
         try {
