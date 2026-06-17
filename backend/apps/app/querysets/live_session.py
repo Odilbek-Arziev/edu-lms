@@ -1,5 +1,4 @@
 from core.querysets.base_queryset import BaseQuerySet
-from django.db.models import Q
 
 
 class LiveSessionQuerySet(BaseQuerySet):
@@ -23,16 +22,22 @@ class LiveSessionQuerySet(BaseQuerySet):
             return self
         return self.filter(students__id=student).distinct()
 
+    def by_teacher(self, teacher):
+        if not teacher:
+            return self
+        return self.filter(teacher=teacher).distinct()
+
     def for_course(self, course):
         if not course:
             return self
         return self.filter(course__title__icontains=course)
 
-    def list(self, search=None, date_from=None, date_to=None, student=None, course=None):
+    def list(self, search=None, date_from=None, date_to=None, teacher=None, student=None, course=None):
         return (
             self.search(search)
                 .within_period(date_from, date_to)
                 .by_student(student)
+                .by_teacher(teacher)
                 .for_course(course)
                 .order_by("-created_at")
         )

@@ -162,6 +162,7 @@ class LiveSession(BaseModel):
     link = models.URLField()
     objects = LiveSessionQuerySet.as_manager()
 
+    teacher = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, null=True, blank=True)
     students = models.ManyToManyField('users.CustomUser', related_name='live_sessions')
     course = models.ForeignKey('app.Course', on_delete=models.CASCADE, related_name='live_sessions')
 

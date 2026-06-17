@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 import * as Yup from "yup";
 import {coursesThunks} from "../../../slices/courses/reducer";
 import {usersThunks} from "../../../slices/users/reducer";
-
+import Flatpickr from "react-flatpickr";
 
 function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: FormProps) {
     const {t} = useTranslation();
@@ -18,6 +18,8 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
     const [coursesLoaded, setCoursesLoaded] = useState(false);
     const [students, setStudents] = useState<any[]>([]);
     const [studentsLoaded, setStudentsLoaded] = useState(false);
+    const [teachers, setTeachers] = useState<any[]>([]);
+    const [teachersLoaded, setTeachersLoaded] = useState(false);
 
     const validation: any = useFormik({
         enableReinitialize: true,
@@ -27,6 +29,7 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
             duration_minutes: 0,
             link: '',
             course_id: '',
+            teacher_id: '',
             student_ids: [],
         },
         validationSchema: Yup.object({
@@ -36,8 +39,9 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
             link: Yup.string().required(t('enter_link')),
             course_id: Yup.string().required(t('select_course')),
             student_ids: Yup.array().min(1, t('select_students')),
+            teacher_id: Yup.string().required(t('select_teacher')),
         }),
-        onSubmit: onSubmit
+        onSubmit
     });
 
     useEffect(() => {
@@ -54,7 +58,14 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
         });
     }, []);
 
-    if (!coursesLoaded || !studentsLoaded) return <Spinner/>;
+    useEffect(() => {
+        dispatch(usersThunks.getUsers('teacher')).then((res: any) => {
+            setTeachers(res?.results || []);
+            setTeachersLoaded(true);
+        });
+    }, []);
+
+    if (!coursesLoaded || !studentsLoaded || !teachersLoaded) return <Spinner/>;
 
     return (
         <Form onSubmit={validation.handleSubmit}>
@@ -76,15 +87,27 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
 
             <div className="mb-3">
                 <Label className="form-label">{t('scheduled_at')}</Label>
-                <Input
-                    name="scheduled_at"
-                    type="datetime-local"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
+                <Flatpickr
+                    className={
+                        "form-control" +
+                        (validation.touched.scheduled_at && validation.errors.scheduled_at ? " is-invalid" : "")
+                    }
+                    placeholder={t('enter_scheduled_at')}
                     value={validation.values.scheduled_at || ""}
-                    invalid={!!(validation.touched.scheduled_at && validation.errors.scheduled_at)}
+                    options={{
+                        enableTime: true,
+                        dateFormat: "Y-m-d H:i",
+                        time_24hr: true,
+                        minDate: "today",
+                    }}
+                    onChange={(dates: Date[]) => {
+                        validation.setFieldValue('scheduled_at', dates[0] ?? null);
+                    }}
+                    onClose={() => validation.setFieldTouched('scheduled_at', true)}
                 />
-                <FormFeedback>{validation.errors.scheduled_at}</FormFeedback>
+                {validation.touched.scheduled_at && validation.errors.scheduled_at && (
+                    <div className="invalid-feedback d-block">{validation.errors.scheduled_at}</div>
+                )}
             </div>
 
             <div className="mb-3">
@@ -113,6 +136,26 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
                     invalid={!!(validation.touched.link && validation.errors.link)}
                 />
                 <FormFeedback>{validation.errors.link}</FormFeedback>
+            </div>
+
+            <div className="mb-3">
+                <Label className="form-label">{t('teacher')}</Label>
+                <Input
+                    type="select"
+                    name="teacher_id"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.teacher_id || ""}
+                    invalid={!!(validation.touched.teacher_id && validation.errors.teacher_id)}
+                >
+                    <option value="">{t('select_teacher')}</option>
+                    {teachers.map((teacher: any) => (
+                        <option key={teacher.id} value={teacher.id}>
+                            {teacher.first_name} {teacher.last_name}
+                        </option>
+                    ))}
+                </Input>
+                <FormFeedback>{validation.errors.teacher_id}</FormFeedback>
             </div>
 
             <div className="mb-3">

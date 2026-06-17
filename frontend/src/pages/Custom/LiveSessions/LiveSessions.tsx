@@ -28,7 +28,6 @@ const LiveSessions = (props: any) => {
     const [courseFilter, setCourseFilter] = useState<any>(null);
     const [dateFrom, setDateFrom] = useState<Date | null>(null);
     const [dateTo, setDateTo] = useState<Date | null>(null);
-
     const {localData: liveSessions, isSearching, fetchData} = useFetchData(
         liveSessionsThunk.fetch,
         'live-sessions',
@@ -86,6 +85,7 @@ const LiveSessions = (props: any) => {
                     duration_minutes: response.duration_minutes,
                     link: response.link,
                     course_id: response.course.id,
+                    teacher_id: response.teacher?.id,
                     student_ids: response.students.map((student) => student.id)
                 }
             });
@@ -214,6 +214,7 @@ const LiveSessions = (props: any) => {
                             <th>{props.t('time')}</th>
                             <th>{props.t('duration_minutes')}</th>
                             <th>{props.t('link')}</th>
+                            <th>{props.t('teacher')}</th>
                             <th>{props.t('students')}</th>
                             <th>{props.t('course')}</th>
                             <th>{props.t('actions')}</th>
@@ -228,6 +229,22 @@ const LiveSessions = (props: any) => {
                                 <td>{new Date(row.scheduled_at).toLocaleTimeString('ru-RU')}</td>
                                 <td>{row.duration_minutes}</td>
                                 <td>{row.link}</td>
+                                <td>
+                                    <div className="d-flex flex-wrap gap-1 justify-content-center">
+                                            <span
+                                                className="badge bg-success-subtle text-success d-inline-flex align-items-center gap-1"
+                                                style={{fontSize: '0.75rem', padding: '0.4em 0.6em'}}
+                                            >
+                                                <FeatherIcon size={12} icon="book"/>
+                                                {
+                                                    row?.teacher
+                                                        ? `${row.teacher.first_name} ${row.teacher.last_name}`
+                                                        : `преподаватель`
+
+                                                }
+                                            </span>
+                                    </div>
+                                </td>
                                 <td>
                                     <div className="d-flex flex-wrap gap-1 justify-content-center">
                                         {row.students.map((student) => (

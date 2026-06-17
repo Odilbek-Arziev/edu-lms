@@ -19,6 +19,7 @@ class LiveSessionViewSet(BaseModelViewSet):
         date_from = params.get('date_from')
         date_to = params.get('date_to')
         student = params.get('student')
+        teacher = params.get('teacher')
         course = params.get('course')
 
         return LiveSession.objects.list(
@@ -26,6 +27,7 @@ class LiveSessionViewSet(BaseModelViewSet):
             date_from=date_from,
             date_to=date_to,
             student=student,
+            teacher=teacher,
             course=course
         )
 

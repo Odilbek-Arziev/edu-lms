@@ -9,6 +9,7 @@ from users.models import CustomUser
 
 class LiveSessionSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
+    teacher = UserSerializer(read_only=True)
     students = UserSerializer(read_only=True, many=True)
 
     course_id = serializers.PrimaryKeyRelatedField(
@@ -22,6 +23,11 @@ class LiveSessionSerializer(serializers.ModelSerializer):
         many=True,
         write_only=True,
     )
+    teacher_id = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.all(),
+        source='teacher',
+        write_only=True,
+    )
 
     class Meta:
         model = LiveSession
@@ -31,8 +37,10 @@ class LiveSessionSerializer(serializers.ModelSerializer):
             'scheduled_at',
             'duration_minutes',
             'link',
+            'teacher',
             'students',
             'course',
             'course_id',
-            'student_ids'
+            'student_ids',
+            'teacher_id'
         ]
