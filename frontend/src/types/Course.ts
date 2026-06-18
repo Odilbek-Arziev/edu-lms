@@ -10,3 +10,8 @@ export interface Course {
     is_public: boolean;
     category: string
 }
+
+export interface CourseSimplified {
+    id: number;
+    title: string;
+}

@@ -108,7 +108,7 @@ const Materials = (props: any) => {
                             </Button>
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center'
-                            onClick={showCreate}
+                                onClick={showCreate}
                         >
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
                             {props.t('create', {item: props.t('category')})}
@@ -155,12 +155,12 @@ const Materials = (props: any) => {
                                 </td>
                                 <td className='d-flex gap-1 justify-content-center'>
                                     <Button className='btn btn-info btn-sm'
-                                        onClick={() => getData(row.id)}
+                                            onClick={() => getData(row.id)}
                                     >
                                         <FeatherIcon color="white" size={12} icon="edit"/>
                                     </Button>
                                     <Button className='btn btn-danger btn-sm'
-                                        onClick={() => showDelete({id: row.id})}
+                                            onClick={() => showDelete({id: row.id})}
                                     >
                                         <FeatherIcon color="white" size={12} icon="trash"/>
                                     </Button>

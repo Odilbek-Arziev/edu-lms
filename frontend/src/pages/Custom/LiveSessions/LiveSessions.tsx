@@ -18,9 +18,9 @@ import CustomSelect from "../../../Components/Common/CustomSelect";
 import {usersThunks} from "../../../slices/users/reducer";
 import {coursesThunks} from "../../../slices/courses/reducer";
 import Flatpickr from "react-flatpickr";
+import {CourseSimplified} from "../../../types/Course";
+import {User} from "../../../types/User";
 
-interface Student { id: number; first_name: string; last_name: string; }
-interface Course { id: number; title: string; }
 
 
 const LiveSessions = (props: any) => {
@@ -32,6 +32,7 @@ const LiveSessions = (props: any) => {
     const [courseFilter, setCourseFilter] = useState<any>(null);
     const [dateFrom, setDateFrom] = useState<Date | null>(null);
     const [dateTo, setDateTo] = useState<Date | null>(null);
+
     const {localData: liveSessions, isSearching, fetchData} = useFetchData(
         liveSessionsThunk.fetch,
         'live-sessions',
@@ -90,22 +91,21 @@ const LiveSessions = (props: any) => {
                     link: response.link,
                     course_id: response.course.id,
                     teacher_id: response.teacher?.id,
-                    student_ids: response.students.map((student: Student) => student.id)
+                    student_ids: response.students.map((student: User) => student.id)
                 }
             });
         }
     }
 
-    const studentsOptions = students?.map((student: Student) => ({
+    const studentsOptions = students?.map((student: User) => ({
         value: student.id,
         label: `${student.first_name} ${student.last_name}`,
     })) || [];
 
-    const coursesOptions = courses?.map((course: Course) => ({
+    const coursesOptions = courses?.map((course: CourseSimplified) => ({
         value: course.title,
         label: course.title,
     })) || [];
-
 
     useEffect(() => {
         fetchData();
@@ -251,7 +251,7 @@ const LiveSessions = (props: any) => {
                                 </td>
                                 <td>
                                     <div className="d-flex flex-wrap gap-1 justify-content-center">
-                                        {row.students.map((student: Student) => (
+                                        {row.students.map((student: User) => (
                                             <span
                                                 key={student.id}
                                                 className="badge bg-primary-subtle text-primary d-inline-flex align-items-center gap-1"

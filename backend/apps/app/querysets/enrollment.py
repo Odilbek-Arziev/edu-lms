@@ -3,13 +3,13 @@ from django.db.models import Q
 
 
 class EnrollmentQuerySet(BaseQuerySet):
-    def by_student(self, student):
-        if not student:
+    def search(self, term=None):
+        if not term:
             return self
 
         return self.filter(
-            Q(student__first_name__icontains=student) |
-            Q(student__last_name__icontains=student)
+            Q(student__first_name__icontains=term) |
+            Q(student__last_name__icontains=term)
         )
 
     def within_period(self, date_from=None, date_to=None):
@@ -32,9 +32,9 @@ class EnrollmentQuerySet(BaseQuerySet):
             return self
         return self.filter(course__title__icontains=course)
 
-    def list(self, date_from=None, date_to=None, status=None, course=None, student=None):
+    def list(self, date_from=None, date_to=None, status=None, course=None, search=None):
         return (
-            self.by_student(student)
+            self.search(search)
                 .for_status(status)
                 .for_course(course)
                 .within_period(date_from, date_to)

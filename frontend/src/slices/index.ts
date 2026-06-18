@@ -83,6 +83,7 @@ import {lessonsReducer} from "./lessons";
 import {categoriesReducer} from "./categories";
 import {materialsReducer} from "./materials";
 import {liveSessionsReducer} from "./liveSessions/reducer";
+import {enrollmentsReducer} from "./enrollments/reducer";
 
 const appReducer = combineReducers({
     Layout: LayoutReducer,
@@ -123,6 +124,7 @@ const appReducer = combineReducers({
     Categories: categoriesReducer,
     Materials: materialsReducer,
     LiveSessions: liveSessionsReducer,
+    Enrollments: enrollmentsReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

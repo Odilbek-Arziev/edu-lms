@@ -171,7 +171,7 @@ const Menu = (props: any) => {
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create', {item: props.t('menu')})}
+                            {props.t('add', {item: props.t('menu')})}
                         </Button>
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>

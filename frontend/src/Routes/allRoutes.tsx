@@ -230,6 +230,7 @@ import LessonForm from "../pages/Custom/Lessons/LessonForm";
 import Categories from "../pages/Custom/Categories/Categories";
 import Materials from "../pages/Custom/Materials/Materials";
 import LiveSessions from "../pages/Custom/LiveSessions/LiveSessions";
+import Enrollments from "../pages/Custom/Enrollments/Enrollments";
 
 
 const authProtectedRoutes = [
@@ -247,6 +248,7 @@ const authProtectedRoutes = [
     {path: "/categories", element: <Categories/>},
     {path: "/materials", element: <Materials/>},
     {path: "/live-sessions", element: <LiveSessions/>},
+    {path: "/", element: <Enrollments/>},
 
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},

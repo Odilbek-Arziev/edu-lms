@@ -18,6 +18,33 @@ import image4 from "../../assets/images/companies/img-4.png";
 import image6 from "../../assets/images/companies/img-6.png";
 import image8 from "../../assets/images/companies/img-8.png";
 
+const enrollmentsTiles = [
+    {
+        id: 1,
+        label: "active",
+        labelClass: "muted",
+        counterClass: 'text-success'
+    },
+    {
+        id: 1,
+        label: "completed",
+        labelClass: "muted",
+        counterClass: 'text-info'
+    },
+    {
+        id: 1,
+        label: "suspended",
+        labelClass: "muted",
+        counterClass: 'text-warning'
+    },
+    {
+        id: 1,
+        label: "dropped",
+        labelClass: "muted",
+        counterClass: 'text-danger'
+    },
+];
+
 const tileBoxs1 = [
     {
         id: 1,
@@ -309,27 +336,27 @@ const tileBoxes5 = [
         id: 1,
         img: image3,
         title: "Marketing Director",
-        class : "",
+        class: "",
         year: "(2-4 Yrs Exp.)"
     },
     {
         id: 2,
         img: image4,
-        class : "",
+        class: "",
         title: "Sr. Web Designer",
         year: "(2+ Yrs Exp.)"
     },
     {
         id: 3,
         img: image6,
-        class : "bg-primary-subtle shadow-none bg-opacity-10",
+        class: "bg-primary-subtle shadow-none bg-opacity-10",
         title: "Sr. Web Designer",
         year: "(2+ Yrs Exp.)"
     },
     {
         id: 4,
         img: image8,
-        class : "bg-info-subtle shadow-none bg-opacity-10",
+        class: "bg-info-subtle shadow-none bg-opacity-10",
         title: "Sr. Web Designer",
         year: "(2+ Yrs Exp.)"
     },
@@ -361,9 +388,9 @@ const otherWidgets2 = [
             },
         ],
         progressBar: [
-            { id: 1, bgColor: "bg-success", width: "30%" },
-            { id: 2, bgColor: "bg-info", width: "50%" },
-            { id: 3, width: "20%" },
+            {id: 1, bgColor: "bg-success", width: "30%"},
+            {id: 2, bgColor: "bg-info", width: "50%"},
+            {id: 3, width: "20%"},
         ],
     },
     {
@@ -391,9 +418,9 @@ const otherWidgets2 = [
             },
         ],
         progressBar: [
-            { id: 1, bgColor: "bg-success", width: "30%" },
-            { id: 2, bgColor: "bg-info", width: "0%" },
-            { id: 3, width: "70%" },
+            {id: 1, bgColor: "bg-success", width: "30%"},
+            {id: 2, bgColor: "bg-info", width: "0%"},
+            {id: 3, width: "70%"},
         ],
     },
     {
@@ -421,9 +448,9 @@ const otherWidgets2 = [
             },
         ],
         progressBar: [
-            { id: 1, bgColor: "bg-success", width: "60%" },
-            { id: 2, bgColor: "bg-info", width: "25%" },
-            { id: 3, width: "15%" },
+            {id: 1, bgColor: "bg-success", width: "60%"},
+            {id: 2, bgColor: "bg-info", width: "25%"},
+            {id: 3, width: "15%"},
         ],
     },
 ];
@@ -436,10 +463,10 @@ const widgetsActivities = [
         time: "12:00am - 03:30pm",
         caption: "Meeting for campaign with sales team",
         subItem: [
-            { id: 1, img: avatar1 },
-            { id: 2, img: avatar2 },
-            { id: 3, img: avatar3 },
-            { id: 4, imgNumber: "5", bgcolor: "bg-info" },
+            {id: 1, img: avatar1},
+            {id: 2, img: avatar2},
+            {id: 3, img: avatar3},
+            {id: 4, imgNumber: "5", bgcolor: "bg-info"},
         ],
     },
     {
@@ -449,11 +476,11 @@ const widgetsActivities = [
         time: "02:00pm - 03:45pm",
         caption: "Adding a new event with attachments",
         subItem: [
-            { id: 1, img: avatar4 },
-            { id: 2, img: avatar5 },
-            { id: 3, img: avatar6 },
-            { id: 4, img: avatar7 },
-            { id: 5, imgNumber: "3", bgcolor: "bg-success" },
+            {id: 1, img: avatar4},
+            {id: 2, img: avatar5},
+            {id: 3, img: avatar6},
+            {id: 4, img: avatar7},
+            {id: 5, imgNumber: "3", bgcolor: "bg-success"},
         ],
     },
     {
@@ -463,10 +490,10 @@ const widgetsActivities = [
         time: "04:30pm - 07:15pm",
         caption: "Create new project Bundling Product",
         subItem: [
-            { id: 1, img: avatar8 },
-            { id: 2, img: avatar1 },
-            { id: 3, img: avatar2 },
-            { id: 4, imgNumber: "4", bgcolor: "bg-primary" },
+            {id: 1, img: avatar8},
+            {id: 2, img: avatar1},
+            {id: 3, img: avatar2},
+            {id: 4, imgNumber: "4", bgcolor: "bg-primary"},
         ],
     },
     {
@@ -476,10 +503,10 @@ const widgetsActivities = [
         time: "10:30am - 01:15pm",
         caption: "Weekly closed sales won checking with sales team",
         subItem: [
-            { id: 1, img: avatar1 },
-            { id: 2, img: avatar5 },
-            { id: 3, img: avatar2 },
-            { id: 4, imgNumber: "9", bgcolor: "bg-warning" },
+            {id: 1, img: avatar1},
+            {id: 2, img: avatar5},
+            {id: 3, img: avatar2},
+            {id: 4, imgNumber: "9", bgcolor: "bg-warning"},
         ],
     },
 ];
@@ -526,7 +553,7 @@ const widgetsTasks = [
 const widgetsAudiences = [
     {
         id: 1,
-        subCounter: [{ id: 1, counter: "854", suffix: "", prefix: "" }],
+        subCounter: [{id: 1, counter: "854", suffix: "", prefix: ""}],
         caption: "Avg. Session",
         percentage: "49%",
     },
@@ -578,7 +605,7 @@ const widgetsPortfolio = [
         badgeClass: "primary",
         price: "$19,405.12",
         priceClass: "success",
-        coinNameClass:"primary"
+        coinNameClass: "primary"
     },
     {
         id: 2,
@@ -589,7 +616,7 @@ const widgetsPortfolio = [
         badgeClass: "info",
         price: "$40552.18",
         priceClass: "danger",
-        coinNameClass:"info"
+        coinNameClass: "info"
     },
     {
         id: 3,
@@ -600,7 +627,7 @@ const widgetsPortfolio = [
         badgeClass: "warning",
         price: "$15824.58",
         priceClass: "success",
-        coinNameClass:"warning"
+        coinNameClass: "warning"
     },
     {
         id: 4,
@@ -611,7 +638,7 @@ const widgetsPortfolio = [
         badgeClass: "success",
         price: "$30635.84",
         priceClass: "success",
-        coinNameClass:"success"
+        coinNameClass: "success"
     },
 ];
 
@@ -666,4 +693,5 @@ export {
     widgetsPortfolio,
     otherWidgets2,
     ecommerceWidget,
+    enrollmentsTiles
 };

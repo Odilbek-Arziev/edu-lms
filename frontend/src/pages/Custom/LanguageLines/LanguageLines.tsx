@@ -172,18 +172,20 @@ const LanguageLines = (props: any) => {
                         </tbody>
                     </Table>
                 </Container>
+                <Container fluid>
+                    {count > 10 ? (
+                        <PaginationButtons
+                            count={count}
+                            currentPage={page}
+                            perPageData={PER_PAGE}
+                            setCurrentPage={(p) => {
+                                setPage(p);
+                                dispatch(fetchLanguageLines({page: p}));
+                            }}
+                        />
+                    ) : null}
+                </Container>
             </div>
-            {count > 10 ? (
-                <PaginationButtons
-                    count={count}
-                    currentPage={page}
-                    perPageData={PER_PAGE}
-                    setCurrentPage={(p) => {
-                        setPage(p);
-                        dispatch(fetchLanguageLines({page: p}));
-                    }}
-                />
-            ) : null}
         </React.Fragment>
     );
 };
