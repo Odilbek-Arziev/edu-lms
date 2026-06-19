@@ -231,24 +231,25 @@ import Categories from "../pages/Custom/Categories/Categories";
 import Materials from "../pages/Custom/Materials/Materials";
 import LiveSessions from "../pages/Custom/LiveSessions/LiveSessions";
 import Enrollments from "../pages/Custom/Enrollments/Enrollments";
+import AccessDenied from "../pages/Custom/AuthPages/AccessDenied";
 
 
 const authProtectedRoutes = [
     {path: "/dashboard", element: <DashboardEcommerce/>},
-    {path: "/menu", element: <Menu/>},
-    {path: "/language-lines", element: <LanguageLines/>},
-    {path: "/roles", element: <Roles/>},
-    {path: "/users", element: <Users/>},
-    {path: "/role-permissions/:id", element: <RolePermissions/>},
-    {path: "/courses", element: <Courses/>},
-    {path: "/course/:id", element: <Course/>},
-    {path: "/course/:id", element: <Course/>},
-    {path: "/lessons/create/:moduleId", element: <LessonForm/>},
-    {path: "/lessons/edit/:lessonId", element: <LessonForm/>},
-    {path: "/categories", element: <Categories/>},
-    {path: "/materials", element: <Materials/>},
-    {path: "/live-sessions", element: <LiveSessions/>},
-    {path: "/", element: <Enrollments/>},
+    {path: "/menu", element: <Menu/>, roles: ['manager']},
+    {path: "/language-lines", element: <LanguageLines/>, roles: ['manager']},
+    {path: "/roles", element: <Roles/>, roles: ['manager']},
+    {path: "/users", element: <Users/>, roles: ['manager']},
+    {path: "/role-permissions/:id", element: <RolePermissions/>, roles: ['manager']},
+    {path: "/courses", element: <Courses/>, roles: ['manager', 'teacher']},
+    {path: "/course/:id", element: <Course/>, roles: ['manager', 'teacher']},
+    {path: "/lessons/create/:moduleId", element: <LessonForm/>, roles: ['manager', 'teacher']},
+    {path: "/lessons/edit/:lessonId", element: <LessonForm/>, roles: ['manager', 'teacher']},
+    {path: "/categories", element: <Categories/>, roles: ['manager']},
+    {path: "/materials", element: <Materials/>, roles: ['manager', 'teacher']},
+    {path: "/live-sessions", element: <LiveSessions/>, roles: ['manager', 'teacher']},
+    {path: "/enrollments", element: <Enrollments/>, roles: ['manager']},
+    {path: "/access-denied", element: <AccessDenied/>},
 
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},

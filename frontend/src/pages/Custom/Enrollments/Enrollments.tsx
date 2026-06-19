@@ -160,12 +160,12 @@ const Enrollments = (props: any) => {
     }, []);
 
     useEffect(() => {
-        if (loading) {
+        if (loading || isSearching) {
             showLoading(props.t('loading'), props.t('wait'));
         } else {
             closeLoading()
         }
-    }, [loading]);
+    }, [loading, isSearching]);
 
     useEffect(() => {
         dispatch(enrollmentsThunk.getStats());
@@ -261,7 +261,7 @@ const Enrollments = (props: any) => {
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('enroll')}
+                           {props.t('create')}
                         </Button>
                     </div>
                     <Table
@@ -337,7 +337,7 @@ const Enrollments = (props: any) => {
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan={5} className="text-center">{props.t('no_data_found')}</td>
+                                <td colSpan={7} className="text-center">{props.t('no_data_found')}</td>
                             </tr>
                         )}
                         </tbody>

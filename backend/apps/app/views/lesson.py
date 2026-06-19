@@ -10,10 +10,12 @@ from core.views.viewsets import BaseModelViewSet
 from app.serializers.lesson import LessonSerializer
 from app.serializers.homework import HomeworkSerializer
 from app.serializers.material import MaterialSerializer
+from users.permissions.permissions import role_required
 
 
 class LessonViewSet(BaseModelViewSet):
     serializer_class = LessonSerializer
+    permission_classes = [role_required('manager', 'teacher', 'student')]
 
     def get_queryset(self):
         params = self.request.query_params

@@ -5,10 +5,12 @@ from core.views.viewsets import BaseModelViewSet
 from app.models import Homework, HomeworkCriterion
 from app.serializers.homework import HomeworkSerializer
 from app.serializers.homework_criterion import HomeworkCriterionSerializer
+from users.permissions.permissions import role_required
 
 
 class HomeworkViewSet(BaseModelViewSet):
     serializer_class = HomeworkSerializer
+    permission_classes = [role_required('manager', 'teacher')]
 
     def get_queryset(self):
         params = self.request.query_params

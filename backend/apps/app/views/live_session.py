@@ -7,10 +7,12 @@ from app.models import LiveSession
 from app.serializers.live_session import LiveSessionSerializer
 
 from apps.users.serializers.user import UserSerializer
+from users.permissions.permissions import role_required
 
 
 class LiveSessionViewSet(BaseModelViewSet):
     serializer_class = LiveSessionSerializer
+    permission_classes = [role_required('manager', 'teacher', 'student')]
 
     def get_queryset(self):
         params = self.request.query_params

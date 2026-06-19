@@ -75,7 +75,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-            "role": getattr(user, "role", None),
+            "roles": list(user.groups.values_list("name", flat=True)),
             "email": user.email.lower(),
             "username": user.username,
         }

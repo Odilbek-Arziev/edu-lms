@@ -5,11 +5,13 @@ from app.paginations.language_line import BasePagination
 from django.db.models import Count, Q
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from users.permissions.permissions import role_required
 
 
 class EnrollmentViewSet(BaseModelViewSet):
     serializer_class = EnrollmentSerializer
     pagination_class = BasePagination
+    permission_classes = [role_required('manager')]
 
     def get_queryset(self):
         params = self.request.query_params

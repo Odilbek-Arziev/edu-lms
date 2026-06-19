@@ -3,10 +3,12 @@ from core.views.viewsets import BaseModelViewSet
 from app.models import HomeworkSubmission
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from users.permissions.permissions import role_required
 
 
 class HomeworkSubmissionViewSet(BaseModelViewSet):
     serializer_class = HomeworkSubmissionSerializer
+    permission_classes = [role_required('manager', 'teacher')]
 
     def get_queryset(self):
         params = self.request.query_params

@@ -20,6 +20,7 @@ from app.serializers.homework_submission import HomeworkSubmissionSerializer
 from app.serializers.live_session import LiveSessionSerializer
 
 from apps.users.serializers.user import UserSerializer
+from apps.users.permissions.permissions import role_required
 
 
 class CourseViewSet(BaseModelViewSet):

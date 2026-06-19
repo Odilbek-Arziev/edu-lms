@@ -8,6 +8,7 @@ import VerticalLayout from "../Layouts/index";
 //routes
 import {authProtectedRoutes, publicRoutes} from "./allRoutes";
 import AuthProtected from './AuthProtected';
+import RoleProtected from "./RoleProtected";
 
 const Index = () => {
     return (
@@ -29,7 +30,12 @@ const Index = () => {
                             path={route.path}
                             element={
                                 <AuthProtected>
-                                    <VerticalLayout>{route.element}</VerticalLayout>
+                                    <VerticalLayout>
+                                        {route.roles
+                                            ? <RoleProtected allowedRoles={route.roles}>{route.element}</RoleProtected>
+                                            : route.element
+                                        }
+                                    </VerticalLayout>
                                 </AuthProtected>
                             }
                             key={idx}

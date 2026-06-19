@@ -6,10 +6,13 @@ from app.serializers.category import CategorySerializer
 from core.views.viewsets import BaseModelViewSet
 from app.serializers.course import CourseSerializer
 
+from users.permissions.permissions import role_required
+
 
 class CategoryViewSet(BaseModelViewSet):
     serializer_class = CategorySerializer
     pagination_class = None
+    permission_classes = [role_required('manager')]
 
     def get_queryset(self):
         search = self.request.query_params.get("search")

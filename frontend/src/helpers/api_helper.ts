@@ -36,6 +36,12 @@ const errorInterceptor = (error: any) => {
             return;
         }
 
+        if (status === 403) {
+            console.warn('Нет прав доступа (403)')
+            window.location.href = '/access-denied';
+            return Promise.reject(error)
+        }
+
         return Promise.reject(error);
     }
 

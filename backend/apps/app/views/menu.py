@@ -5,10 +5,12 @@ from rest_framework import permissions
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
+from apps.users.permissions.permissions import role_required
+
 
 class MenuViewSet(BaseModelViewSet):
     serializer_class = MenuSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.AllowAny]
 
     @extend_schema(
         parameters=[
