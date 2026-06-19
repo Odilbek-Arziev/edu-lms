@@ -28,6 +28,7 @@ export function createCrudThunks(
                     } catch (e: any) {
                         if (!skipReduxUpdate) {
                             dispatch(actions.error(e.response?.data || 'Ошибка загрузки'));
+                            throw e;
                         }
                         return null;
                     }
@@ -45,6 +46,7 @@ export function createCrudThunks(
                         });
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
+                        throw e;
                     }
                 },
 
@@ -60,6 +62,7 @@ export function createCrudThunks(
                         });
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
+                        throw e;
                     }
                 },
 
@@ -70,6 +73,7 @@ export function createCrudThunks(
                         return await getApi().delete(`${endpoint}${id}/`);
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
+                        throw e;
                     }
                 },
 
@@ -80,6 +84,7 @@ export function createCrudThunks(
                         return await getApi().get(`${endpoint}${id}/`);
                     } catch (e: any) {
                         dispatch(actions.error(e.response?.data));
+                        throw e;
                     }
                 }
     };

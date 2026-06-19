@@ -30,7 +30,7 @@ class EnrollmentQuerySet(BaseQuerySet):
     def for_course(self, course):
         if not course:
             return self
-        return self.filter(course__title__icontains=course)
+        return self.filter(course__title=course)
 
     def list(self, date_from=None, date_to=None, status=None, course=None, search=None):
         return (

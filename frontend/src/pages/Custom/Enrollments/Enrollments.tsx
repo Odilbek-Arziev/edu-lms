@@ -4,8 +4,8 @@ import {
     Card,
     CardBody,
     Col,
-    Container, Progress,
-    Row, Table,
+    Container, DropdownItem, DropdownMenu, DropdownToggle, Progress,
+    Row, Table, UncontrolledDropdown,
 } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {withTranslation} from "react-i18next";
@@ -22,6 +22,12 @@ import {closeLoading, showLoading} from "../../../utils/swal";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
 import {RootState} from "../../../slices";
+import {useModal} from "../../../Components/Hooks/useModal";
+import EnrollmentCreate from "../../../Components/Custom/Enrollments/EnrollmentCreate";
+import {useFetchData} from "../../../hooks/useFetchData";
+import {EditModalProps} from "../../../types/editModal";
+import EnrollmentEdit from "../../../Components/Custom/Enrollments/EnrollmentEdit";
+import EnrollmentDelete from "../../../Components/Custom/Enrollments/EnrollmentDelete";
 
 const Enrollments = (props: any) => {
     const dispatch = useDispatch<any>();
@@ -31,8 +37,20 @@ const Enrollments = (props: any) => {
     const [statusFilter, setStatusFilter] = useState<any>(null);
     const [page, setPage] = useState<number>(1);
 
-    const {items: enrollments, loading, count, stats} = useSelector(
+    const {loading, count, stats} = useSelector(
         (state: RootState) => state.Enrollments
+    );
+
+    const {localData, isSearching, fetchData} = useFetchData(
+        enrollmentsThunk.fetch,
+        'enrollments',
+        () => ({
+            page,
+            perPage: PER_PAGE,
+            ...(search && {search}),
+            ...(courseFilter && {course: courseFilter}),
+            ...(statusFilter && {status: statusFilter}),
+        })
     );
 
     const coursesOptions = courses?.map((course: Course) => ({
@@ -67,6 +85,74 @@ const Enrollments = (props: any) => {
         }))
     }, [stats])
 
+
+    const [showCreate, hideCreate] = useModal(
+        <EnrollmentCreate onSuccess={() => {
+            fetchData();
+            dispatch(enrollmentsThunk.getStats());
+            hideCreate();
+        }} onCancel={() => hideCreate()}/>,
+    )
+
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <EnrollmentEdit
+                {...props}
+                onSuccess={() => {
+                    fetchData();
+                    dispatch(enrollmentsThunk.getStats());
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <EnrollmentDelete
+                {...props}
+                onSuccess={() => {
+                    fetchData();
+                    dispatch(enrollmentsThunk.getStats());
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
+
+
+    const handleStatusChange = async (id: number, status: string) => {
+        await dispatch(enrollmentsThunk.update(id, {status}));
+        fetchData();
+        dispatch(enrollmentsThunk.getStats());
+    };
+
+    async function getData(id: number) {
+        const response = await dispatch(enrollmentsThunk.getById(id));
+
+        if (response) {
+            showEdit({
+                id: id,
+                initialValues: {
+                    course_id: response.course.id,
+                    student_id: response.student?.id,
+                    status: response.status,
+                    progress: response.progress,
+                    final_grade: response.final_grade
+                }
+            });
+        }
+    }
+
+    const statusColors: Record<string, string> = {
+        active: "success",
+        completed: "info",
+        dropped: "danger",
+        suspended: "warning",
+    }
+
     useEffect(() => {
         dispatch(coursesThunks.fetch()).then((res: any) => {
             setCourses(res?.results || []);
@@ -82,12 +168,12 @@ const Enrollments = (props: any) => {
     }, [loading]);
 
     useEffect(() => {
-        dispatch(enrollmentsThunk.fetch({page, search}));
-    }, [dispatch, page, search]);
-
-    useEffect(() => {
         dispatch(enrollmentsThunk.getStats());
     }, [dispatch]);
+
+    useEffect(() => {
+        fetchData()
+    }, [page, search, courseFilter, statusFilter])
 
     document.title = props.t('enrollments');
 
@@ -173,7 +259,7 @@ const Enrollments = (props: any) => {
                                 {props.t('clear')}
                             </Button>
                         </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center'>
+                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
                             {props.t('enroll')}
                         </Button>
@@ -192,12 +278,32 @@ const Enrollments = (props: any) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {enrollments && enrollments.length > 0 ? enrollments?.map((row: any, idx: number) => (
+                        {localData && localData.length > 0 ? localData?.map((row: any, idx: number) => (
                             <tr key={row.id || idx}>
                                 <td>{(page - 1) * PER_PAGE + idx + 1}</td>
                                 <td>{`${row.student.first_name} ${row.student.last_name}`}</td>
                                 <td>{row.course.title}</td>
-                                <td>{props.t(row.status)}</td>
+                                <td>
+                                    <UncontrolledDropdown>
+                                        <DropdownToggle tag="span" style={{cursor: "pointer"}}>
+                                            <span className={`badge bg-${statusColors[row.status] ?? 'secondary'}`}>
+                                                {props.t(row.status)} <FeatherIcon icon="chevron-down" size={10}/>
+                                            </span>
+                                        </DropdownToggle>
+                                        <DropdownMenu>
+                                            {Object.keys(statusColors).map((st) => (
+                                                <DropdownItem
+                                                    key={st}
+                                                    active={st === row.status}
+                                                    onClick={() => handleStatusChange(row.id, st)}
+                                                >
+                                                    <span className={`badge bg-${statusColors[st]} me-2`}>&nbsp;</span>
+                                                    {props.t(st)}
+                                                </DropdownItem>
+                                            ))}
+                                        </DropdownMenu>
+                                    </UncontrolledDropdown>
+                                </td>
                                 <td>
                                     <div className="d-flex align-items-center">
                                         <div className="flex-grow-1 me-2">
@@ -218,10 +324,12 @@ const Enrollments = (props: any) => {
                                 <td>{row.final_grade ?? '-'}</td>
                                 <td className='d-flex gap-1 justify-content-center'>
                                     <Button className='btn btn-info btn-sm'
+                                            onClick={() => getData(row.id)}
                                     >
                                         <FeatherIcon color="white" size={12} icon="edit"/>
                                     </Button>
                                     <Button className='btn btn-danger btn-sm'
+                                            onClick={() => showDelete({id: row.id})}
                                     >
                                         <FeatherIcon color="white" size={12} icon="trash"/>
                                     </Button>
