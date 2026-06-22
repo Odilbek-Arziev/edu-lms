@@ -14,8 +14,15 @@ class LiveSessionViewSet(BaseModelViewSet):
     serializer_class = LiveSessionSerializer
     permission_classes = [role_required('manager', 'teacher', 'student')]
 
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve'):
+            return [role_required('manager', 'teacher')()]
+
+        return [role_required('manager')()]
+
     def get_queryset(self):
         params = self.request.query_params
+        user = self.request.user
 
         search = params.get('search')
         date_from = params.get('date_from')
@@ -23,6 +30,14 @@ class LiveSessionViewSet(BaseModelViewSet):
         student = params.get('student')
         teacher = params.get('teacher')
         course = params.get('course')
+
+        user_roles = user.groups.values_list('name', flat=True)
+
+        if not user.is_superuser and 'manager' not in user_roles:
+            if 'teacher' in user_roles:
+                teacher = user.id
+            elif 'student' in user_roles:
+                student = user.id
 
         return LiveSession.objects.list(
             search=search,

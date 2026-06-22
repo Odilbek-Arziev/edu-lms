@@ -26,6 +26,18 @@ from apps.users.permissions.permissions import role_required
 class CourseViewSet(BaseModelViewSet):
     serializer_class = CourseSerializer
 
+    def get_permissions(self):
+        read_actions = (
+            'list', 'retrieve',
+            'levels', 'languages',
+            'students', 'enrollments', 'homeworks',
+            'homework_submissions', 'live_sessions',
+        )
+        if self.action in read_actions:
+            return [role_required('manager', 'teacher')()]
+
+        return [role_required('manager')()]
+
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return CourseNestedSerializer

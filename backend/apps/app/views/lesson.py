@@ -15,14 +15,20 @@ from users.permissions.permissions import role_required
 
 class LessonViewSet(BaseModelViewSet):
     serializer_class = LessonSerializer
-    permission_classes = [role_required('manager', 'teacher', 'student')]
+
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve'):
+            return [role_required('manager', 'teacher')()]
+
+        return [role_required('manager')()]
 
     def get_queryset(self):
         params = self.request.query_params
         search = params.get('search')
         course = params.get('course')
+        module = params.get('module')
 
-        queryset = Lesson.objects.list(search=search, course=course)
+        queryset = Lesson.objects.list(search=search, course=course, module=module)
 
         return queryset
 

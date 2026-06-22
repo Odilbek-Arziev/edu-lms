@@ -30,7 +30,7 @@ class LiveSessionQuerySet(BaseQuerySet):
     def for_course(self, course):
         if not course:
             return self
-        return self.filter(course__title__icontains=course)
+        return self.filter(course__title=course)
 
     def list(self, search=None, date_from=None, date_to=None, teacher=None, student=None, course=None):
         return (

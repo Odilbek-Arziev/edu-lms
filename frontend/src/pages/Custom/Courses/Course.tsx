@@ -25,6 +25,7 @@ import {EditModalProps} from "../../../types/editModal";
 import ModuleEdit from "../../../Components/Custom/Modules/ModuleEdit";
 import {modulesThunks} from "../../../slices/modules";
 import LessonDelete from "../../../Components/Custom/Lessons/LessonDelete";
+import {getUserRoles} from "../../../helpers/getUserRoles";
 
 const Course = (props: any) => {
     const navigate = useNavigate();
@@ -34,6 +35,8 @@ const Course = (props: any) => {
     const dispatch = useDispatch<any>();
     const {loading, currentCourse} = useSelector((state: RootState) => state.Courses);
     const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+    const roles = getUserRoles();
+    const canManage = roles.includes('manager')
 
     const toggleNode = (nodeId: string) => {
         setExpandedNodes(prev => {
@@ -172,15 +175,18 @@ const Course = (props: any) => {
                             </Button>
                         </div>
 
-                        <Button
-                            color="success"
-                            size="sm"
-                            className='d-flex gap-1 align-items-center'
-                            onClick={showCreate}
-                        >
-                            <FeatherIcon size={14} icon="plus-circle"/>
-                            {props.t('create', {item: props.t('module')})}
-                        </Button>
+                        {
+                            canManage
+                            && <Button
+                                color="success"
+                                size="sm"
+                                className='d-flex gap-1 align-items-center'
+                                onClick={showCreate}
+                            >
+                                <FeatherIcon size={14} icon="plus-circle"/>
+                                {props.t('create', {item: props.t('module')})}
+                            </Button>
+                        }
                     </div>
 
                     <Row>
@@ -232,48 +238,52 @@ const Course = (props: any) => {
                                                                     </span>
                                                                 </div>
 
-                                                                <div className="d-flex gap-1 ms-auto">
-                                                                    <Button
-                                                                        color="light"
-                                                                        size="sm"
-                                                                        className="btn-icon"
-                                                                        title={props.t('create', {item: props.t('lesson')})}
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            navigate(`/lessons/create/${module.id}`);
-                                                                        }}
-                                                                    >
-                                                                        <FeatherIcon icon="plus" size={14}/>
-                                                                    </Button>
-
-                                                                    <UncontrolledDropdown>
-                                                                        <DropdownToggle
-                                                                            tag="button"
-                                                                            className="btn btn-light btn-sm btn-icon"
-                                                                            onClick={(e) => e.stopPropagation()}
+                                                                {
+                                                                    canManage
+                                                                    && <div className="d-flex gap-1 ms-auto">
+                                                                        <Button
+                                                                            color="light"
+                                                                            size="sm"
+                                                                            className="btn-icon"
+                                                                            title={props.t('create', {item: props.t('lesson')})}
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                navigate(`/lessons/create/${module.id}`);
+                                                                            }}
                                                                         >
-                                                                            <FeatherIcon icon="more-vertical"
-                                                                                         size={14}/>
-                                                                        </DropdownToggle>
-                                                                        <DropdownMenu end>
-                                                                            <DropdownItem
-                                                                                onClick={() => getData(module.id)}>
-                                                                                <FeatherIcon icon="edit-2" size={14}
-                                                                                             className="me-2"/>
-                                                                                {props.t('edit')}
-                                                                            </DropdownItem>
-                                                                            <DropdownItem divider/>
-                                                                            <DropdownItem
-                                                                                className="text-danger"
-                                                                                onClick={() => showDelete({id: module.id})}
+                                                                            <FeatherIcon icon="plus" size={14}/>
+                                                                        </Button>
+
+                                                                        <UncontrolledDropdown>
+                                                                            <DropdownToggle
+                                                                                tag="button"
+                                                                                className="btn btn-light btn-sm btn-icon"
+                                                                                onClick={(e) => e.stopPropagation()}
                                                                             >
-                                                                                <FeatherIcon icon="trash-2" size={14}
-                                                                                             className="me-2"/>
-                                                                                {props.t('delete')}
-                                                                            </DropdownItem>
-                                                                        </DropdownMenu>
-                                                                    </UncontrolledDropdown>
-                                                                </div>
+                                                                                <FeatherIcon icon="more-vertical"
+                                                                                             size={14}/>
+                                                                            </DropdownToggle>
+                                                                            <DropdownMenu end>
+                                                                                <DropdownItem
+                                                                                    onClick={() => getData(module.id)}>
+                                                                                    <FeatherIcon icon="edit-2" size={14}
+                                                                                                 className="me-2"/>
+                                                                                    {props.t('edit')}
+                                                                                </DropdownItem>
+                                                                                <DropdownItem divider/>
+                                                                                <DropdownItem
+                                                                                    className="text-danger"
+                                                                                    onClick={() => showDelete({id: module.id})}
+                                                                                >
+                                                                                    <FeatherIcon icon="trash-2"
+                                                                                                 size={14}
+                                                                                                 className="me-2"/>
+                                                                                    {props.t('delete')}
+                                                                                </DropdownItem>
+                                                                            </DropdownMenu>
+                                                                        </UncontrolledDropdown>
+                                                                    </div>
+                                                                }
                                                             </div>
 
                                                             {isExpanded(`module-${moduleIndex}`) && (
@@ -303,32 +313,35 @@ const Course = (props: any) => {
                                                                                 )}
 
                                                                                 {/* Действия для урока */}
-                                                                                <div
-                                                                                    className="lesson-actions d-flex gap-1">
-                                                                                    <Button
-                                                                                        color="light"
-                                                                                        size="sm"
-                                                                                        className="btn-icon"
-                                                                                        title={props.t('edit')}
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation();
-                                                                                            navigate(`/lessons/edit/${lesson.id}`);
-                                                                                        }}
-                                                                                    >
-                                                                                        <FeatherIcon icon="edit-2"
-                                                                                                     size={12}/>
-                                                                                    </Button>
-                                                                                    <Button
-                                                                                        color="light"
-                                                                                        size="sm"
-                                                                                        className="btn-icon text-danger"
-                                                                                        title={props.t('delete')}
-                                                                                        onClick={() => showLessonDelete({id: lesson.id})}
-                                                                                    >
-                                                                                        <FeatherIcon icon="trash-2"
-                                                                                                     size={12}/>
-                                                                                    </Button>
-                                                                                </div>
+                                                                                {
+                                                                                    canManage
+                                                                                    && <div
+                                                                                        className="lesson-actions d-flex gap-1">
+                                                                                        <Button
+                                                                                            color="light"
+                                                                                            size="sm"
+                                                                                            className="btn-icon"
+                                                                                            title={props.t('edit')}
+                                                                                            onClick={(e) => {
+                                                                                                e.stopPropagation();
+                                                                                                navigate(`/lessons/edit/${lesson.id}`);
+                                                                                            }}
+                                                                                        >
+                                                                                            <FeatherIcon icon="edit-2"
+                                                                                                         size={12}/>
+                                                                                        </Button>
+                                                                                        <Button
+                                                                                            color="light"
+                                                                                            size="sm"
+                                                                                            className="btn-icon text-danger"
+                                                                                            title={props.t('delete')}
+                                                                                            onClick={() => showLessonDelete({id: lesson.id})}
+                                                                                        >
+                                                                                            <FeatherIcon icon="trash-2"
+                                                                                                         size={12}/>
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                }
                                                                             </div>
                                                                         ))
                                                                     ) : (
@@ -349,13 +362,17 @@ const Course = (props: any) => {
                                                     <div className="text-muted p-3 text-center">
                                                         <FeatherIcon icon="alert-circle" size={20} className="mb-2"/>
                                                         <div className="mb-2">{props.t('no_modules')}</div>
-                                                        <Button
-                                                            color="success"
-                                                            size="sm"
-                                                        >
-                                                            <FeatherIcon icon="plus-circle" size={14} className="me-1"/>
-                                                            {props.t('create_first_module')}
-                                                        </Button>
+                                                        {
+                                                            canManage
+                                                            && <Button
+                                                                color="success"
+                                                                size="sm"
+                                                            >
+                                                                <FeatherIcon icon="plus-circle" size={14}
+                                                                             className="me-1"/>
+                                                                {props.t('create_first_module')}
+                                                            </Button>
+                                                        }
                                                     </div>
                                                 )}
                                             </div>

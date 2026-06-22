@@ -1,4 +1,4 @@
-from app.models import Module
+from app.models import Module, Lesson
 from app.serializers.module import ModuleSerializer
 from core.views.viewsets import BaseModelViewSet
 from users.permissions.permissions import role_required

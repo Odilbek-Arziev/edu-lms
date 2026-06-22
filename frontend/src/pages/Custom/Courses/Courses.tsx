@@ -26,8 +26,8 @@ import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {EditModalProps} from "../../../types/editModal";
 import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
-import UserDelete from "../../../Components/Custom/Users/UserDelete";
 import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
+import {getUserRoles} from "../../../helpers/getUserRoles";
 
 
 const Courses = (props: any) => {
@@ -49,6 +49,8 @@ const Courses = (props: any) => {
             ...(isActive && {is_active: isActive}),
         })
     );
+    const roles = getUserRoles();
+    const canManage = roles.includes('manager')
 
     const dispatch = useDispatch<any>();
     const {loading, languages, levels, categories} = useSelector((state: RootState) => state.Courses);
@@ -187,10 +189,13 @@ const Courses = (props: any) => {
                                 {props.t('clear')}
                             </Button>
                         </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                            <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create', {item: props.t('course')})}
-                        </Button>
+                        {
+                            canManage
+                            && <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
+                                <FeatherIcon color="white" size={12} icon="plus-circle"/>
+                                {props.t('create', {item: props.t('course')})}
+                            </Button>
+                        }
                     </div>
                     <Row>
                         {localData ? localData.map((item: any, key: number) => (
@@ -212,52 +217,55 @@ const Courses = (props: any) => {
                                                   </span>
                                                 </div>
                                             </div>
-                                            <Dropdown
-                                                isOpen={openActionsId === item.id}
-                                                toggle={() => toggleActions(item.id)}
-                                                direction="down"
-                                            >
-                                                <DropdownToggle
-                                                    tag="button"
-                                                    className="btn btn-sm btn-light"
+                                            {
+                                                canManage &&
+                                                <Dropdown
+                                                    isOpen={openActionsId === item.id}
+                                                    toggle={() => toggleActions(item.id)}
+                                                    direction="down"
                                                 >
-                                                    <FeatherIcon icon="more-vertical" size={16}/>
-                                                </DropdownToggle>
+                                                    <DropdownToggle
+                                                        tag="button"
+                                                        className="btn btn-sm btn-light"
+                                                    >
+                                                        <FeatherIcon icon="more-vertical" size={16}/>
+                                                    </DropdownToggle>
 
-                                                <DropdownMenu end>
-                                                    <DropdownItem
-                                                        onClick={() => getData(item.id)}
-                                                        className="d-flex align-items-center gap-2"
-                                                    >
-                                                        <FeatherIcon size={14} icon="edit"/>
-                                                        {props.t('edit')}
-                                                    </DropdownItem>
+                                                    <DropdownMenu end>
+                                                        <DropdownItem
+                                                            onClick={() => getData(item.id)}
+                                                            className="d-flex align-items-center gap-2"
+                                                        >
+                                                            <FeatherIcon size={14} icon="edit"/>
+                                                            {props.t('edit')}
+                                                        </DropdownItem>
 
-                                                    <DropdownItem
-                                                        onClick={() => handleStatus(item.id, item.is_active)}
-                                                        className="d-flex align-items-center gap-2"
-                                                    >
-                                                        {item.is_active ? (
-                                                            <>
-                                                                <FeatherIcon size={14} icon="slash"/>
-                                                                {props.t('deactivate')}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <FeatherIcon size={14} icon="check-circle"/>
-                                                                {props.t('activate')}
-                                                            </>
-                                                        )}
-                                                    </DropdownItem>
-                                                    <DropdownItem
-                                                        onClick={() => showDelete({id: item.id})}
-                                                        className="d-flex align-items-center gap-2 text-danger"
-                                                    >
-                                                        <FeatherIcon size={14} icon="trash"/>
-                                                        {props.t('delete')}
-                                                    </DropdownItem>
-                                                </DropdownMenu>
-                                            </Dropdown>
+                                                        <DropdownItem
+                                                            onClick={() => handleStatus(item.id, item.is_active)}
+                                                            className="d-flex align-items-center gap-2"
+                                                        >
+                                                            {item.is_active ? (
+                                                                <>
+                                                                    <FeatherIcon size={14} icon="slash"/>
+                                                                    {props.t('deactivate')}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <FeatherIcon size={14} icon="check-circle"/>
+                                                                    {props.t('activate')}
+                                                                </>
+                                                            )}
+                                                        </DropdownItem>
+                                                        <DropdownItem
+                                                            onClick={() => showDelete({id: item.id})}
+                                                            className="d-flex align-items-center gap-2 text-danger"
+                                                        >
+                                                            <FeatherIcon size={14} icon="trash"/>
+                                                            {props.t('delete')}
+                                                        </DropdownItem>
+                                                    </DropdownMenu>
+                                                </Dropdown>
+                                            }
                                         </div>
                                         <div className="d-flex align-items-end justify-content-between mt-4">
                                             <div>

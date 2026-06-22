@@ -20,7 +20,7 @@ import {coursesThunks} from "../../../slices/courses/reducer";
 import Flatpickr from "react-flatpickr";
 import {CourseSimplified} from "../../../types/Course";
 import {User} from "../../../types/User";
-
+import {getUserRoles} from "../../../helpers/getUserRoles";
 
 
 const LiveSessions = (props: any) => {
@@ -44,6 +44,8 @@ const LiveSessions = (props: any) => {
             ...(dateTo && {date_to: toApiDate(dateTo)}),
         })
     );
+    const roles = getUserRoles();
+    const canManage = roles.includes('manager')
 
     const [showCreate, hideCreate] = useModal(
         <LiveSessionCreate onSuccess={() => {
@@ -200,14 +202,17 @@ const LiveSessions = (props: any) => {
                             </Button>
                         </div>
 
-                        <Button
-                            color="success"
-                            className="d-flex gap-1 align-items-center"
-                            onClick={showCreate}
-                        >
-                            <FeatherIcon size={14} icon="plus-circle"/>
-                            {props.t('create', {item: props.t('category')})}
-                        </Button>
+                        {
+                            canManage
+                            && <Button
+                                color="success"
+                                className="d-flex gap-1 align-items-center"
+                                onClick={showCreate}
+                            >
+                                <FeatherIcon size={14} icon="plus-circle"/>
+                                {props.t('create', {item: props.t('live_session')})}
+                            </Button>
+                        }
                     </div>
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
@@ -221,7 +226,7 @@ const LiveSessions = (props: any) => {
                             <th>{props.t('teacher')}</th>
                             <th>{props.t('students')}</th>
                             <th>{props.t('course')}</th>
-                            <th>{props.t('actions')}</th>
+                            {canManage && <th>{props.t('actions')}</th>}
                         </tr>
                         </thead>
                         <tbody>
@@ -264,19 +269,21 @@ const LiveSessions = (props: any) => {
                                     </div>
                                 </td>
                                 <td>{row.course.title}</td>
-
-                                <td className='d-flex gap-1 justify-content-center'>
-                                    <Button className='btn btn-info btn-sm'
-                                            onClick={() => getData(row.id)}
-                                    >
-                                        <FeatherIcon color="white" size={12} icon="edit"/>
-                                    </Button>
-                                    <Button className='btn btn-danger btn-sm'
-                                            onClick={() => showDelete({id: row.id})}
-                                    >
-                                        <FeatherIcon color="white" size={12} icon="trash"/>
-                                    </Button>
-                                </td>
+                                {
+                                    canManage
+                                    && <td className='d-flex gap-1 justify-content-center'>
+                                        <Button className='btn btn-info btn-sm'
+                                                onClick={() => getData(row.id)}
+                                        >
+                                            <FeatherIcon color="white" size={12} icon="edit"/>
+                                        </Button>
+                                        <Button className='btn btn-danger btn-sm'
+                                                onClick={() => showDelete({id: row.id})}
+                                        >
+                                            <FeatherIcon color="white" size={12} icon="trash"/>
+                                        </Button>
+                                    </td>
+                                }
                             </tr>
                         ))}
                         </tbody>

@@ -1,12 +1,14 @@
 from core.views.viewsets import BaseModelViewSet
-from rest_framework import permissions
 
 from users.models import CustomUser
 from users.serializers.user import UserAdminSerializer
 
+from users.permissions.permissions import role_required
+
 
 class UserViewSet(BaseModelViewSet):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [role_required('manager', 'teacher')]
+
     serializer_class = UserAdminSerializer
 
     def get_queryset(self):

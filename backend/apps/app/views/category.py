@@ -12,7 +12,7 @@ from users.permissions.permissions import role_required
 class CategoryViewSet(BaseModelViewSet):
     serializer_class = CategorySerializer
     pagination_class = None
-    permission_classes = [role_required('manager')]
+    permission_classes = [role_required('manager', 'teacher')]
 
     def get_queryset(self):
         search = self.request.query_params.get("search")

@@ -10,11 +10,23 @@ class MaterialQuerySet(BaseQuerySet):
     def for_lesson(self, lesson):
         if not lesson:
             return self
-        return self.filter(lesson__title__icontains=lesson)
+        return self.filter(lesson_id=lesson)
 
-    def list(self, search=None, lesson=None):
+    def for_module(self, module):
+        if not module:
+            return self
+        return self.filter(lesson__module_id=module)
+
+    def for_course(self, course):
+        if not course:
+            return self
+        return self.filter(lesson__module__course_id=course)
+
+    def list(self, search=None, lesson=None, course=None, module=None):
         return (
             self.search(search)
                 .for_lesson(lesson)
+                .for_course(course)
+                .for_module(module)
                 .order_by("-created_at")
         )
