@@ -28,6 +28,7 @@ function MenuForm({onSubmit, onCancel, loader, initialValues, action, t}: FormPr
             parent: null,
             url_path: '',
             icon: null,
+            order: null,
             groups_ids: []
         },
         validationSchema: Yup.object({
@@ -35,6 +36,7 @@ function MenuForm({onSubmit, onCancel, loader, initialValues, action, t}: FormPr
             parent: Yup.number().nullable(),
             url_path: Yup.string().optional(),
             icon: Yup.string().required(t('select_icon')),
+            order: Yup.number().optional(),
             groups_ids: Yup.array()
                 .of(Yup.number())
                 .nullable()
@@ -144,6 +146,24 @@ function MenuForm({onSubmit, onCancel, loader, initialValues, action, t}: FormPr
                 {validation.touched.icon && validation.errors.icon && (
                     <FormFeedback>{validation.errors.icon}</FormFeedback>
                 )}
+            </div>
+
+            <div className="mb-3">
+                <Label htmlFor="order" className="form-label">{t('order')}</Label>
+                <Input
+                    name="order"
+                    className="form-control"
+                    placeholder={t('enter_order')}
+                    type="text"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.order || ""}
+                    invalid={!!(validation.touched.order && validation.errors.order)}
+                />
+                {validation.touched.order && validation.errors.order ? (
+                    <FormFeedback
+                        type="invalid">{validation.errors.order}</FormFeedback>
+                ) : null}
             </div>
 
             <div className="mb-3">

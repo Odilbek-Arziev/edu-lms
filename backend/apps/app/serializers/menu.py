@@ -36,7 +36,8 @@ class MenuSerializer(serializers.ModelSerializer):
             'parent',
             'groups',
             'groups_ids',
-            'children'
+            'children',
+            'order'
         ]
 
     @extend_schema_field(serializers.ListSerializer(child=serializers.DictField()))

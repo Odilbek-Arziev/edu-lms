@@ -12,6 +12,7 @@ import {useModal} from "../../../Components/Hooks/useModal";
 import HomeworkCreate from "../../../Components/Custom/Homeworks/HomeworkCreate";
 import {useCascadeSelect} from "../../../hooks/useHomeworkCascadeSelect";
 import CascadeSelect from "../../../Components/Custom/Homeworks/CascadeSelect";
+import HomeworkDelete from "../../../Components/Custom/Homeworks/HomeworkDelete";
 
 const Homeworks = (props: any) => {
     const [search, setSearch] = useState<string>('');
@@ -32,6 +33,19 @@ const Homeworks = (props: any) => {
             hideCreate()
         }} onCancel={() => hideCreate()}/>,
     )
+
+    const [showDelete, hideDelete] = useModal<{ id: number }>(
+        (props: { id: number }) => (
+            <HomeworkDelete
+                {...props}
+                onSuccess={() => {
+                    fetchData();
+                    hideDelete();
+                }}
+                onCancel={() => hideDelete()}
+            />
+        )
+    );
 
     const roles = getUserRoles();
     const canManage = roles.includes('teacher');
@@ -163,7 +177,7 @@ const Homeworks = (props: any) => {
                                 <Button className="btn btn-info btn-sm">
                                     <FeatherIcon color="white" size={12} icon="edit"/>
                                 </Button>
-                                <Button className="btn btn-danger btn-sm">
+                                <Button className="btn btn-danger btn-sm" onClick={() => showDelete({id: hw.id})}>
                                     <FeatherIcon color="white" size={12} icon="trash"/>
                                 </Button>
                             </div>

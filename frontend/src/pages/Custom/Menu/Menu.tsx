@@ -183,6 +183,7 @@ const Menu = (props: any) => {
                             <th>{props.t('url_path')}</th>
                             <th>{props.t('status')}</th>
                             <th>{props.t('roles')}</th>
+                            <th>{props.t('order')}</th>
                             <th>{props.t('actions')}</th>
                         </tr>
                         </thead>
@@ -207,6 +208,7 @@ const Menu = (props: any) => {
                                         </span>
                                     )) : '-'}
                                 </td>
+                                 <td>{row.order}</td>
                                 <td className='d-flex gap-1 justify-content-center'>
                                     <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
                                         <FeatherIcon color="white" size={12} icon="edit"/>
