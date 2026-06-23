@@ -23,7 +23,7 @@ export default function HomeworkCreate({onCancel, onSuccess}: CreateProps) {
                 .filter(Boolean)
                 .map((text: string) => ({text})),
         };
-        console.log('payload criteria:', payload.criteria);
+
         await handleRequest(
             () => dispatch(homeworksThunk.create(payload)),
             {

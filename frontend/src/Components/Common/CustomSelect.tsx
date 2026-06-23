@@ -13,6 +13,7 @@ interface SelectProps {
     placeholder?: string;
     width?: string;
     isClearable?: boolean;
+    isDisabled?: boolean;
 }
 
 const CustomSelect: React.FC<SelectProps> = ({
@@ -20,14 +21,16 @@ const CustomSelect: React.FC<SelectProps> = ({
     options,
     onChange,
     placeholder = "Select necessary...",
-    width = "15vw",
+    width = "100%",
     isClearable = true,
+    isDisabled = false,
 }) => {
     return (
         <Select<Option>
             value={options.find(o => o.value === value) || null}
             options={options}
             isClearable={isClearable}
+            isDisabled={isDisabled}
             placeholder={placeholder}
             styles={{
                 container: (provided: any) => ({
