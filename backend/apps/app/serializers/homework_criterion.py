@@ -11,3 +11,9 @@ class HomeworkCriterionSerializer(serializers.ModelSerializer):
             'text',
             'homework',
         ]
+
+
+class HomeworkCriterionNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeworkCriterion
+        fields = ['id', 'text']

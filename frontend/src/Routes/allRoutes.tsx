@@ -233,6 +233,7 @@ import LiveSessions from "../pages/Custom/LiveSessions/LiveSessions";
 import Enrollments from "../pages/Custom/Enrollments/Enrollments";
 import AccessDenied from "../pages/Custom/AuthPages/AccessDenied";
 import LiveSessionsDashboard from "../pages/Custom/LiveSessions/LiveSessionsDashboard";
+import Homeworks from "../pages/Custom/Homeworks/Homeworks";
 
 
 const authProtectedRoutes = [
@@ -251,6 +252,7 @@ const authProtectedRoutes = [
     {path: "/live-sessions", element: <LiveSessions/>, roles: ['manager', 'teacher']},
     {path: "/live-sessions-dashboard", element: <LiveSessionsDashboard/>, roles: ['manager', 'teacher']},
     {path: "/enrollments", element: <Enrollments/>, roles: ['manager']},
+    {path: "/homeworks", element: <Homeworks/>, roles: ['teacher']},
     {path: "/access-denied", element: <AccessDenied/>},
 
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},

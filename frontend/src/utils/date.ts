@@ -11,3 +11,8 @@ export function toApiDate(d: Date): string {
     const day = String(d.getDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
 }
+
+export function formatDate(d: Date) {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}

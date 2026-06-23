@@ -1,0 +1,1 @@
+export {homeworkCriteriaReducer, homeworkCriteriaActions, homeworkCriteriaThunk} from "./reducer";

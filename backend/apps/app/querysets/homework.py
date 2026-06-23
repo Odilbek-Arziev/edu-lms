@@ -10,12 +10,12 @@ class HomeworkQuerySet(BaseQuerySet):
     def for_lesson(self, lesson):
         if not lesson:
             return self
-        return self.filter(lesson__title__icontains=lesson)
+        return self.filter(lesson_id=lesson)
 
     def by_course(self, course):
         if not course:
             return self
-        return self.filter(lesson__module__course__title__icontains=course)
+        return self.filter(lesson__module__course__id=course)
 
     def list(self, search=None, lesson=None, course=None):
         return (
