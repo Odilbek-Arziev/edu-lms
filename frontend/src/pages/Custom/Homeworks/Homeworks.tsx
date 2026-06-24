@@ -13,10 +13,15 @@ import HomeworkCreate from "../../../Components/Custom/Homeworks/HomeworkCreate"
 import {useCascadeSelect} from "../../../hooks/useHomeworkCascadeSelect";
 import CascadeSelect from "../../../Components/Custom/Homeworks/CascadeSelect";
 import HomeworkDelete from "../../../Components/Custom/Homeworks/HomeworkDelete";
+import {EditModalProps} from "../../../types/editModal";
+import HomeworkEdit from "../../../Components/Custom/Homeworks/HomeworkEdit";
+import {toLocalInput} from "../../../utils/date";
+import {useDispatch} from "react-redux";
 
 const Homeworks = (props: any) => {
     const [search, setSearch] = useState<string>('');
     const cascade = useCascadeSelect();
+    const dispatch = useDispatch<any>();
 
     const {localData: homeworks, isSearching, fetchData} = useFetchData(
         homeworksThunk.fetch, 'homeworks',
@@ -46,6 +51,39 @@ const Homeworks = (props: any) => {
             />
         )
     );
+
+    const [showEdit, hideEdit] = useModal<EditModalProps>(
+        (props: EditModalProps) => (
+            <HomeworkEdit
+                {...props}
+                onSuccess={() => {
+                    fetchData();
+                    hideEdit();
+                }}
+                onCancel={() => hideEdit()}
+            />
+        )
+    );
+
+    async function getData(id: number) {
+        const response = await dispatch(homeworksThunk.getById(id));
+
+        if (response) {
+            showEdit({
+                id: id,
+                initialValues: {
+                    title: response.title,
+                    description: response.description,
+                    deadline: toLocalInput(response.deadline),
+                    max_attempts: response.max_attempts,
+                    lesson_id: response.lesson.id,
+                    module_id: response.lesson.module,
+                    course_id: response.lesson.course,
+                    criteria: (response.criteria || []).map((c: any) => c.text),
+                }
+            });
+        }
+    }
 
     const roles = getUserRoles();
     const canManage = roles.includes('teacher');
@@ -174,7 +212,7 @@ const Homeworks = (props: any) => {
 
                         {canManage && (
                             <div className="d-flex gap-1 flex-shrink-0">
-                                <Button className="btn btn-info btn-sm">
+                                <Button className="btn btn-info btn-sm" onClick={() => getData(hw.id)}>
                                     <FeatherIcon color="white" size={12} icon="edit"/>
                                 </Button>
                                 <Button className="btn btn-danger btn-sm" onClick={() => showDelete({id: hw.id})}>

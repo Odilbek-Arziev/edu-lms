@@ -13,7 +13,11 @@ import CriteriaPicker from "./Criterion/CriteriaPicker";
 
 function HomeworkForm({onSubmit, onCancel, loader, initialValues, action}: FormProps) {
     const {t} = useTranslation();
-    const cascade = useCascadeSelect({lesson: initialValues?.lesson_id});
+    const cascade = useCascadeSelect({
+        course: initialValues?.course_id != null ? Number(initialValues.course_id) : null,
+        module: initialValues?.module_id != null ? Number(initialValues.module_id) : null,
+        lesson: initialValues?.lesson_id != null ? Number(initialValues.lesson_id) : null,
+    });
 
     const validation: any = useFormik({
         enableReinitialize: true,
@@ -39,6 +43,9 @@ function HomeworkForm({onSubmit, onCancel, loader, initialValues, action}: FormP
     useEffect(() => {
         validation.setFieldValue('lesson_id', cascade.lessonId ?? '');
     }, [cascade.lessonId]);
+
+    const isEdit = action === 'update';
+    if (isEdit && !cascade.ready) return <Spinner/>;
 
     return (
         <Form onSubmit={validation.handleSubmit}>
@@ -83,7 +90,7 @@ function HomeworkForm({onSubmit, onCancel, loader, initialValues, action}: FormP
                     value={validation.values.deadline || ""}
                     options={{
                         dateFormat: "Y-m-d",
-                        minDate: "today",
+                        minDate: action === 'update' ? undefined : "today",
                     }}
                     onChange={(dates: Date[]) => {
                         validation.setFieldValue('deadline', dates[0] ?? null);

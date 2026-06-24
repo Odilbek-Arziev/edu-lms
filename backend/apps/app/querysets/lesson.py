@@ -23,4 +23,5 @@ class LessonQuerySet(BaseQuerySet):
                 .order_by("-created_at")
                 .for_course(course)
                 .for_module(module)
+                .select_related('module__course')
         )

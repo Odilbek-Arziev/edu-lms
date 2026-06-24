@@ -3,6 +3,8 @@ from app.models import Lesson
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    course = serializers.PrimaryKeyRelatedField(source='module.course', read_only=True)
+
     class Meta:
         model = Lesson
         fields = [
@@ -13,5 +15,6 @@ class LessonSerializer(serializers.ModelSerializer):
             'content',
             'is_preview',
             'slug',
-            'module'
+            'module',
+            'course'
         ]
