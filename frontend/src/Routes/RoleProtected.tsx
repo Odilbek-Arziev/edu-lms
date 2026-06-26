@@ -6,6 +6,7 @@ const RoleProtected = ({allowedRoles, children}: {
     children: JSX.Element;
 }) => {
     const roles = getUserRoles();
+    console.log(roles)
     const hasAccess = roles.some((r) => allowedRoles.includes(r));
 
     if (!hasAccess) {

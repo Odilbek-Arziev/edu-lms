@@ -101,7 +101,7 @@ const LiveSessionsDashboard = (props: any) => {
         dispatch(coursesThunks.fetch()).then((res: any) => setCourses(res?.results || []));
     }, []);
 
-    document.title = props.t('live-sessions-page');
+    document.title = props.t('live_sessions_dashboard_page');
 
     const statCards = [
         {label: props.t('total'), value: stats.total, icon: 'video', color: 'primary'},

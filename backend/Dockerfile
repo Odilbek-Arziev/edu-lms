@@ -8,7 +8,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-RUN pip install poetry
+ENV PIP_CERT=/etc/ssl/certs/ca-certificates.crt
+
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+
+RUN pip install --trusted-host pypi.org \
+                 --trusted-host files.pythonhosted.org \
+                 poetry
 
 COPY pyproject.toml poetry.lock ./
 

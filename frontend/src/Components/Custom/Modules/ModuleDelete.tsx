@@ -24,7 +24,7 @@ function ModuleDelete({onCancel, onSuccess, id, t}: DeleteProps) {
             <div className="mt-2 text-center">
                 <i className="ri-delete-bin-line display-5 text-danger"/>
                 <p className="fw-bold fs-5">
-                     {t('delete_confirm', {item: t('module')})}
+                     {t('delete_confirm', {item: t('module_to_delete')})}
                 </p>
             </div>
             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">

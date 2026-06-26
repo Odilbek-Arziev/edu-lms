@@ -201,7 +201,7 @@
   fields:
     key: "course_item"
     value:
-      ru: "Элемент курса"
+      ru: "Элемент 'Курс'"
       uz: "Kurs elementi"
       en: "Course item"
 
@@ -300,7 +300,7 @@
   fields:
     key: "delete_confirm"
     value:
-      ru: "Подтвердить удаление"
+      ru: "Подтвердить удаление {{item}}"
       uz: "O'chirishni tasdiqlash"
       en: "Confirm deletion"
 
@@ -705,7 +705,7 @@
   fields:
     key: "lang_item"
     value:
-      ru: "Элемент языка"
+      ru: "Элемент 'Языковая запись'"
       uz: "Til elementi"
       en: "Language item"
 
@@ -840,7 +840,7 @@
   fields:
     key: "menu_item"
     value:
-      ru: "Элемент меню"
+      ru: "Элемент 'Меню'"
       uz: "Menyu elementi"
       en: "Menu item"
 
@@ -1173,7 +1173,7 @@
   fields:
     key: "role_item"
     value:
-      ru: "Элемент роли"
+      ru: "Элемент 'Роль'"
       uz: "Rol elementi"
       en: "Role item"
 
@@ -1608,3 +1608,679 @@
       ru: "Соцсети"
       uz: "Ijtimoiy tarmoqlar"
       en: "Social networks"
+
+- model: app.languageline
+  pk: 180
+  fields:
+    key: "sessions"
+    value:
+      ru: "Онлайн встречи"
+      uz: "Online uchrashuvlar"
+      en: "Live Sessions"
+
+- model: app.languageline
+  pk: 181
+  fields:
+    key: "sessions_control"
+    value:
+      ru: "Контроль онлайн встречь"
+      uz: "Onlayn uchrashuv nazorati"
+      en: "Live Sessions Control"
+
+- model: app.languageline
+  pk: 182
+  fields:
+    key: "enrollments"
+    value:
+      ru: "Зачисления"
+      uz: "Ro'yxatdan o'tganlar"
+      en: "Enrollments"
+
+- model: app.languageline
+  pk: 183
+  fields:
+    key: "homeworks"
+    value:
+      ru: "Домашние задания"
+      uz: "Uyga topshiriqlar"
+      en: "Homeworks"
+
+- model: app.languageline
+  pk: 184
+  fields:
+    key: "materials"
+    value:
+      ru: "Материалы"
+      uz: "Materiallar"
+      en: "Materials"
+
+- model: app.languageline
+  pk: 185
+  fields:
+    key: "categories"
+    value:
+      ru: "Категории"
+      uz: "Kategoriyalar"
+      en: "Categories"
+
+- model: app.languageline
+  pk: 186
+  fields:
+    key: "select_course"
+    value:
+      ru: "Выберите курс"
+      uz: "Kursni tanlang"
+      en: "Select course"
+
+- model: app.languageline
+  pk: 187
+  fields:
+    key: "select_module"
+    value:
+      ru: "Выберите модуль"
+      uz: "Modulni tanlang"
+      en: "Select module"
+
+- model: app.languageline
+  pk: 188
+  fields:
+    key: "select_lesson"
+    value:
+      ru: "Выберите урок"
+      uz: "Darsni tanlang"
+      en: "Select lesson"
+
+- model: app.languageline
+  pk: 189
+  fields:
+    key: "no_data"
+    value:
+      ru: "Нет данных"
+      uz: "Ma'lumot yo'q"
+      en: "No data"
+
+- model: app.languageline
+  pk: 190
+  fields:
+    key: "enter_url"
+    value:
+      ru: "Введите ссылку"
+      uz: "Havolani kiriting"
+      en: "Enter URL"
+
+- model: app.languageline
+  pk: 191
+  fields:
+    key: "open"
+    value:
+      ru: "Открыть"
+      uz: "Ochish"
+      en: "Open"
+
+- model: app.languageline
+  pk: 192
+  fields:
+    key: "select_user"
+    value:
+      ru: "Выберите пользователя"
+      uz: "Foydalanuvchini tanlang"
+      en: "Select user"
+
+- model: app.languageline
+  pk: 193
+  fields:
+    key: "date_from"
+    value:
+      ru: "Дата с"
+      uz: "Boshlanish sanasi"
+      en: "Date from"
+
+- model: app.languageline
+  pk: 194
+  fields:
+    key: "date_to"
+    value:
+      ru: "Дата по"
+      uz: "Tugash sanasi"
+      en: "Date to"
+
+- model: app.languageline
+  pk: 195
+  fields:
+    key: "duration_minutes"
+    value:
+      ru: "Продолжительность (минут)"
+      uz: "Davomiyligi (daqiqa)"
+      en: "Duration (minutes)"
+
+- model: app.languageline
+  pk: 196
+  fields:
+    key: "date"
+    value:
+      ru: "Дата"
+      uz: "Sana"
+      en: "Date"
+
+- model: app.languageline
+  pk: 197
+  fields:
+    key: "time"
+    value:
+      ru: "Время"
+      uz: "Vaqt"
+      en: "Time"
+
+- model: app.languageline
+  pk: 198
+  fields:
+    key: "link"
+    value:
+      ru: "Ссылка"
+      uz: "Havola"
+      en: "Link"
+
+- model: app.languageline
+  pk: 199
+  fields:
+    key: "students"
+    value:
+      ru: "Студенты"
+      uz: "Talabalar"
+      en: "Students"
+
+- model: app.languageline
+  pk: 200
+  fields:
+    key: "enter_scheduled_at"
+    value:
+      ru: "Введите дату и время"
+      uz: "Sana va vaqtni kiriting"
+      en: "Enter date and time"
+
+- model: app.languageline
+  pk: 201
+  fields:
+    key: "enter_duration_minutes"
+    value:
+      ru: "Введите продолжительность в минутах"
+      uz: "Davomiylikni daqiqalarda kiriting"
+      en: "Enter duration in minutes"
+
+- model: app.languageline
+  pk: 202
+  fields:
+    key: "enter_link"
+    value:
+      ru: "Введите ссылку"
+      uz: "Havolani kiriting"
+      en: "Enter link"
+
+- model: app.languageline
+  pk: 203
+  fields:
+    key: "select_teacher"
+    value:
+      ru: "Выберите преподавателя"
+      uz: "O‘qituvchini tanlang"
+      en: "Select teacher"
+
+- model: app.languageline
+  pk: 204
+  fields:
+    key: "load_file"
+    value:
+      ru: "Загрузить файл"
+      uz: "Faylni yuklash"
+      en: "Upload file"
+
+- model: app.languageline
+  pk: 205
+  fields:
+    key: "scheduled_at"
+    value:
+      ru: "Дата и время"
+      uz: "Sana va vaqt"
+      en: "Scheduled at"
+
+- model: app.languageline
+  pk: 206
+  fields:
+    key: "total"
+    value:
+      ru: "Всего"
+      uz: "Jami"
+      en: "Total"
+
+- model: app.languageline
+  pk: 207
+  fields:
+    key: "today"
+    value:
+      ru: "Сегодня"
+      uz: "Bugun"
+      en: "Today"
+
+- model: app.languageline
+  pk: 208
+  fields:
+    key: "upcoming"
+    value:
+      ru: "Предстоящие"
+      uz: "Kutilayotgan"
+      en: "Upcoming"
+
+- model: app.languageline
+  pk: 209
+  fields:
+    key: "past"
+    value:
+      ru: "Прошедшие"
+      uz: "O‘tgan"
+      en: "Past"
+
+- model: app.languageline
+  pk: 210
+  fields:
+    key: "live_sessions"
+    value:
+      ru: "Живые занятия"
+      uz: "Jonli darslar"
+      en: "Live sessions"
+
+- model: app.languageline
+  pk: 211
+  fields:
+    key: "month"
+    value:
+      ru: "Месяц"
+      uz: "Oy"
+      en: "Month"
+
+- model: app.languageline
+  pk: 212
+  fields:
+    key: "week"
+    value:
+      ru: "Неделя"
+      uz: "Hafta"
+      en: "Week"
+
+- model: app.languageline
+  pk: 213
+  fields:
+    key: "day"
+    value:
+      ru: "День"
+      uz: "Kun"
+      en: "Day"
+
+- model: app.languageline
+  pk: 214
+  fields:
+    key: "completed"
+    value:
+      ru: "Завершено"
+      uz: "Yakunlangan"
+      en: "Completed"
+
+- model: app.languageline
+  pk: 215
+  fields:
+    key: "suspended"
+    value:
+      ru: "Приостановлено"
+      uz: "To'xtatilgan"
+      en: "Suspended"
+
+- model: app.languageline
+  pk: 216
+  fields:
+    key: "dropped"
+    value:
+      ru: "Прекращено"
+      uz: "Bekor qilingan"
+      en: "Dropped"
+
+- model: app.languageline
+  pk: 217
+  fields:
+    key: "progress"
+    value:
+      ru: "Прогресс"
+      uz: "Jarayon"
+      en: "Progress"
+
+- model: app.languageline
+  pk: 218
+  fields:
+    key: "grade"
+    value:
+      ru: "Оценка"
+      uz: "Baho"
+      en: "Grade"
+
+- model: app.languageline
+  pk: 219
+  fields:
+    key: "select_student"
+    value:
+      ru: "Выберите студента"
+      uz: "Talabani tanlang"
+      en: "Select student"
+
+- model: app.languageline
+  pk: 220
+  fields:
+    key: "deadline"
+    value:
+      ru: "Срок выполнения"
+      uz: "Muddat"
+      en: "Deadline"
+
+- model: app.languageline
+  pk: 221
+  fields:
+    key: "enter_deadline"
+    value:
+      ru: "Введите срок выполнения"
+      uz: "Muddatni kiriting"
+      en: "Enter deadline"
+
+- model: app.languageline
+  pk: 222
+  fields:
+    key: "max_attempts"
+    value:
+      ru: "Максимум попыток"
+      uz: "Maksimal urinishlar soni"
+      en: "Max attempts"
+
+- model: app.languageline
+  pk: 223
+  fields:
+    key: "criteria"
+    value:
+      ru: "Критерии"
+      uz: "Mezonlar"
+      en: "Criteria"
+
+- model: app.languageline
+  pk: 224
+  fields:
+    key: "no_criteria_yet"
+    value:
+      ru: "Критерии пока не добавлены"
+      uz: "Hozircha mezonlar qo'shilmagan"
+      en: "No criteria yet"
+
+- model: app.languageline
+  pk: 225
+  fields:
+    key: "enter_criterion"
+    value:
+      ru: "Введите критерий"
+      uz: "Mezonni kiriting"
+      en: "Enter criterion"
+
+- model: app.languageline
+  pk: 226
+  fields:
+    key: "add"
+    value:
+      ru: "Добавить {{item}}"
+      uz: "Qo'shish"
+      en: "Add"
+
+- model: app.languageline
+  pk: 227
+  fields:
+    key: "overdue"
+    value:
+      ru: "Просрочено"
+      uz: "Muddati o'tgan"
+      en: "Overdue"
+
+- model: app.languageline
+  pk: 228
+  fields:
+    key: "due_soon"
+    value:
+      ru: "Срок скоро истекает"
+      uz: "Muddati yaqin"
+      en: "Due soon"
+
+- model: app.languageline
+  pk: 229
+  fields:
+    key: "categories_page"
+    value:
+      ru: "Страница категорий"
+      uz: "Kategoriyalar sahifasi"
+      en: "Categories Page"
+
+- model: app.languageline
+  pk: 230
+  fields:
+    key: "courses_page"
+    value:
+      ru: "Страница курсов"
+      uz: "Kurslar sahifasi"
+      en: "Courses Page"
+
+- model: app.languageline
+  pk: 231
+  fields:
+    key: "materials_page"
+    value:
+      ru: "Страница материалов"
+      uz: "Materiallar sahifasi"
+      en: "Materials Page"
+
+- model: app.languageline
+  pk: 232
+  fields:
+    key: "live_sessions_page"
+    value:
+      ru: "Страница онлайн-занятий"
+      uz: "Jonli darslar sahifasi"
+      en: "Live Sessions Page"
+
+- model: app.languageline
+  pk: 233
+  fields:
+    key: "live_sessions_dashboard_page"
+    value:
+      ru: "Панель онлайн-занятий"
+      uz: "Jonli darslar boshqaruv paneli"
+      en: "Live Sessions Dashboard"
+
+- model: app.languageline
+  pk: 234
+  fields:
+    key: "homeworks_page"
+    value:
+      ru: "Страница домашних заданий"
+      uz: "Uy vazifalari sahifasi"
+      en: "Homeworks Page"
+
+- model: app.languageline
+  pk: 235
+  fields:
+    key: "enrollments_page"
+    value:
+      ru: "Страница зачислений"
+      uz: "Ro'yxatdan o'tishlar sahifasi"
+      en: "Enrollments Page"
+
+- model: app.languageline
+  pk: 236
+  fields:
+    key: "category_to_delete"
+    value:
+      ru: "категории"
+      uz: "kategoriyani"
+      en: "category"
+
+- model: app.languageline
+  pk: 237
+  fields:
+    key: "course_to_delete"
+    value:
+      ru: "курса"
+      uz: "kursni"
+      en: "course"
+
+- model: app.languageline
+  pk: 238
+  fields:
+    key: "enrollment_item_to_delete"
+    value:
+      ru: "записи о зачислении"
+      uz: "ro‘yxatdan o‘tish yozuvini"
+      en: "enrollment"
+
+- model: app.languageline
+  pk: 239
+  fields:
+    key: "homework_to_delete"
+    value:
+      ru: "домашнего задания"
+      uz: "uy vazifasini"
+      en: "homework"
+
+- model: app.languageline
+  pk: 240
+  fields:
+    key: "lang_item_to_delete"
+    value:
+      ru: "языковой записи"
+      uz: "til yozuvini"
+      en: "language entry"
+
+- model: app.languageline
+  pk: 241
+  fields:
+    key: "lesson_to_delete"
+    value:
+      ru: "урока"
+      uz: "darsni"
+      en: "lesson"
+
+- model: app.languageline
+  pk: 242
+  fields:
+    key: "live_session_to_delete"
+    value:
+      ru: "онлайн-занятия"
+      uz: "jonli darsni"
+      en: "live session"
+
+- model: app.languageline
+  pk: 243
+  fields:
+    key: "material_to_delete"
+    value:
+      ru: "материала"
+      uz: "materialni"
+      en: "material"
+
+- model: app.languageline
+  pk: 244
+  fields:
+    key: "menu_item_to_delete"
+    value:
+      ru: "пункта меню"
+      uz: "menyu bandini"
+      en: "menu item"
+
+- model: app.languageline
+  pk: 245
+  fields:
+    key: "module_to_delete"
+    value:
+      ru: "модуля"
+      uz: "modulni"
+      en: "module"
+
+- model: app.languageline
+  pk: 246
+  fields:
+    key: "role_item_to_delete"
+    value:
+      ru: "роли"
+      uz: "rolni"
+      en: "role"
+
+- model: app.languageline
+  pk: 247
+  fields:
+    key: "user_to_delete"
+    value:
+      ru: "пользователя"
+      uz: "foydalanuvchini"
+      en: "user"
+
+- model: app.languageline
+  pk: 248
+  fields:
+    key: "category_item"
+    value:
+      ru: 'элемент "Категория"'
+      uz: '"Kategoriya" elementi'
+      en: '"Category" item'
+
+- model: app.languageline
+  pk: 249
+  fields:
+    key: "material_item"
+    value:
+      ru: 'элемент "Материал"'
+      uz: '"Material" elementi'
+      en: '"Material" item'
+
+- model: app.languageline
+  pk: 250
+  fields:
+    key: "live_session_item"
+    value:
+      ru: 'элемент "Онлайн-занятие"'
+      uz: '"Jonli dars" elementi'
+      en: '"Live Session" item'
+
+- model: app.languageline
+  pk: 251
+  fields:
+    key: "enrollment"
+    value:
+      ru: 'элемент "Зачисление"'
+      uz: '"Ro‘yxatdan o‘tish" elementi'
+      en: '"Enrollment" item'
+
+- model: app.languageline
+  pk: 252
+  fields:
+    key: "homework_item"
+    value:
+      ru: 'элемент "Домашнее задание"'
+      uz: '"Uy vazifasi" elementi'
+      en: '"Homework" item'
+
+- model: app.languageline
+  pk: 253
+  fields:
+    key: "update"
+    value:
+      ru: "Редактировать {{item}}"
+      uz: "{{item}}ni tahrirlash"
+      en: "Edit {{item}}"
+
+- model: app.languageline
+  pk: 254
+  fields:
+    key: "final_grade"
+    value:
+      ru: "Итоговая оценка"
+      uz: "Yakuniy baho"
+      en: "Final grade"
+

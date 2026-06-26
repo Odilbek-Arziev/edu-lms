@@ -1,0 +1,14 @@
+- model: app.Category
+  pk: 1
+  fields:
+    title: "Backend"
+
+- model: app.Category
+  pk: 2
+  fields:
+    title: "Frontend"
+
+- model: app.Category
+  pk: 3
+  fields:
+    title: "DevOps"

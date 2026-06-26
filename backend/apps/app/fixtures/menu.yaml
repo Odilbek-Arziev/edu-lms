@@ -48,3 +48,43 @@
     order: 4
     url_path: "/courses"
     icon: 142
+
+- model: app.Menu
+  pk: 7
+  fields:
+    title: "Materials"
+    order: 5
+    url_path: "/materials"
+    icon: 142
+
+- model: app.Menu
+  pk: 8
+  fields:
+    title: "Sessions_control"
+    order: 6
+    url_path: "/live-sessions"
+    icon: 142
+
+- model: app.Menu
+  pk: 9
+  fields:
+    title: "Sessions"
+    order: 7
+    url_path: "/live-sessions-dashboard"
+    icon: 142
+
+- model: app.Menu
+  pk: 10
+  fields:
+    title: "Enrollments"
+    order: 8
+    url_path: "/enrollments"
+    icon: 142
+
+- model: app.Menu
+  pk: 11
+  fields:
+    title: "Homeworks"
+    order: 9
+    url_path: "/homeworks"
+    icon: 142

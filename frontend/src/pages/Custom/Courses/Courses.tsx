@@ -148,6 +148,8 @@ const Courses = (props: any) => {
         }
     }, [loading, isSearching]);
 
+    document.title = props.t('courses_page');
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -182,7 +184,6 @@ const Courses = (props: any) => {
                                 value={isActive}
                                 options={statusTypes}
                                 onChange={setIsActive}
-                                width='10vw'
                             />
                             <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                                 <FeatherIcon color="white" size={12} icon="trash"/>

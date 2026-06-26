@@ -175,7 +175,7 @@ const Enrollments = (props: any) => {
         fetchData()
     }, [page, search, courseFilter, statusFilter])
 
-    document.title = props.t('enrollments');
+    document.title = props.t('enrollments_page');
 
     return (
         <React.Fragment>

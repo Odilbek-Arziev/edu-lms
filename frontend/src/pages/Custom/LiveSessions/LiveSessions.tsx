@@ -131,7 +131,7 @@ const LiveSessions = (props: any) => {
         });
     }, []);
 
-    document.title = props.t('live-sessions-page');
+    document.title = props.t('live_sessions_page');
 
     return (
         <React.Fragment>

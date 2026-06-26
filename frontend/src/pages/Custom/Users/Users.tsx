@@ -171,18 +171,21 @@ const Users = (props: any) => {
                             value={role}
                             options={rolesOptions}
                             onChange={setRole}
+                            width='20%'
                         />
                         <CustomSelect
                             placeholder={props.t('select_register_type')}
                             value={registerType}
                             options={regTypesOptions}
                             onChange={setRegisterType}
+                            width='20%'
                         />
                         <CustomSelect
                             placeholder={props.t('select_status')}
                             value={status}
                             options={statusTypes}
                             onChange={setStatus}
+                            width='20%'
                         />
                         <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
                             <FeatherIcon color="white" size={12} icon="trash"/>

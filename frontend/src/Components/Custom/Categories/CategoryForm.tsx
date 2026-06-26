@@ -20,7 +20,10 @@ function CategoryForm({onSubmit, onCancel, loader, initialValues, action}: FormP
         }),
         onSubmit: onSubmit
     });
-
+    console.log(action);
+    console.log(t(action));
+    console.log(t(action, {item: t('category_item')}));
+    console.log(t('add', {item: t('category_item')}));
     return (
         <Form onSubmit={validation.handleSubmit}>
             <p className="fw-bold fs-5">{t(action, {item: t('category_item')})}</p>
