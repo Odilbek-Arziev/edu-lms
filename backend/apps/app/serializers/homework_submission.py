@@ -27,7 +27,8 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
             'previous_submission',
             'is_checked',
             'is_approved',
-            'review'
+            'review',
+            'submitted_at'
         ]
 
     def create(self, validated_data):

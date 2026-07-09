@@ -17,9 +17,11 @@ export function formatDate(d: Date) {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-export function toLocalDateInput(iso: string) {
-    if (!iso) return '';
-    const d = new Date(iso);
-    const off = d.getTimezoneOffset() * 60000;
-    return new Date(d.getTime() - off).toISOString().slice(0, 10);
+export function formatFullDate(date?: string) {
+    if (!date) return '-'
+
+    return new Date(date).toLocaleString('ru-RU', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', 'minute': '2-digit'
+    })
 }

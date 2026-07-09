@@ -7,9 +7,9 @@ export interface Option {
 }
 
 interface SelectProps {
-    value: number | null;
+    value: number | string | null;
     options: Option[];
-    onChange: (value: number | null) => void;
+    onChange: (value: number | string | null) => void;
     placeholder?: string;
     width?: string;
     isClearable?: boolean;

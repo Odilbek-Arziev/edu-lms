@@ -82,9 +82,12 @@ import {LOGOUT} from "./auth/login/actions";
 import {lessonsReducer} from "./lessons";
 import {categoriesReducer} from "./categories";
 import {materialsReducer} from "./materials";
-import {liveSessionsReducer} from "./liveSessions/reducer";
-import {enrollmentsReducer} from "./enrollments/reducer";
-import {homeworksReducer} from "./homeworks/reducer";
+import {liveSessionsReducer} from "./liveSessions";
+import {enrollmentsReducer} from "./enrollments";
+import {homeworksReducer} from "./homeworks";
+import {homeworkSubmissionsReducer} from "./HomeworkSubmissions";
+import {submissionCriterionResultsReducer} from "./submissionCriterionResults";
+import {submissionReviewsReducer} from "./submissionReviews";
 
 const appReducer = combineReducers({
     Layout: LayoutReducer,
@@ -127,6 +130,9 @@ const appReducer = combineReducers({
     LiveSessions: liveSessionsReducer,
     Enrollments: enrollmentsReducer,
     Homeworks: homeworksReducer,
+    HomeworkSubmissions: homeworkSubmissionsReducer,
+    SubmissionCriterionResults: submissionCriterionResultsReducer,
+    submissionReviews: submissionReviewsReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

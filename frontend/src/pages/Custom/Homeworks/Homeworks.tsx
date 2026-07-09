@@ -7,7 +7,7 @@ import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {getUserRoles} from "../../../helpers/getUserRoles";
-import {homeworksThunk} from "../../../slices/homeworks/reducer";
+import {homeworksThunk} from "../../../slices/homeworks";
 import {useModal} from "../../../Components/Hooks/useModal";
 import HomeworkCreate from "../../../Components/Custom/Homeworks/HomeworkCreate";
 import {useCascadeSelect} from "../../../hooks/useHomeworkCascadeSelect";
@@ -15,7 +15,7 @@ import CascadeSelect from "../../../Components/Custom/Homeworks/CascadeSelect";
 import HomeworkDelete from "../../../Components/Custom/Homeworks/HomeworkDelete";
 import {EditModalProps} from "../../../types/editModal";
 import HomeworkEdit from "../../../Components/Custom/Homeworks/HomeworkEdit";
-import {toLocalInput} from "../../../utils/date";
+import {formatFullDate, toLocalInput} from "../../../utils/date";
 import {useDispatch} from "react-redux";
 
 const Homeworks = (props: any) => {
@@ -144,14 +144,6 @@ const Homeworks = (props: any) => {
         cascade.reset();
     };
 
-    const formatDeadline = (deadline: string) => {
-        if (!deadline) return props.t('no_deadline');
-        return new Date(deadline).toLocaleString('ru-RU', {
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit',
-        });
-    };
-
     const HomeworkRow = ({hw, color}: { hw: any; color: string }) => (
         <Card className="mb-2 overflow-hidden">
             <div className="d-flex">
@@ -163,7 +155,7 @@ const Homeworks = (props: any) => {
                                 <h5 className="fs-15 mb-0 text-truncate" title={hw.title}>{hw.title}</h5>
                                 <Badge color={color} className={`bg-${color}-subtle text-${color}`}>
                                     <FeatherIcon size={11} icon="calendar" className="me-1"/>
-                                    {formatDeadline(hw.deadline)}
+                                    {formatFullDate(hw.deadline)}
                                 </Badge>
                             </div>
 

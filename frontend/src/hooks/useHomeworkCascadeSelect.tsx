@@ -1,8 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
-import {coursesThunks} from "../slices/courses/reducer";
-import {modulesThunks} from "../slices/modules/reducer";
-import {lessonsThunks} from "../slices/lessons/reducer";
+import {coursesThunks} from "../slices/courses";
+import {modulesThunks} from "../slices/modules";
+import {lessonsThunks} from "../slices/lessons";
 
 export function useCascadeSelect(initial?: {
     course?: any; module?: any; lesson?: any;
