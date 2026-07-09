@@ -165,19 +165,19 @@ const Courses = (props: any) => {
                                 placeholder={`${props.t('select_lang')}...`}
                                 value={selectedLang}
                                 options={languages || []}
-                                onChange={setSelectedLang}
+                              onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
                             />
                             <CustomSelect
                                 placeholder={`${props.t('select_level')}...`}
                                 value={selectedLevel}
                                 options={levels || []}
-                                onChange={setSelectedLevel}
+                               onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
                             />
                             <CustomSelect
                                 placeholder={`${props.t('select_category')}...`}
                                 value={selectedCategory}
                                 options={categories || []}
-                                onChange={setSelectedCategory}
+                                onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
                             />
                             <CustomSelect
                                 placeholder={props.t('select_status')}
