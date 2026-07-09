@@ -39,7 +39,6 @@ export interface SubmissionReview {
     general_feedback: string;
     submission: number;
     reviewer: StudentShort;
-    created_at: string,
     criteria_results?: SubmissionCriterionResult[];
 }
 

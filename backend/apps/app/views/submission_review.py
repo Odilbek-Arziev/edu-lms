@@ -9,3 +9,6 @@ class SubmissionReviewViewSet(BaseModelViewSet):
     queryset = SubmissionReview.objects.all()
     serializer_class = SubmissionReviewSerializer
     permission_classes = [role_required('manager', 'teacher')]
+
+    def perform_create(self, serializer):
+        serializer.save(reviewer=self.request.user)

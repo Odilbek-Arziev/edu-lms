@@ -2284,3 +2284,474 @@
       uz: "Yakuniy baho"
       en: "Final grade"
 
+- model: app.languageline
+  pk: 255
+  fields:
+    key: "filters"
+    value:
+      ru: "Фильтр"
+      uz: "Filtr"
+      en: "Filter"
+
+- model: app.languageline
+  pk: 256
+  fields:
+    key: "full_name"
+    value:
+      ru: "ФИО"
+      uz: "F.I.Sh."
+      en: "Full name"
+
+- model: app.languageline
+  pk: 257
+  fields:
+    key: "submitted_date"
+    value:
+      ru: "Дата отправки"
+      uz: "Yuborilgan sana"
+      en: "Submitted date"
+
+
+
+- model: app.languageline
+  pk: 259
+  fields:
+    key: "checked"
+    value:
+      ru: "Проверено"
+      uz: "Tekshirilgan"
+      en: "Reviewed"
+
+- model: app.languageline
+  pk: 260
+  fields:
+    key: "accepted"
+    value:
+      ru: "Зачтено"
+      uz: "Qabul qilingan"
+      en: "Accepted"
+
+- model: app.languageline
+  pk: 261
+  fields:
+    key: "reworked"
+    value:
+      ru: "Доработано"
+      uz: "Qayta ishlangan"
+      en: "Reworked"
+
+- model: app.languageline
+  pk: 262
+  fields:
+    key: "checked_date"
+    value:
+      ru: "Дата проверки"
+      uz: "Tekshirilgan sana"
+      en: "Review date"
+
+- model: app.languageline
+  pk: 263
+  fields:
+    key: "all"
+    value:
+      ru: "Все"
+      uz: "Barchasi"
+      en: "All"
+
+- model: app.languageline
+  pk: 264
+  fields:
+    key: "yes"
+    value:
+      ru: "Да"
+      uz: "Ha"
+      en: "Yes"
+
+- model: app.languageline
+  pk: 265
+  fields:
+    key: "no"
+    value:
+      ru: "Нет"
+      uz: "Yo'q"
+      en: "No"
+
+- model: app.languageline
+  pk: 266
+  fields:
+    key: "answer"
+    value:
+      ru: "Ответ"
+      uz: "Javob"
+      en: "Answer"
+
+- model: app.languageline
+  pk: 267
+  fields:
+    key: "attached_files"
+    value:
+      ru: "Вложенные файлы"
+      uz: "Biriktirilgan fayllar"
+      en: "Attached files"
+
+
+
+- model: app.languageline
+  pk: 269
+  fields:
+    key: "attachments"
+    value:
+      ru: "Вложения"
+      uz: "Ilovalar"
+      en: "Attachments"
+
+- model: app.languageline
+  pk: 270
+  fields:
+    key: "review_queue"
+    value:
+      ru: "Не проверено"
+      uz: "Tekshirilmagan"
+      en: "Unreviewed"
+
+- model: app.languageline
+  pk: 271
+  fields:
+    key: "fullscreen"
+    value:
+      ru: "На весь экран"
+      uz: "To'liq ekran"
+      en: "Fullscreen"
+
+- model: app.languageline
+  pk: 272
+  fields:
+    key: "mark_all_met"
+    value:
+      ru: "Отметить все"
+      uz: "Barchasini belgilash"
+      en: "Mark all as met"
+
+- model: app.languageline
+  pk: 273
+  fields:
+    key: "unmark_all"
+    value:
+      ru: "Снять все отметки"
+      uz: "Belgilarni olib tashlash"
+      en: "Unmark all"
+
+- model: app.languageline
+  pk: 274
+  fields:
+    key: "accept_unmet_confirm_title"
+    value:
+      ru: "Не все критерии выполнены"
+      uz: "Barcha mezonlar bajarilmagan"
+      en: "Not all criteria are met"
+
+- model: app.languageline
+  pk: 275
+  fields:
+    key: "accept_unmet_confirm_text"
+    value:
+      ru: "Принять работу, хотя часть критериев не отмечена как выполненная?"
+      uz: "Ba'zi mezonlar bajarilmagan bo'lsa ham ishni qabul qilasizmi?"
+      en: "Accept the submission even though some criteria are not marked as met?"
+
+- model: app.languageline
+  pk: 276
+  fields:
+    key: "homework"
+    value:
+      ru: "Задание"
+      uz: "Vazifa"
+      en: "Homework"
+
+- model: app.languageline
+  pk: 277
+  fields:
+    key: "submissions"
+    value:
+      ru: "Решения заданий"
+      uz: "Vazifa yechimlari"
+      en: "Homework submissions"
+
+- model: app.languageline
+  pk: 278
+  fields:
+    key: "search_by_student"
+    value:
+      ru: "Поиск по студенту"
+      uz: "Talaba bo'yicha qidirish"
+      en: "Search by student"
+
+# ---- Статусы работ (метки FILTERS и бейджей) ----
+
+- model: app.languageline
+  pk: 279
+  fields:
+    key: "approved"
+    value:
+      ru: "Зачтено"
+      uz: "Qabul qilingan"
+      en: "Approved"
+
+- model: app.languageline
+  pk: 280
+  fields:
+    key: "rejected"
+    value:
+      ru: "Отклонено"
+      uz: "Rad etilgan"
+      en: "Rejected"
+
+- model: app.languageline
+  pk: 281
+  fields:
+    key: "unchecked"
+    value:
+      ru: "На проверке"
+      uz: "Tekshiruvda"
+      en: "Open"
+
+- model: app.languageline
+  pk: 282
+  fields:
+    key: "check"
+    value:
+      ru: "Проверить"
+      uz: "Tekshirish"
+      en: "Check"
+
+- model: app.languageline
+  pk: 283
+  fields:
+    key: "view"
+    value:
+      ru: "Просмотр"
+      uz: "Ko'rish"
+      en: "View"
+
+
+- model: app.languageline
+  pk: 285
+  fields:
+    key: "criteria_check"
+    value:
+      ru: "Контрольный список"
+      uz: "Nazorat ro'yxati"
+      en: "Checklist"
+
+- model: app.languageline
+  pk: 286
+  fields:
+    key: "no_criteria_for_homework"
+    value:
+      ru: "У этого задания нет критериев проверки"
+      uz: "Bu vazifada tekshirish mezonlari yo'q"
+      en: "This homework has no review criteria"
+
+- model: app.languageline
+  pk: 287
+  fields:
+    key: "met"
+    value:
+      ru: "Выполнено"
+      uz: "Bajarilgan"
+      en: "Met"
+
+- model: app.languageline
+  pk: 288
+  fields:
+    key: "not_met"
+    value:
+      ru: "Не выполнено"
+      uz: "Bajarilmagan"
+      en: "Not met"
+
+- model: app.languageline
+  pk: 289
+  fields:
+    key: "criterion_feedback_placeholder"
+    value:
+      ru: "Комментарий к критерию (необязательно)"
+      uz: "Mezon bo'yicha izoh (ixtiyoriy)"
+      en: "Comment on the criterion (optional)"
+
+# ---- Фидбек и действия ----
+
+- model: app.languageline
+  pk: 290
+  fields:
+    key: "general_feedback"
+    value:
+      ru: "Общий комментарий"
+      uz: "Umumiy izoh"
+      en: "General feedback"
+
+- model: app.languageline
+  pk: 291
+  fields:
+    key: "general_feedback_placeholder"
+    value:
+      ru: "Напишите общий комментарий к работе..."
+      uz: "Ishga umumiy izoh yozing..."
+      en: "Write general feedback on the submission..."
+
+- model: app.languageline
+  pk: 292
+  fields:
+    key: "accept"
+    value:
+      ru: "Принять"
+      uz: "Qabul qilish"
+      en: "Accept"
+
+- model: app.languageline
+  pk: 293
+  fields:
+    key: "reject"
+    value:
+      ru: "Отклонить"
+      uz: "Rad etish"
+      en: "Reject"
+
+- model: app.languageline
+  pk: 294
+  fields:
+    key: "already_reviewed_notice"
+    value:
+      ru: "Работа уже проверена. Изменение результатов недоступно."
+      uz: "Ish allaqachon tekshirilgan. Natijalarni o'zgartirib bo'lmaydi."
+      en: "This submission has already been reviewed. Results cannot be changed."
+
+# ---- Страница проверки ----
+
+- model: app.languageline
+  pk: 295
+  fields:
+    key: "submission_review"
+    value:
+      ru: "Проверка работы"
+      uz: "Ishni tekshirish"
+      en: "Submission review"
+
+- model: app.languageline
+  pk: 296
+  fields:
+    key: "submission_review_page"
+    value:
+      ru: "Проверка работы | LMS"
+      uz: "Ishni tekshirish | LMS"
+      en: "Submission review | LMS"
+
+- model: app.languageline
+  pk: 297
+  fields:
+    key: "back_to_queue"
+    value:
+      ru: "Назад к списку"
+      uz: "Ro'yxatga qaytish"
+      en: "Back to queue"
+
+- model: app.languageline
+  pk: 298
+  fields:
+    key: "submitted_at"
+    value:
+      ru: "Сдано"
+      uz: "Topshirilgan"
+      en: "Submitted"
+
+- model: app.languageline
+  pk: 300
+  fields:
+    key: "student_comment"
+    value:
+      ru: "Комментарий студента"
+      uz: "O'quvchi izohi"
+      en: "Student comment"
+
+- model: app.languageline
+  pk: 301
+  fields:
+    key: "no_comment"
+    value:
+      ru: "Без комментария"
+      uz: "Izohsiz"
+      en: "No comment"
+
+- model: app.languageline
+  pk: 302
+  fields:
+    key: "submission_not_found"
+    value:
+      ru: "Работа не найдена"
+      uz: "Ish topilmadi"
+      en: "Submission not found"
+
+# ---- Уведомления и ошибки ----
+
+- model: app.languageline
+  pk: 303
+  fields:
+    key: "submission_approved"
+    value:
+      ru: "Работа принята"
+      uz: "Ish qabul qilindi"
+      en: "Submission approved"
+
+- model: app.languageline
+  pk: 304
+  fields:
+    key: "submission_rejected"
+    value:
+      ru: "Работа отклонена"
+      uz: "Ish rad etildi"
+      en: "Submission rejected"
+
+- model: app.languageline
+  pk: 305
+  fields:
+    key: "reject_confirm_title"
+    value:
+      ru: "Отклонить работу?"
+      uz: "Ish rad etilsinmi?"
+      en: "Reject the submission?"
+
+- model: app.languageline
+  pk: 306
+  fields:
+    key: "reject_confirm_text"
+    value:
+      ru: "Студент увидит ваш комментарий и сможет отправить работу повторно."
+      uz: "O'quvchi izohingizni ko'radi va ishni qayta yuborishi mumkin."
+      en: "The student will see your feedback and will be able to resubmit."
+
+- model: app.languageline
+  pk: 307
+  fields:
+    key: "failed_to_load_submission"
+    value:
+      ru: "Не удалось загрузить работу"
+      uz: "Ishni yuklab bo'lmadi"
+      en: "Failed to load the submission"
+
+- model: app.languageline
+  pk: 308
+  fields:
+    key: "failed_to_save_review"
+    value:
+      ru: "Не удалось сохранить результат проверки"
+      uz: "Tekshiruv natijasini saqlab bo'lmadi"
+      en: "Failed to save the review"
+
+- model: app.languageline
+  pk: 309
+  fields:
+    key: "no_file_attached"
+    value:
+      ru: "Файл не прикреплён"
+      uz: "Fayl biriktirilmagan"
+      en: "No file attached"

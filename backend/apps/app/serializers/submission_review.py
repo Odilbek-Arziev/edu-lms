@@ -17,6 +17,7 @@ class SubmissionReviewSerializer(serializers.ModelSerializer):
             'submission',
             'reviewer'
         ]
+        read_only_fields = ['reviewer']
 
     def validate_submission(self, submission):
         if not submission.is_active:

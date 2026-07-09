@@ -11,11 +11,12 @@ import {getAvatarColor, getInitials} from "../../../utils/getters";
 function SubmissionsTableRow({submission, onOpen}: SubmissionsTableRowProps) {
     const {t} = useTranslation();
 
-    const rowState: QueueFilter = submission.is_checked
-        ? (submission.is_approved ? 'approved' : 'rejected')
+    const rowState: QueueFilter = submission.review
+        ? (submission.review.is_accepted ? 'approved' : 'rejected')
         : 'open';
 
-    const config = FILTERS.find((f) => f.key === rowState) || FILTERS[0];
+    const config =
+        FILTERS.find((f) => f.key === rowState) || FILTERS[0];
 
     const fullName = `${submission.student?.first_name || ''} ${submission.student?.last_name || ''}`.trim();
     const avatarColor = getAvatarColor(fullName || String(submission.id));
@@ -41,7 +42,8 @@ function SubmissionsTableRow({submission, onOpen}: SubmissionsTableRowProps) {
             <td>
                 <div className="d-flex align-items-center gap-2">
                     <div className="avatar-xs flex-shrink-0">
-                        <div className={`avatar-title rounded-circle fw-semibold fs-12 bg-${avatarColor}-subtle text-${avatarColor}`}>
+                        <div
+                            className={`avatar-title rounded-circle fw-semibold fs-12 bg-${avatarColor}-subtle text-${avatarColor}`}>
                             {getInitials(submission.student?.first_name, submission.student?.last_name)}
                         </div>
                     </div>
@@ -86,9 +88,9 @@ function SubmissionsTableRow({submission, onOpen}: SubmissionsTableRowProps) {
                     <FeatherIcon size={11} icon={config.icon} className="me-1"/>
                     {t(config.label)}
                 </Badge>
-                {submission.review?.created_at && (
+                {submission.review?.received_at && (
                     <div className="text-muted fs-12 mt-1">
-                        {formatFullDate(submission.review.created_at)}
+                        {formatFullDate(submission.review.received_at)}
                     </div>
                 )}
             </td>

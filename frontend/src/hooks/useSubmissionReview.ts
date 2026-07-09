@@ -120,8 +120,8 @@ export function useSubmissionReview(id: number) {
 
             for (const draft of drafts) {
                 await dispatch(submissionCriterionResultsThunk.create({
-                    criterion: draft.criterionId,
-                    review: review.id,
+                    criterion_id: draft.criterionId,
+                    review_id: review.id,
                     is_met: draft.is_met,
                     feedback: draft.feedback,
                 }));
