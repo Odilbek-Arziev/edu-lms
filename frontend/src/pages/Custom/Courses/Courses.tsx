@@ -21,13 +21,12 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/CustomSelect";
 import FeatherIcon from "feather-icons-react";
 import {closeLoading, showLoading} from "../../../utils/swal";
-import {useModal} from "../../../Components/Hooks/useModal";
 import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
 import {useFetchData} from "../../../hooks/useFetchData";
-import {EditModalProps} from "../../../types/editModal";
 import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
 import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
 import {getUserRoles} from "../../../helpers/getUserRoles";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 
 const Courses = (props: any) => {
@@ -55,37 +54,9 @@ const Courses = (props: any) => {
     const dispatch = useDispatch<any>();
     const {loading, languages, levels, categories} = useSelector((state: RootState) => state.Courses);
 
-    const [showCreate, hideCreate] = useModal(
-        <CourseCreate onSuccess={() => {
-            fetchData();
-            hideCreate()
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <CourseEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData()
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
-    );
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <CourseDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData()
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: CourseCreate, edit: CourseEdit, remove: CourseDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {
@@ -165,13 +136,13 @@ const Courses = (props: any) => {
                                 placeholder={`${props.t('select_lang')}...`}
                                 value={selectedLang}
                                 options={languages || []}
-                              onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
+                                onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
                             />
                             <CustomSelect
                                 placeholder={`${props.t('select_level')}...`}
                                 value={selectedLevel}
                                 options={levels || []}
-                               onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
+                                onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
                             />
                             <CustomSelect
                                 placeholder={`${props.t('select_category')}...`}

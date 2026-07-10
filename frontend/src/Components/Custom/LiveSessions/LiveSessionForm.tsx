@@ -1,25 +1,21 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {Button, Form, FormFeedback, Input, Label, Spinner} from "reactstrap";
 import {useFormik} from "formik";
 import FeatherIcon from "feather-icons-react";
 import {FormProps} from "../../../types/crud";
-import {useDispatch} from "react-redux";
 import {withTranslation} from "react-i18next";
 import {useTranslation} from "react-i18next";
 import * as Yup from "yup";
-import {coursesThunks} from "../../../slices/courses/reducer";
-import {usersThunks} from "../../../slices/users/reducer";
 import Flatpickr from "react-flatpickr";
+import {useCourseOptions} from "../../../hooks/useCourseOptions";
+import {useUsersByRole} from "../../../hooks/useUsersByRole";
 
 function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: FormProps) {
     const {t} = useTranslation();
-    const dispatch = useDispatch<any>();
-    const [courses, setCourses] = useState<any[]>([]);
-    const [coursesLoaded, setCoursesLoaded] = useState(false);
-    const [students, setStudents] = useState<any[]>([]);
-    const [studentsLoaded, setStudentsLoaded] = useState(false);
-    const [teachers, setTeachers] = useState<any[]>([]);
-    const [teachersLoaded, setTeachersLoaded] = useState(false);
+
+    const {courses, coursesLoaded} = useCourseOptions();
+    const {users: students, usersLoaded: studentsLoaded} = useUsersByRole('student');
+    const {users: teachers, usersLoaded: teachersLoaded} = useUsersByRole('teacher');
 
     const validation: any = useFormik({
         enableReinitialize: true,
@@ -43,27 +39,6 @@ function LiveSessionForm({onSubmit, onCancel, loader, initialValues, action}: Fo
         }),
         onSubmit
     });
-
-    useEffect(() => {
-        dispatch(coursesThunks.fetch({})).then((res: any) => {
-            setCourses(res?.results || []);
-            setCoursesLoaded(true);
-        });
-    }, []);
-
-    useEffect(() => {
-        dispatch(usersThunks.getUsers('student')).then((res: any) => {
-            setStudents(res?.results || []);
-            setStudentsLoaded(true);
-        });
-    }, []);
-
-    useEffect(() => {
-        dispatch(usersThunks.getUsers('teacher')).then((res: any) => {
-            setTeachers(res?.results || []);
-            setTeachersLoaded(true);
-        });
-    }, []);
 
     if (!coursesLoaded || !studentsLoaded || !teachersLoaded) return <Spinner/>;
 

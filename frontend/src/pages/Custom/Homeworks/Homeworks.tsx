@@ -8,15 +8,14 @@ import {useFetchData} from "../../../hooks/useFetchData";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {getUserRoles} from "../../../helpers/getUserRoles";
 import {homeworksThunk} from "../../../slices/homeworks";
-import {useModal} from "../../../Components/Hooks/useModal";
 import HomeworkCreate from "../../../Components/Custom/Homeworks/HomeworkCreate";
-import {useCascadeSelect} from "../../../hooks/useHomeworkCascadeSelect";
+import {useCascadeSelect} from "../../../hooks/useCascadeSelect";
 import CascadeSelect from "../../../Components/Custom/Homeworks/CascadeSelect";
 import HomeworkDelete from "../../../Components/Custom/Homeworks/HomeworkDelete";
-import {EditModalProps} from "../../../types/editModal";
 import HomeworkEdit from "../../../Components/Custom/Homeworks/HomeworkEdit";
 import {formatFullDate, toLocalInput} from "../../../utils/date";
 import {useDispatch} from "react-redux";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 const Homeworks = (props: any) => {
     const [search, setSearch] = useState<string>('');
@@ -32,37 +31,9 @@ const Homeworks = (props: any) => {
         })
     );
 
-    const [showCreate, hideCreate] = useModal(
-        <HomeworkCreate onSuccess={() => {
-            fetchData();
-            hideCreate()
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <HomeworkDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
-    );
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <HomeworkEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: HomeworkCreate, edit: HomeworkEdit, remove: HomeworkDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {

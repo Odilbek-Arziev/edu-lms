@@ -4,7 +4,6 @@ import FeatherIcon from "feather-icons-react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchLanguageLines, getLanguageLine, refreshLanguageLines} from "../../../slices/languageLines/thunk";
-import {useModal} from "../../../Components/Hooks/useModal";
 import LanguageLinesCreate from "../../../Components/Custom/LanguageLines/LanguageLinesCreate";
 import {closeLoading, showError, showLoading, showSuccess} from "../../../utils/swal";
 import LanguageLineDelete from "../../../Components/Custom/LanguageLines/LanguageLineDelete";
@@ -13,8 +12,8 @@ import {RootState} from "../../../slices";
 import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
-import {EditModalProps} from "../../../types/editModal";
 import {withTranslation} from "react-i18next";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 
 const LanguageLines = (props: any) => {
@@ -23,42 +22,11 @@ const LanguageLines = (props: any) => {
     const dispatch = useDispatch<any>();
     const {items: languageLines, loading, count} = useSelector((state: RootState) => state.LanguageLines);
 
-    const [showCreate, hideCreate] = useModal(
-        () => (
-            <LanguageLinesCreate
-                onSuccess={() => {
-                    dispatch(fetchLanguageLines({page, search}));
-                    hideCreate();
-                }}
-                onCancel={() => hideCreate()}
-            />
-        )
-    );
+    const reload = () => dispatch(fetchLanguageLines({page, search}));
 
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <LanguageLineDelete
-                {...props}
-                onSuccess={() => {
-                    dispatch(fetchLanguageLines({page, search}));
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
-    );
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <LanguageLineEdit
-                {...props}
-                onSuccess={() => {
-                    dispatch(fetchLanguageLines({page, search}));
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: LanguageLinesCreate, edit: LanguageLineEdit, remove: LanguageLineDelete},
+        {onChange: reload}
     );
 
     async function getData(id: number) {

@@ -13,6 +13,10 @@ import CategoryEdit from "../../../Components/Custom/Categories/CategoryEdit";
 import {EditModalProps} from "../../../types/editModal";
 import {useDispatch} from "react-redux";
 import CategoryDelete from "../../../Components/Custom/Categories/CategoryDelete";
+import {useCrudModals} from "../../../hooks/useCrudModals";
+import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
+import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
+import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
 
 const Categories = (props: any) => {
     const [search, setSearch] = useState<string>('');
@@ -26,37 +30,9 @@ const Categories = (props: any) => {
         })
     );
 
-    const [showCreate, hideCreate] = useModal(
-        <CategoryCreate onSuccess={() => {
-            fetchData();
-            hideCreate()
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <CategoryEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
-    );
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <CategoryDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: CategoryCreate, edit: CategoryEdit, remove: CategoryDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {

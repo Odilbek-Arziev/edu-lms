@@ -1,5 +1,5 @@
 import {SubmissionFilters} from "./SubmissionFIlters";
-import {useCascadeSelect} from "../hooks/useHomeworkCascadeSelect";
+import {useCascadeSelect} from "../hooks/useCascadeSelect";
 import {TriState} from "../Components/Custom/Submissions/TriStateSwitch";
 
 export interface HomeworkCriterionShort {

@@ -7,7 +7,7 @@ import {withTranslation} from "react-i18next";
 import {useTranslation} from "react-i18next";
 import * as Yup from "yup";
 import Flatpickr from "react-flatpickr";
-import {useCascadeSelect} from "../../../hooks/useHomeworkCascadeSelect";
+import {useCascadeSelect} from "../../../hooks/useCascadeSelect";
 import CascadeSelect from "./CascadeSelect";
 import CriteriaPicker from "./Criterion/CriteriaPicker";
 

@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useState} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
-import {useModal} from "../../../Components/Hooks/useModal";
 import RoleCreate from "../../../Components/Custom/Roles/RoleCreate";
 import RoleDelete from "../../../Components/Custom/Roles/RoleDelete";
 import RoleEdit from "../../../Components/Custom/Roles/RoleEdit";
@@ -14,8 +13,8 @@ import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {withTranslation} from "react-i18next";
-import {EditModalProps} from "../../../types/editModal";
 import {useFetchData} from "../../../hooks/useFetchData";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 
 const Roles = (props: any) => {
@@ -35,37 +34,9 @@ const Roles = (props: any) => {
         })
     );
 
-    const [showCreate, hideCreate] = useModal(
-        <RoleCreate onSuccess={() => {
-            fetchData();
-            hideCreate()
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <RoleDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
-    );
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <RoleEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: RoleCreate, edit: RoleEdit, remove: RoleDelete},
+        {onChange: fetchData}
     );
 
     const clearFilter = () => {

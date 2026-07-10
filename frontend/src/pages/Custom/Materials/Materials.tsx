@@ -7,73 +7,42 @@ import CustomSelect from "../../../Components/Common/CustomSelect";
 import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {closeLoading, showLoading} from "../../../utils/swal";
-import {useModal} from "../../../Components/Hooks/useModal";
-import {EditModalProps} from "../../../types/editModal";
 import {useDispatch} from "react-redux";
 import {materialsThunk} from "../../../slices/materials/reducer";
-import {coursesThunks} from "../../../slices/courses/reducer";
-import {modulesThunks} from "../../../slices/modules/reducer";
-import {lessonsThunks} from "../../../slices/lessons/reducer";
 import MaterialCreate from "../../../Components/Custom/Materials/MaterialCreate";
 import MaterialEdit from "../../../Components/Custom/Materials/MaterialEdit";
 import MaterialDelete from "../../../Components/Custom/Materials/MaterialDelete";
 import {getUserRoles} from "../../../helpers/getUserRoles";
+import {useCascadeSelect} from "../../../hooks/useCascadeSelect";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 const Materials = (props: any) => {
     const dispatch = useDispatch<any>();
     const [search, setSearch] = useState<string>('');
 
-    const [courses, setCourses] = useState<any[]>([]);
-    const [modules, setModules] = useState<any[]>([]);
-    const [lessons, setLessons] = useState<any[]>([]);
-    const [courseFilter, setCourseFilter] = useState<any>(null);
-    const [moduleFilter, setModuleFilter] = useState<any>(null);
-    const [lessonFilter, setLessonFilter] = useState<any>(null);
+    const {
+        courseId, moduleId, lessonId,
+        setCourseId, setModuleId, setLessonId,
+        coursesOptions, modulesOptions, lessonsOptions,
+        reset,
+    } = useCascadeSelect();
 
     const {localData: materials, isSearching, fetchData} = useFetchData(
         materialsThunk.fetch,
         'materials',
         () => ({
             ...(search && {search}),
-            ...(courseFilter && {course: courseFilter}),
-            ...(lessonFilter && {lesson: lessonFilter}),
+            ...(courseId && {course: courseId}),
+            ...(lessonId && {lesson: lessonId}),
         })
     );
 
     const roles = getUserRoles();
     const canManage = roles.includes('manager');
 
-    const [showCreate, hideCreate] = useModal(
-        <MaterialCreate onSuccess={() => {
-            fetchData();
-            hideCreate();
-        }} onCancel={() => hideCreate()}/>,
-    );
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (modalProps: EditModalProps) => (
-            <MaterialEdit
-                {...modalProps}
-                onSuccess={() => {
-                    fetchData();
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
-    );
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (modalProps: { id: number }) => (
-            <MaterialDelete
-                {...modalProps}
-                onSuccess={() => {
-                    fetchData();
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: MaterialCreate, edit: MaterialEdit, remove: MaterialDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {
@@ -92,35 +61,9 @@ const Materials = (props: any) => {
         }
     }
 
-    const coursesOptions = courses?.map((c: any) => ({value: c.id, label: c.title})) || [];
-    const modulesOptions = modules?.map((m: any) => ({value: m.id, label: m.title})) || [];
-    const lessonsOptions = lessons?.map((l: any) => ({value: l.id, label: l.title})) || [];
-
-    useEffect(() => {
-        dispatch(coursesThunks.fetch()).then((res: any) => setCourses(res?.results || []));
-    }, []);
-
-    useEffect(() => {
-        setModuleFilter(null);
-        setLessonFilter(null);
-        setModules([]);
-        setLessons([]);
-        if (courseFilter) {
-            dispatch(modulesThunks.fetch({course: courseFilter})).then((res: any) => setModules(res?.results || []));
-        }
-    }, [courseFilter]);
-
-    useEffect(() => {
-        setLessonFilter(null);
-        setLessons([]);
-        if (moduleFilter) {
-            dispatch(lessonsThunks.fetch({module: moduleFilter})).then((res: any) => setLessons(res?.results || []));
-        }
-    }, [moduleFilter]);
-
     useEffect(() => {
         fetchData();
-    }, [search, courseFilter, lessonFilter]);
+    }, [search, courseId, lessonId]);
 
     useEffect(() => {
         if (isSearching) showLoading(props.t('loading'), props.t('wait'));
@@ -131,9 +74,7 @@ const Materials = (props: any) => {
 
     const clearFilters = () => {
         setSearch('');
-        setCourseFilter(null);
-        setModuleFilter(null);
-        setLessonFilter(null);
+        reset();
     };
 
     return (
@@ -151,9 +92,9 @@ const Materials = (props: any) => {
                                     <div style={{minWidth: 200}}>
                                         <CustomSelect
                                             placeholder={props.t('select_course')}
-                                            value={courseFilter}
+                                            value={courseId}
                                             options={coursesOptions}
-                                            onChange={setCourseFilter}
+                                            onChange={setCourseId}
                                             isClearable
                                         />
                                     </div>
@@ -161,22 +102,22 @@ const Materials = (props: any) => {
                                     <div style={{minWidth: 200}}>
                                         <CustomSelect
                                             placeholder={props.t('select_module')}
-                                            value={moduleFilter}
+                                            value={moduleId}
                                             options={modulesOptions}
-                                            onChange={setModuleFilter}
+                                            onChange={setModuleId}
                                             isClearable
-                                            isDisabled={!courseFilter}
+                                            isDisabled={!courseId}
                                         />
                                     </div>
 
                                     <div style={{minWidth: 200}}>
                                         <CustomSelect
                                             placeholder={props.t('select_lesson')}
-                                            value={lessonFilter}
+                                            value={lessonId}
                                             options={lessonsOptions}
-                                            onChange={setLessonFilter}
+                                            onChange={setLessonId}
                                             isClearable
-                                            isDisabled={!moduleFilter}
+                                            isDisabled={!moduleId}
                                         />
                                     </div>
 

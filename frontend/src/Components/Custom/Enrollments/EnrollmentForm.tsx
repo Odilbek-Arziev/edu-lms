@@ -10,15 +10,14 @@ import * as Yup from "yup";
 import {coursesThunks} from "../../../slices/courses/reducer";
 import {usersThunks} from "../../../slices/users/reducer";
 import {enrollmentsTiles} from "../../../common/data/widgets";
+import {useCourseOptions} from "../../../hooks/useCourseOptions";
+import {useUsersByRole} from "../../../hooks/useUsersByRole";
 
 
 function EnrollmentForm({onSubmit, onCancel, loader, initialValues, action}: FormProps) {
     const {t} = useTranslation();
-    const dispatch = useDispatch<any>();
-    const [courses, setCourses] = useState<any[]>([]);
-    const [coursesLoaded, setCoursesLoaded] = useState(false);
-    const [students, setStudents] = useState<any[]>([]);
-    const [studentsLoaded, setStudentsLoaded] = useState(false);
+    const {courses, coursesLoaded} = useCourseOptions();
+    const {users: students, usersLoaded: studentsLoaded} = useUsersByRole('student');
 
     const isEdit = action === 'update' || !!initialValues?.id
 
@@ -47,21 +46,6 @@ function EnrollmentForm({onSubmit, onCancel, loader, initialValues, action}: For
         value: status.label,
         label: status.label,
     })) || [];
-
-
-    useEffect(() => {
-        dispatch(coursesThunks.fetch({})).then((res: any) => {
-            setCourses(res?.results || []);
-            setCoursesLoaded(true);
-        });
-    }, []);
-
-    useEffect(() => {
-        dispatch(usersThunks.getUsers('student')).then((res: any) => {
-            setStudents(res?.results || []);
-            setStudentsLoaded(true);
-        });
-    }, []);
 
     if (!coursesLoaded || !studentsLoaded) return <Spinner/>;
 

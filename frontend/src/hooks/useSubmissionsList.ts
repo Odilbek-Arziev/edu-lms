@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useFetchData} from "./useFetchData";
-import {useCascadeSelect} from "./useHomeworkCascadeSelect";
+import {useCascadeSelect} from "./useCascadeSelect";
 import {homeworkSubmissionsThunk} from "../slices/HomeworkSubmissions";
 import {closeLoading, showLoading} from "../utils/swal";
 import {PER_PAGE} from "../constants";

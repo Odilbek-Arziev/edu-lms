@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Button, Container, Input, Table} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
-import {useModal} from "../../../Components/Hooks/useModal";
 import MenuCreate from "../../../Components/Custom/Menu/MenuCreate";
 import MenuDelete from "../../../Components/Custom/Menu/MenuDelete";
 import MenuEdit from "../../../Components/Custom/Menu/MenuEdit";
@@ -18,8 +17,8 @@ import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
 import {iconsThunks} from "../../../slices/icons";
 import {withTranslation} from "react-i18next";
-import {EditModalProps} from "../../../types/editModal";
 import {useFetchData} from "../../../hooks/useFetchData";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 
 const Menu = (props: any) => {
@@ -34,14 +33,14 @@ const Menu = (props: any) => {
     const {items: menu, loading} = useSelector((state: RootState) => state.Menu);
     const roles = useSelector((state: any) => state.Roles.items);
 
-    const { localData, totalCount, isSearching, fetchData } = useFetchData(
+    const {localData, totalCount, isSearching, fetchData} = useFetchData(
         menuThunks.fetch,
         'menu',
         () => ({
             page,
             perPage,
-            ...(search && { search }),
-            ...(role && { roleId: role })
+            ...(search && {search}),
+            ...(role && {roleId: role})
         })
     );
 
@@ -52,49 +51,9 @@ const Menu = (props: any) => {
         label: props.t(item.name),
     }))
 
-    const [showCreate, hideCreate] = useModal(
-        <MenuCreate onSuccess={() => {
-            if (hasActiveFilters) {
-                fetchData();
-            } else {
-                dispatch(menuThunks.fetch());
-            }
-            hideCreate()
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <MenuDelete
-                {...props}
-                onSuccess={() => {
-                    if (hasActiveFilters) {
-                        fetchData();
-                    } else {
-                        dispatch(menuThunks.fetch());
-                    }
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
-    );
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <MenuEdit
-                {...props}
-                onSuccess={() => {
-                    if (hasActiveFilters) {
-                        fetchData();
-                    } else {
-                        dispatch(menuThunks.fetch());
-                    }
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: MenuCreate, edit: MenuEdit, remove: MenuDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {
@@ -208,7 +167,7 @@ const Menu = (props: any) => {
                                         </span>
                                     )) : '-'}
                                 </td>
-                                 <td>{row.order}</td>
+                                <td>{row.order}</td>
                                 <td className='d-flex gap-1 justify-content-center'>
                                     <Button className='btn btn-info btn-sm editBtn' onClick={() => getData(row.id)}>
                                         <FeatherIcon color="white" size={12} icon="edit"/>

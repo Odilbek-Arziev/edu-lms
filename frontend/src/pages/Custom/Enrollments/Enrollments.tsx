@@ -13,10 +13,8 @@ import {enrollmentsTiles} from "../../../common/data/widgets";
 import CountUp from "react-countup";
 import SearchInput from "../../../Components/Common/SearchInput";
 import FeatherIcon from "feather-icons-react";
-import {coursesThunks} from "../../../slices/courses/reducer";
 import {useDispatch, useSelector} from "react-redux";
 import CustomSelect from "../../../Components/Common/CustomSelect";
-import {Course} from "../../../types/Course";
 import {enrollmentsThunk} from "../../../slices/enrollments/reducer";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
@@ -28,14 +26,16 @@ import {useFetchData} from "../../../hooks/useFetchData";
 import {EditModalProps} from "../../../types/editModal";
 import EnrollmentEdit from "../../../Components/Custom/Enrollments/EnrollmentEdit";
 import EnrollmentDelete from "../../../Components/Custom/Enrollments/EnrollmentDelete";
+import {useCourseOptions} from "../../../hooks/useCourseOptions";
+import {useCrudModals} from "../../../hooks/useCrudModals";
 
 const Enrollments = (props: any) => {
     const dispatch = useDispatch<any>();
     const [search, setSearch] = useState<string>('');
-    const [courses, setCourses] = useState<any[]>([]);
     const [courseFilter, setCourseFilter] = useState<any>(null);
     const [statusFilter, setStatusFilter] = useState<any>(null);
     const [page, setPage] = useState<number>(1);
+    const {coursesOptions} = useCourseOptions();
 
     const {loading, count, stats} = useSelector(
         (state: RootState) => state.Enrollments
@@ -52,11 +52,6 @@ const Enrollments = (props: any) => {
             ...(statusFilter && {status: statusFilter}),
         })
     );
-
-    const coursesOptions = courses?.map((course: Course) => ({
-        value: course.title,
-        label: course.title,
-    })) || [];
 
     const statusOptions = enrollmentsTiles?.map((status: any) => ({
         value: status.label,
@@ -85,43 +80,15 @@ const Enrollments = (props: any) => {
         }))
     }, [stats])
 
+    const refresh = () => {
+        fetchData();
+        dispatch(enrollmentsThunk.getStats());
+    };
 
-    const [showCreate, hideCreate] = useModal(
-        <EnrollmentCreate onSuccess={() => {
-            fetchData();
-            dispatch(enrollmentsThunk.getStats());
-            hideCreate();
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <EnrollmentEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    dispatch(enrollmentsThunk.getStats());
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: EnrollmentCreate, edit: EnrollmentEdit, remove: EnrollmentDelete},
+        {onChange: refresh}
     );
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <EnrollmentDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    dispatch(enrollmentsThunk.getStats());
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
-    );
-
 
     const handleStatusChange = async (id: number, status: string) => {
         await dispatch(enrollmentsThunk.update(id, {status}));
@@ -152,12 +119,6 @@ const Enrollments = (props: any) => {
         dropped: "danger",
         suspended: "warning",
     }
-
-    useEffect(() => {
-        dispatch(coursesThunks.fetch()).then((res: any) => {
-            setCourses(res?.results || []);
-        });
-    }, []);
 
     useEffect(() => {
         if (loading || isSearching) {
@@ -261,7 +222,7 @@ const Enrollments = (props: any) => {
                         </div>
                         <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
                             <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                           {props.t('create')}
+                            {props.t('create')}
                         </Button>
                     </div>
                     <Table
@@ -312,8 +273,8 @@ const Enrollments = (props: any) => {
                                                 color={
                                                     row.progress >= 75 ? "success"
                                                         : row.progress >= 50 ? "info"
-                                                        : row.progress >= 25 ? "warning"
-                                                            : "danger"
+                                                            : row.progress >= 25 ? "warning"
+                                                                : "danger"
                                                 }
                                                 style={{height: "6px"}}
                                             />

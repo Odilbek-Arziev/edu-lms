@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Container, Input, Label, Table} from "reactstrap";
+import {Button, Container, Table} from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import SearchInput from "../../../Components/Common/SearchInput";
@@ -15,23 +15,27 @@ import LiveSessionCreate from "../../../Components/Custom/LiveSessions/LiveSessi
 import LiveSessionEdit from "../../../Components/Custom/LiveSessions/LiveSessionEdit";
 import {toApiDate, toLocalInput} from "../../../utils/date";
 import CustomSelect from "../../../Components/Common/CustomSelect";
-import {usersThunks} from "../../../slices/users/reducer";
-import {coursesThunks} from "../../../slices/courses/reducer";
 import Flatpickr from "react-flatpickr";
-import {CourseSimplified} from "../../../types/Course";
 import {User} from "../../../types/User";
 import {getUserRoles} from "../../../helpers/getUserRoles";
+import {useCourseOptions} from "../../../hooks/useCourseOptions";
+import {useUsersByRole} from "../../../hooks/useUsersByRole";
+import {useCrudModals} from "../../../hooks/useCrudModals";
+import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
+import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
+import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
 
 
 const LiveSessions = (props: any) => {
     const dispatch = useDispatch<any>();
     const [search, setSearch] = useState<string>('');
-    const [students, setStudents] = useState<any[]>([]);
-    const [courses, setCourses] = useState<any[]>([]);
     const [studentFilter, setStudentFilter] = useState<any>(null);
     const [courseFilter, setCourseFilter] = useState<any>(null);
     const [dateFrom, setDateFrom] = useState<Date | null>(null);
     const [dateTo, setDateTo] = useState<Date | null>(null);
+
+    const {coursesOptions} = useCourseOptions()
+    const {usersOptions: studentsOptions} = useUsersByRole('student')
 
     const {localData: liveSessions, isSearching, fetchData} = useFetchData(
         liveSessionsThunk.fetch,
@@ -47,37 +51,9 @@ const LiveSessions = (props: any) => {
     const roles = getUserRoles();
     const canManage = roles.includes('manager')
 
-    const [showCreate, hideCreate] = useModal(
-        <LiveSessionCreate onSuccess={() => {
-            fetchData();
-            hideCreate()
-        }} onCancel={() => hideCreate()}/>,
-    )
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <LiveSessionEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
-    );
-
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <LiveSessionDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData();
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
+    const {showCreate, showEdit, showDelete} = useCrudModals(
+        {create: LiveSessionCreate, edit: LiveSessionEdit, remove: LiveSessionDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {
@@ -99,16 +75,6 @@ const LiveSessions = (props: any) => {
         }
     }
 
-    const studentsOptions = students?.map((student: User) => ({
-        value: student.id,
-        label: `${student.first_name} ${student.last_name}`,
-    })) || [];
-
-    const coursesOptions = courses?.map((course: CourseSimplified) => ({
-        value: course.title,
-        label: course.title,
-    })) || [];
-
     useEffect(() => {
         fetchData();
     }, [search, studentFilter, courseFilter, dateFrom, dateTo]);
@@ -120,16 +86,6 @@ const LiveSessions = (props: any) => {
             closeLoading();
         }
     }, [isSearching]);
-
-    useEffect(() => {
-        dispatch(usersThunks.getUsers('student')).then((res: any) => {
-            setStudents(res?.results || []);
-        });
-
-        dispatch(coursesThunks.fetch()).then((res: any) => {
-            setCourses(res?.results || []);
-        });
-    }, []);
 
     document.title = props.t('live_sessions_page');
 

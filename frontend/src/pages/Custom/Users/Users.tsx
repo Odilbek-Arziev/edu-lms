@@ -28,6 +28,10 @@ import {usersThunks} from "../../../slices/users";
 import {withTranslation} from "react-i18next";
 import {EditModalProps} from "../../../types/editModal";
 import {useFetchData} from "../../../hooks/useFetchData";
+import {useCrudModals} from "../../../hooks/useCrudModals";
+import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
+import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
+import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
 
 
 const Users = (props: any) => {
@@ -78,30 +82,9 @@ const Users = (props: any) => {
         {value: 'passive', label: props.t('passive')}
     ];
 
-    const [showDelete, hideDelete] = useModal<{ id: number }>(
-        (props: { id: number }) => (
-            <UserDelete
-                {...props}
-                onSuccess={() => {
-                    fetchData()
-                    hideDelete();
-                }}
-                onCancel={() => hideDelete()}
-            />
-        )
-    );
-
-    const [showEdit, hideEdit] = useModal<EditModalProps>(
-        (props: EditModalProps) => (
-            <UserEdit
-                {...props}
-                onSuccess={() => {
-                    fetchData()
-                    hideEdit();
-                }}
-                onCancel={() => hideEdit()}
-            />
-        )
+    const {showEdit, showDelete} = useCrudModals(
+        {edit: UserEdit, remove: UserDelete},
+        {onChange: fetchData}
     );
 
     async function getData(id: number) {

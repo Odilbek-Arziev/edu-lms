@@ -5,29 +5,24 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import SearchInput from "../../../Components/Common/SearchInput";
 import CustomSelect from "../../../Components/Common/CustomSelect";
 import {withTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {liveSessionsThunk} from "../../../slices/liveSessions/reducer";
-import {usersThunks} from "../../../slices/users/reducer";
-import {coursesThunks} from "../../../slices/courses/reducer";
-import {CourseSimplified} from "../../../types/Course";
-import {User} from "../../../types/User";
-
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import {useCourseOptions} from "../../../hooks/useCourseOptions";
+import {useUsersByRole} from "../../../hooks/useUsersByRole";
 
 const LiveSessionsDashboard = (props: any) => {
-    const dispatch = useDispatch<any>();
     const calendarRef = useRef<any>(null);
 
     const [search, setSearch] = useState<string>('');
-    const [students, setStudents] = useState<any[]>([]);
-    const [courses, setCourses] = useState<any[]>([]);
     const [studentFilter, setStudentFilter] = useState<any>(null);
     const [courseFilter, setCourseFilter] = useState<any>(null);
+    const {coursesOptions} = useCourseOptions();
+    const {usersOptions: studentsOptions} = useUsersByRole('student');
 
     const {localData: liveSessions, isSearching, fetchData} = useFetchData(
         liveSessionsThunk.fetch,
@@ -38,17 +33,6 @@ const LiveSessionsDashboard = (props: any) => {
             ...(courseFilter && {course: courseFilter}),
         })
     );
-
-
-    const studentsOptions = students?.map((s: User) => ({
-        value: s.id,
-        label: `${s.first_name} ${s.last_name}`,
-    })) || [];
-
-    const coursesOptions = courses?.map((c: CourseSimplified) => ({
-        value: c.title,
-        label: c.title,
-    })) || [];
 
     const calendarEvents = useMemo(() => {
         return (liveSessions || []).map((row: any) => {
@@ -79,6 +63,13 @@ const LiveSessionsDashboard = (props: any) => {
         return {total: liveSessions?.length || 0, today, upcoming, past};
     }, [liveSessions]);
 
+    const statCards = [
+        {label: props.t('total'), value: stats.total, icon: 'video', color: 'primary'},
+        {label: props.t('today'), value: stats.today, icon: 'calendar', color: 'success'},
+        {label: props.t('upcoming'), value: stats.upcoming, icon: 'clock', color: 'info'},
+        {label: props.t('past'), value: stats.past, icon: 'check-circle', color: 'secondary'},
+    ];
+
     const upcomingList = useMemo(() => {
         const now = new Date();
         return (liveSessions || [])
@@ -86,6 +77,11 @@ const LiveSessionsDashboard = (props: any) => {
             .sort((a: any, b: any) => +new Date(a.scheduled_at) - +new Date(b.scheduled_at))
             .slice(0, 6);
     }, [liveSessions]);
+
+    const handleEventClick = (info: any) => {
+        const row = info.event.extendedProps.raw;
+        window.open(row.link, '_blank');
+    };
 
     useEffect(() => {
         fetchData();
@@ -96,24 +92,7 @@ const LiveSessionsDashboard = (props: any) => {
         else closeLoading();
     }, [isSearching]);
 
-    useEffect(() => {
-        dispatch(usersThunks.getUsers('student')).then((res: any) => setStudents(res?.results || []));
-        dispatch(coursesThunks.fetch()).then((res: any) => setCourses(res?.results || []));
-    }, []);
-
     document.title = props.t('live_sessions_dashboard_page');
-
-    const statCards = [
-        {label: props.t('total'), value: stats.total, icon: 'video', color: 'primary'},
-        {label: props.t('today'), value: stats.today, icon: 'calendar', color: 'success'},
-        {label: props.t('upcoming'), value: stats.upcoming, icon: 'clock', color: 'info'},
-        {label: props.t('past'), value: stats.past, icon: 'check-circle', color: 'secondary'},
-    ];
-
-    const handleEventClick = (info: any) => {
-        const row = info.event.extendedProps.raw;
-        window.open(row.link, '_blank');
-    };
 
     return (
         <React.Fragment>
