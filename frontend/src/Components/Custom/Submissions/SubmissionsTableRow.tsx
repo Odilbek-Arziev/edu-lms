@@ -88,6 +88,16 @@ function SubmissionsTableRow({submission, onOpen}: SubmissionsTableRowProps) {
                     <FeatherIcon size={11} icon={config.icon} className="me-1"/>
                     {t(config.label)}
                 </Badge>
+
+                {submission.previous_submission && (
+                    <div>
+                        <Badge className="bg-warning-subtle text-warning ms-1">
+                            <FeatherIcon size={11} icon="refresh-cw" className="me-1"/>
+                            {t('reworked')}
+                        </Badge>
+                    </div>
+                )}
+
                 {submission.review?.received_at && (
                     <div className="text-muted fs-12 mt-1">
                         {formatFullDate(submission.review.received_at)}

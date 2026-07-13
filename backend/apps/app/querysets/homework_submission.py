@@ -16,38 +16,35 @@ class HomeworkSubmissionQuerySet(BaseQuerySet):
         if not course:
             return self
 
-        return self.filter(homework__lesson__module__course__title__icontains=course)
+        return self.filter(homework__lesson__module__course_id=course)
 
-    def within_submit_period(self, date_from=None, date_to=None):
-        """
-        :returns submissions of the period
-        """
+    def for_lesson(self, lesson):
+        if not lesson:
+            return self
+
+        return self.filter(homework__lesson_id=lesson)
+
+    def within_submit_period(self, submitted_from=None, submitted_to=None):
         filters = {}
 
-        if date_from:
-            filters["submitted_at__gte"] = date_from
-        if date_to:
-            filters["submitted_at__lte"] = date_to
+        if submitted_from:
+            filters["submitted_at__date__gte"] = submitted_from
+        if submitted_to:
+            filters["submitted_at__date__lte"] = submitted_to
 
         return self.filter(**filters)
 
     def within_check_period(self, checked_from=None, checked_to=None):
-        """
-        :returns submissions which was checked in this period
-        """
         filters = {}
 
         if checked_from:
-            filters["review__created_at__gte"] = checked_from
+            filters["review__created_at__date__gte"] = checked_from
         if checked_to:
-            filters["review__created_at__lte"] = checked_to
+            filters["review__created_at__date__lte"] = checked_to
 
         return self.filter(**filters)
 
     def within_homework_period(self, homework_from=None, homework_to=None):
-        """
-        :returns submissions which was created for homework given in this period
-        """
         filters = {}
 
         if homework_from:
@@ -66,7 +63,7 @@ class HomeworkSubmissionQuerySet(BaseQuerySet):
 
         latest_submissions = (
             self.order_by("student_id", "homework_id", "-created_at")
-                .distinct("student_id", "homework_id")
+            .distinct("student_id", "homework_id")
         )
 
         if status == "checked":
@@ -82,7 +79,7 @@ class HomeworkSubmissionQuerySet(BaseQuerySet):
 
         latest_submissions = (
             self.order_by("student_id", "homework_id", "-created_at")
-                .distinct("student_id", "homework_id")
+            .distinct("student_id", "homework_id")
         )
 
         if state == 'approved':
@@ -90,15 +87,23 @@ class HomeworkSubmissionQuerySet(BaseQuerySet):
         elif state == 'rejected':
             return latest_submissions.filter(review__is_accepted=False)
 
-    def list(self, date_from=None, date_to=None, student=None, course=None, status=None, state=None, checked_from=None,
-             checked_to=None, homework_from=None, homework_to=None):
+    def by_previous_submission(self, reworked=None):
+        if reworked is None:
+            return self
+        return self.filter(previous_submission__isnull=not reworked)
+
+    def list(self, submitted_from=None, submitted_to=None, student=None, course=None, status=None,
+             state=None, checked_from=None, checked_to=None, homework_from=None, homework_to=None,
+             lesson=None, reworked=None):
         return (
             self.by_student(student)
-                .for_course(course)
-                .by_status(status)
-                .by_state(state)
-                .within_submit_period(date_from, date_to)
-                .within_check_period(checked_from, checked_to)
-                .within_homework_period(homework_from, homework_to)
-                .order_by("student_id", "homework_id", "-created_at")
+            .for_course(course)
+            .for_lesson(lesson)
+            .by_status(status)
+            .by_state(state)
+            .by_previous_submission(reworked)
+            .within_submit_period(submitted_from, submitted_to)
+            .within_check_period(checked_from, checked_to)
+            .within_homework_period(homework_from, homework_to)
+            .order_by("student_id", "homework_id", "-created_at")
         )

@@ -1,4 +1,5 @@
 from app.serializers.homework_submission import HomeworkSubmissionSerializer
+from core.utils.string import str_to_bool
 from core.views.viewsets import BaseModelViewSet
 from app.models import HomeworkSubmission
 from rest_framework.decorators import action
@@ -12,20 +13,22 @@ class HomeworkSubmissionViewSet(BaseModelViewSet):
 
     def get_queryset(self):
         params = self.request.query_params
-        date_from = params.get('date_from')
-        date_to = params.get('date_to')
+        submitted_from = params.get('submitted_from')
+        submitted_to = params.get('submitted_to')
         student = params.get('student')
         course = params.get('course')
+        lesson = params.get('lesson')
         status = params.get('status')
         state = params.get('state')
         checked_from = params.get('checked_from')
         checked_to = params.get('checked_to')
         homework_from = params.get('homework_from')
         homework_to = params.get('homework_to')
+        reworked = params.get('reworked')
 
         queryset = HomeworkSubmission.objects.list(
-            date_from=date_from,
-            date_to=date_to,
+            submitted_from=submitted_from,
+            submitted_to=submitted_to,
             student=student,
             course=course,
             status=status,
@@ -33,7 +36,9 @@ class HomeworkSubmissionViewSet(BaseModelViewSet):
             checked_from=checked_from,
             checked_to=checked_to,
             homework_from=homework_from,
-            homework_to=homework_to
+            homework_to=homework_to,
+            lesson=lesson,
+            reworked=str_to_bool(reworked)
         )
 
         return queryset

@@ -50,6 +50,7 @@ export interface HomeworkSubmission {
     homework: HomeworkShort;
     is_active: boolean;
     previous_submission: number | null;
+    previous_submission_detail: this,
     is_checked: boolean;
     is_approved: boolean;
     review: SubmissionReview | null;

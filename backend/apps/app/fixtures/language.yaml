@@ -2755,3 +2755,30 @@
       ru: "Файл не прикреплён"
       uz: "Fayl biriktirilmagan"
       en: "No file attached"
+
+- model: app.languageline
+  pk: 310
+  fields:
+    key: "rework"
+    value:
+      ru: "Пересдача"
+      uz: "Qayta topshirish"
+      en: "Rework"
+
+- model: app.languageline
+  pk: 311
+  fields:
+    key: "previous_submission_from"
+    value:
+      ru: "Пересдача от"
+      uz: "Oldingi topshiruv sanasi"
+      en: "Previous submission from"
+
+- model: app.languageline
+  pk: 312
+  fields:
+    key: "view_previous"
+    value:
+      ru: "Посмотреть предыдущее выполнение"
+      uz: "Oldingi topshipuvni ko'rish"
+      en: "View previous submission"

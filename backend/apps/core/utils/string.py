@@ -46,3 +46,8 @@ def remove_emoji(text):
                                u"\u3030"
                                "]+", flags=re.UNICODE)
     return emoji_pattern.sub(r'', text)
+
+def str_to_bool(value):
+    if value is None:
+        return None
+    return str(value).lower() in ("true", "1", "yes")

@@ -14,6 +14,7 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
     is_checked = serializers.BooleanField(read_only=True)
     is_approved = serializers.BooleanField(read_only=True)
     review = SubmissionReviewSerializer(read_only=True)
+    previous_submission_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = HomeworkSubmission
@@ -25,11 +26,21 @@ class HomeworkSubmissionSerializer(serializers.ModelSerializer):
             'homework',
             'is_active',
             'previous_submission',
+            'previous_submission_detail',
             'is_checked',
             'is_approved',
             'review',
             'submitted_at'
         ]
+
+    def get_previous_submission_detail(self, obj):
+        if not obj.previous_submission_id:
+            return None
+        if self.context.get('_depth', 0) >= 1:
+            return None
+
+        context = {**self.context, '_depth': self.context.get('_depth', 0) + 1}
+        return HomeworkSubmissionSerializer(obj.previous_submission, context=context).data
 
     def create(self, validated_data):
         request = self.context['request']
