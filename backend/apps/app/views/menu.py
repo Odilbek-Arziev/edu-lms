@@ -15,7 +15,7 @@ class MenuViewSet(BaseModelViewSet):
     @extend_schema(
         parameters=[
             OpenApiParameter("search", OpenApiTypes.STR, description="Search by name"),
-            OpenApiParameter("role", OpenApiTypes.STR, description="Filter by role"),
+            OpenApiParameter("roleId", OpenApiTypes.STR, description="Filter by role"),
         ]
     )
     def get_queryset(self):
@@ -26,5 +26,5 @@ class MenuViewSet(BaseModelViewSet):
             user=self.request.user,
             search=self.request.query_params.get('search')
         ).by_role(
-            self.request.query_params.get('role')
+            self.request.query_params.get('roleId')
         ).order_by('order')

@@ -1,7 +1,6 @@
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import React, {useEffect, useState} from "react";
 import {
-    Button,
     Container,
     DropdownItem,
     DropdownMenu,
@@ -13,25 +12,19 @@ import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
-import {useModal} from "../../../Components/Hooks/useModal";
 import UserDelete from "../../../Components/Custom/Users/UserDelete";
 import UserEdit from "../../../Components/Custom/Users/UserEdit";
 import {useRecaptchaSubmit} from "../../../hooks/useRecaptchaSubmit";
 import {userForgetPassword} from "../../../slices/auth/forgetpwd/thunk";
 import ReCAPTCHA from "react-google-recaptcha";
 import {RootState} from "../../../slices";
-import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/CustomSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {usersThunks} from "../../../slices/users";
 import {withTranslation} from "react-i18next";
-import {EditModalProps} from "../../../types/editModal";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {useCrudModals} from "../../../hooks/useCrudModals";
-import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
-import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
-import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 
 const Users = (props: any) => {
@@ -144,37 +137,34 @@ const Users = (props: any) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title={props.t('users')} pageTitle={props.t('main')}/>
-                    <div className='d-flex gap-1'>
-                        <SearchInput
-                            value={search}
-                            onSearch={setSearch}
-                        />
-                        <CustomSelect
-                            placeholder={props.t('select_role')}
-                            value={role}
-                            options={rolesOptions}
-                            onChange={setRole}
-                            width='20%'
-                        />
-                        <CustomSelect
-                            placeholder={props.t('select_register_type')}
-                            value={registerType}
-                            options={regTypesOptions}
-                            onChange={setRegisterType}
-                            width='20%'
-                        />
-                        <CustomSelect
-                            placeholder={props.t('select_status')}
-                            value={status}
-                            options={statusTypes}
-                            onChange={setStatus}
-                            width='20%'
-                        />
-                        <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
-                            <FeatherIcon color="white" size={12} icon="trash"/>
-                            {props.t('clear')}
-                        </Button>
-                    </div>
+                    <FilterBar
+                        search={search}
+                        onSearch={setSearch}
+                        onClear={clearFilter}
+                        filters={[
+                            {
+                                placeholder: props.t('select_role'),
+                                value: role,
+                                options: rolesOptions,
+                                onChange: setRole,
+                                isClearable: true,
+                            },
+                            {
+                                placeholder: props.t('select_register_type'),
+                                value: registerType,
+                                options: regTypesOptions,
+                                onChange: setRegisterType,
+                                isClearable: true,
+                            },
+                             {
+                                placeholder: props.t('select_status'),
+                                value: status,
+                                options: statusTypes,
+                                onChange: setStatus,
+                                isClearable: true,
+                            },
+                        ]}
+                    />
                     <Table className='table table-striped table-nowrap table-bordered align-middle mt-2 text-center'>
                         <thead>
                         <tr>

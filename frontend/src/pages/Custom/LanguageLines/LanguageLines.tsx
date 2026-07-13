@@ -9,11 +9,11 @@ import {closeLoading, showError, showLoading, showSuccess} from "../../../utils/
 import LanguageLineDelete from "../../../Components/Custom/LanguageLines/LanguageLineDelete";
 import LanguageLineEdit from "../../../Components/Custom/LanguageLines/LanguageLineEdit";
 import {RootState} from "../../../slices";
-import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
 import {withTranslation} from "react-i18next";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 
 const LanguageLines = (props: any) => {
@@ -73,36 +73,26 @@ const LanguageLines = (props: any) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title={props.t('language')} pageTitle={props.t('main')}/>
-                    <div className="d-flex justify-content-between my-2">
-                        <div className='d-flex gap-1'>
-                            <SearchInput
-                                value={search}
-                                onSearch={handleSearchChange}
-                            />
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'
-                                    onClick={() => {
-                                        setSearch('')
-                                        setPage(1);
-                                    }}>
-                                <FeatherIcon color="white" size={12} icon="trash"/>
-                                {props.t('clear')}
-                            </Button>
-                        </div>
-                        <div className='d-flex gap-1'>
-                            <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                                <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                                {props.t('create', {item: props.t('lang_item')})}
-                            </Button>
+                    <FilterBar
+                        search={search}
+                        onSearch={handleSearchChange}
+                        onClear={() => {
+                            setSearch('');
+                            setPage(1);
+                        }}
+                        onCreate={showCreate}
+                        createLabel={props.t('create', {item: props.t('lang_item')})}
+                        actions={
                             <Button
-                                className='btn btn-primary d-flex gap-1 align-items-center'
+                                className="btn btn-primary d-flex gap-1 align-items-center"
                                 onClick={handleRefreshTranslations}
                                 disabled={loading}
                             >
                                 <FeatherIcon color="white" size={12} icon="refresh-cw"/>
                                 {props.t('refresh')}
                             </Button>
-                        </div>
-                    </div>
+                        }
+                    />
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>

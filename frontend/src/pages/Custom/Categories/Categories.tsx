@@ -7,16 +7,12 @@ import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {categoriesThunk} from "../../../slices/categories/reducer";
 import {closeLoading, showLoading} from "../../../utils/swal";
-import {useModal} from "../../../Components/Hooks/useModal";
 import CategoryCreate from "../../../Components/Custom/Categories/CategoryCreate";
 import CategoryEdit from "../../../Components/Custom/Categories/CategoryEdit";
-import {EditModalProps} from "../../../types/editModal";
 import {useDispatch} from "react-redux";
 import CategoryDelete from "../../../Components/Custom/Categories/CategoryDelete";
 import {useCrudModals} from "../../../hooks/useCrudModals";
-import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
-import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
-import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 const Categories = (props: any) => {
     const [search, setSearch] = useState<string>('');
@@ -66,23 +62,13 @@ const Categories = (props: any) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title={props.t('categories')} pageTitle={props.t('main')}/>
-                    <div className="d-flex justify-content-between my-2">
-                        <div className='d-flex gap-1'>
-                            <SearchInput
-                                value={search}
-                                onSearch={setSearch}
-                            />
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'
-                                    onClick={() => setSearch('')}>
-                                <FeatherIcon color="white" size={12} icon="trash"/>
-                                {props.t('clear')}
-                            </Button>
-                        </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                            <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create', {item: props.t('category')})}
-                        </Button>
-                    </div>
+                    <FilterBar
+                        search={search}
+                        onSearch={setSearch}
+                        onClear={() => setSearch('')}
+                        onCreate={showCreate}
+                        createLabel={props.t('create', {item: props.t('category')})}
+                    />
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>

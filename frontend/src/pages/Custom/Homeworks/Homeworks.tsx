@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Badge, Button, Card, CardBody, Container, Progress} from "reactstrap";
+import {Badge, Button, Card, CardBody, Container} from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import SearchInput from "../../../Components/Common/SearchInput";
@@ -13,9 +13,10 @@ import {useCascadeSelect} from "../../../hooks/useCascadeSelect";
 import CascadeSelect from "../../../Components/Custom/Homeworks/CascadeSelect";
 import HomeworkDelete from "../../../Components/Custom/Homeworks/HomeworkDelete";
 import HomeworkEdit from "../../../Components/Custom/Homeworks/HomeworkEdit";
-import {formatFullDate, toLocalInput} from "../../../utils/date";
+import {toLocalInput} from "../../../utils/date";
 import {useDispatch} from "react-redux";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import HomeworkRow from "../../../Components/Custom/Homeworks/HomeworkRow";
 
 const Homeworks = (props: any) => {
     const [search, setSearch] = useState<string>('');
@@ -56,19 +57,13 @@ const Homeworks = (props: any) => {
         }
     }
 
+    const clearFilters = () => {
+        setSearch('');
+        cascade.reset();
+    };
+
     const roles = getUserRoles();
     const canManage = roles.includes('teacher');
-
-    useEffect(() => {
-        fetchData();
-    }, [search, cascade.courseId, cascade.lessonId]);
-
-    useEffect(() => {
-        if (isSearching) showLoading(props.t('loading'), props.t('wait'));
-        else closeLoading();
-    }, [isSearching]);
-
-    document.title = props.t('homeworks_page');
 
     const groups = useMemo(() => {
         const now = new Date();
@@ -110,84 +105,16 @@ const Homeworks = (props: any) => {
         ].filter(g => g.items.length > 0);
     }, [homeworks]);
 
-    const clearFilters = () => {
-        setSearch('');
-        cascade.reset();
-    };
+    useEffect(() => {
+        fetchData();
+    }, [search, cascade.courseId, cascade.lessonId]);
 
-    const HomeworkRow = ({hw, color}: { hw: any; color: string }) => (
-        <Card className="mb-2 overflow-hidden">
-            <div className="d-flex">
-                <div style={{width: 4, background: `var(--vz-${color})`}}/>
-                <CardBody className="py-3">
-                    <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                        <div className="flex-grow-1" style={{minWidth: 0}}>
-                            <div className="d-flex align-items-center gap-2 mb-1">
-                                <h5 className="fs-15 mb-0 text-truncate" title={hw.title}>{hw.title}</h5>
-                                <Badge color={color} className={`bg-${color}-subtle text-${color}`}>
-                                    <FeatherIcon size={11} icon="calendar" className="me-1"/>
-                                    {formatFullDate(hw.deadline)}
-                                </Badge>
-                            </div>
+    useEffect(() => {
+        if (isSearching) showLoading(props.t('loading'), props.t('wait'));
+        else closeLoading();
+    }, [isSearching]);
 
-                            <div className="text-muted small d-flex align-items-center gap-3 flex-wrap">
-                            <span className="d-flex align-items-center gap-1">
-                                <FeatherIcon size={12} icon="book-open"/>
-                                {hw.lesson?.title}
-                            </span>
-                                <span className="d-flex align-items-center gap-1">
-                                <FeatherIcon size={12} icon="repeat"/>
-                                    {props.t('max_attempts')}: {hw.max_attempts}
-                            </span>
-                                {hw.criteria?.length > 0 && (
-                                    <span className="d-flex align-items-center gap-1">
-                                    <FeatherIcon size={12} icon="check-square"/>
-                                        {props.t('criteria')}: {hw.criteria.length}
-                                </span>
-                                )}
-                            </div>
-
-                            {hw.description && (
-                                <p className="text-muted small mb-0 mt-1"
-                                   style={{
-                                       display: '-webkit-box',
-                                       WebkitLineClamp: 2,
-                                       WebkitBoxOrient: 'vertical',
-                                       overflow: 'hidden',
-                                   }}>
-                                    {hw.description}
-                                </p>
-                            )}
-
-                            {hw.criteria?.length > 0 && (
-                                <div className="d-flex flex-wrap gap-1 mt-2">
-                                    {hw.criteria.map((c: any) => (
-                                        <Badge key={c.id} color="light"
-                                               className="bg-light text-body border d-flex align-items-center gap-1"
-                                               style={{fontWeight: 400, fontSize: 12}}>
-                                            <FeatherIcon size={10} icon="check"/>
-                                            {c.text}
-                                        </Badge>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        {canManage && (
-                            <div className="d-flex gap-1 flex-shrink-0">
-                                <Button className="btn btn-info btn-sm" onClick={() => getData(hw.id)}>
-                                    <FeatherIcon color="white" size={12} icon="edit"/>
-                                </Button>
-                                <Button className="btn btn-danger btn-sm" onClick={() => showDelete({id: hw.id})}>
-                                    <FeatherIcon color="white" size={12} icon="trash"/>
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-                </CardBody>
-            </div>
-        </Card>
-    );
+    document.title = props.t('homeworks_page');
 
     return (
         <React.Fragment>
@@ -243,7 +170,14 @@ const Homeworks = (props: any) => {
                                 </Badge>
                             </div>
                             {group.items.map((hw: any) => (
-                                <HomeworkRow key={hw.id} hw={hw} color={group.color}/>
+                                <HomeworkRow
+                                    key={hw.id}
+                                    hw={hw}
+                                    color={group.color}
+                                    canManage={canManage}
+                                    onEdit={getData}
+                                    onDelete={(id) => showDelete({id})}
+                                />
                             ))}
                         </div>
                     ))}

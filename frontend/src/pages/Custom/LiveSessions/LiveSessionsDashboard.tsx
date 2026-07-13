@@ -1,9 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Badge, Button, Card, CardBody, Col, Container, Row} from "reactstrap";
+import {Badge, Card, CardBody, Col, Container, Row} from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/CustomSelect";
 import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {closeLoading, showLoading} from "../../../utils/swal";
@@ -14,6 +12,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import {useCourseOptions} from "../../../hooks/useCourseOptions";
 import {useUsersByRole} from "../../../hooks/useUsersByRole";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 const LiveSessionsDashboard = (props: any) => {
     const calendarRef = useRef<any>(null);
@@ -127,38 +126,31 @@ const LiveSessionsDashboard = (props: any) => {
                     {/* фильтры */}
                     <Card>
                         <CardBody>
-                            <div className="d-flex flex-wrap gap-3 align-items-end justify-content-between">
-                                <div className="d-flex flex-wrap gap-3 align-items-end">
-                                    <div><SearchInput value={search} onSearch={setSearch}/></div>
-                                    <div style={{minWidth: 200}}>
-                                        <CustomSelect
-                                            placeholder={props.t('select_user')}
-                                            value={studentFilter}
-                                            options={studentsOptions}
-                                            onChange={setStudentFilter}
-                                            isClearable
-                                        />
-                                    </div>
-                                    <div style={{minWidth: 200}}>
-                                        <CustomSelect
-                                            placeholder={props.t('select_course')}
-                                            value={courseFilter}
-                                            options={coursesOptions}
-                                            onChange={setCourseFilter}
-                                            isClearable
-                                        />
-                                    </div>
-                                    <Button color="light" className="d-flex gap-1 align-items-center"
-                                            onClick={() => {
-                                                setSearch('');
-                                                setStudentFilter(null);
-                                                setCourseFilter(null);
-                                            }}>
-                                        <FeatherIcon size={14} icon="x"/>
-                                        {props.t('clear')}
-                                    </Button>
-                                </div>
-                            </div>
+                            <FilterBar
+                                search={search}
+                                onSearch={setSearch}
+                                onClear={() => {
+                                    setSearch('');
+                                    setStudentFilter(null);
+                                    setCourseFilter(null);
+                                }}
+                                filters={[
+                                    {
+                                        placeholder: props.t('select_user'),
+                                        value: studentFilter,
+                                        options: studentsOptions,
+                                        onChange: setStudentFilter,
+                                        isClearable: true,
+                                    },
+                                    {
+                                        placeholder: props.t('select_course'),
+                                        value: courseFilter,
+                                        options: coursesOptions,
+                                        onChange: setCourseFilter,
+                                        isClearable: true,
+                                    },
+                                ]}
+                            />
                         </CardBody>
                     </Card>
 

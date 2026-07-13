@@ -2,8 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Badge, Button, Card, CardBody, Col, Container, Row} from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/CustomSelect";
 import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {closeLoading, showLoading} from "../../../utils/swal";
@@ -15,6 +13,7 @@ import MaterialDelete from "../../../Components/Custom/Materials/MaterialDelete"
 import {getUserRoles} from "../../../helpers/getUserRoles";
 import {useCascadeSelect} from "../../../hooks/useCascadeSelect";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 const Materials = (props: any) => {
     const dispatch = useDispatch<any>();
@@ -85,57 +84,38 @@ const Materials = (props: any) => {
 
                     <Card className="mb-3">
                         <CardBody>
-                            <div className="d-flex justify-content-between align-items-end flex-wrap gap-3">
-                                <div className="d-flex flex-wrap gap-3 align-items-end">
-                                    <div><SearchInput value={search} onSearch={setSearch}/></div>
-
-                                    <div style={{minWidth: 200}}>
-                                        <CustomSelect
-                                            placeholder={props.t('select_course')}
-                                            value={courseId}
-                                            options={coursesOptions}
-                                            onChange={setCourseId}
-                                            isClearable
-                                        />
-                                    </div>
-
-                                    <div style={{minWidth: 200}}>
-                                        <CustomSelect
-                                            placeholder={props.t('select_module')}
-                                            value={moduleId}
-                                            options={modulesOptions}
-                                            onChange={setModuleId}
-                                            isClearable
-                                            isDisabled={!courseId}
-                                        />
-                                    </div>
-
-                                    <div style={{minWidth: 200}}>
-                                        <CustomSelect
-                                            placeholder={props.t('select_lesson')}
-                                            value={lessonId}
-                                            options={lessonsOptions}
-                                            onChange={setLessonId}
-                                            isClearable
-                                            isDisabled={!moduleId}
-                                        />
-                                    </div>
-
-                                    <Button className="btn btn-secondary d-flex gap-1 align-items-center"
-                                            onClick={clearFilters}>
-                                        <FeatherIcon color="white" size={12} icon="x"/>
-                                        {props.t('clear')}
-                                    </Button>
-                                </div>
-
-                                {canManage && (
-                                    <Button className="btn btn-success d-flex gap-1 align-items-center"
-                                            onClick={showCreate}>
-                                        <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                                        {props.t('create', {item: props.t('category')})}
-                                    </Button>
-                                )}
-                            </div>
+                            <FilterBar
+                                search={search}
+                                onSearch={setSearch}
+                                onClear={clearFilters}
+                                 onCreate={canManage ? showCreate : undefined}
+                                createLabel={props.t('create', {item: props.t('category')})}
+                                filters={[
+                                    {
+                                        placeholder: props.t('select_course'),
+                                        value: courseId,
+                                        options: coursesOptions,
+                                        onChange: setCourseId,
+                                        isClearable: true
+                                    },
+                                    {
+                                        placeholder: props.t('select_module'),
+                                        value: moduleId,
+                                        options: modulesOptions,
+                                        onChange: setModuleId,
+                                        isClearable: true,
+                                        isDisabled: !courseId
+                                    },
+                                    {
+                                        placeholder: props.t('select_lesson'),
+                                        value: lessonId,
+                                        options: lessonsOptions,
+                                        onChange: setLessonId,
+                                        isClearable: true,
+                                        isDisabled: !moduleId
+                                    },
+                                ]}
+                            />
                         </CardBody>
                     </Card>
 

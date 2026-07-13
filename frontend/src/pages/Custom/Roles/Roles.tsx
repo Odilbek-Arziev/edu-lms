@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from "react";
-import {Button, Container, Input, Table} from "reactstrap";
+import React, {useEffect, useState} from "react";
+import {Button, Container, Table} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import FeatherIcon from "feather-icons-react";
 import RoleCreate from "../../../Components/Custom/Roles/RoleCreate";
@@ -9,12 +9,12 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {Link} from "react-router-dom";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
-import SearchInput from "../../../Components/Common/SearchInput";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {rolesThunks} from "../../../slices/roles";
 import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 
 const Roles = (props: any) => {
@@ -75,23 +75,13 @@ const Roles = (props: any) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title={props.t('roles_page')} pageTitle={props.t('main')}/>
-                    <div className="d-flex justify-content-between my-2">
-                        <div className='d-flex gap-1'>
-                            <SearchInput
-                                value={search}
-                                onSearch={setSearch}
-                            />
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center'
-                                    onClick={clearFilter}>
-                                <FeatherIcon color="white" size={12} icon="trash"/>
-                                {props.t('clear')}
-                            </Button>
-                        </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                            <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create', {item: props.t('role')})}
-                        </Button>
-                    </div>
+                    <FilterBar
+                        search={search}
+                        onSearch={setSearch}
+                        onClear={() => setSearch('')}
+                        onCreate={showCreate}
+                        createLabel={props.t('create', {item: props.t('role')})}
+                    />
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>

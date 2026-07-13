@@ -10,8 +10,6 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {roleTypeColors} from "../../../utils/rolesMap";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import {RootState} from "../../../slices";
-import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/CustomSelect";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {menuThunks} from "../../../slices/menu";
 import {rolesThunks} from "../../../slices/roles";
@@ -19,6 +17,7 @@ import {iconsThunks} from "../../../slices/icons";
 import {withTranslation} from "react-i18next";
 import {useFetchData} from "../../../hooks/useFetchData";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 
 const Menu = (props: any) => {
@@ -96,7 +95,7 @@ const Menu = (props: any) => {
         }
     }, [loading, isSearching]);
 
-    const tableData = hasActiveFilters ? localMenuData : flattenMenu(menu || []);
+    const tableData = hasActiveFilters ? (localData || []) : flattenMenu(menu || []);
 
     const paginatedData = hasActiveFilters
         ? tableData
@@ -111,28 +110,21 @@ const Menu = (props: any) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title={props.t('menu')} pageTitle={props.t('main')}/>
-                    <div className="d-flex justify-content-between my-2">
-                        <div className='d-flex gap-1'>
-                            <SearchInput
-                                value={search}
-                                onSearch={setSearch}
-                            />
-                            <CustomSelect
-                                placeholder={`${props.t('select_role')}...`}
-                                value={role}
-                                options={rolesOptions}
-                                onChange={setRole}
-                            />
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
-                                <FeatherIcon color="white" size={12} icon="trash"/>
-                                {props.t('clear')}
-                            </Button>
-                        </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                            <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('add', {item: props.t('menu')})}
-                        </Button>
-                    </div>
+                    <FilterBar
+                        search={search}
+                        onSearch={setSearch}
+                        onClear={clearFilter}
+                        onCreate={showCreate}
+                        createLabel={props.t('add', {item: props.t('menu')})}
+                        filters={[
+                            {
+                                placeholder: `${props.t('select_role')}...`,
+                                value: role,
+                                options: rolesOptions,
+                                onChange: setRole,
+                            },
+                        ]}
+                    />
                     <Table className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center'>
                         <thead>
                         <tr>

@@ -17,8 +17,6 @@ import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../slices";
 import {coursesThunks} from "../../../slices/courses";
-import SearchInput from "../../../Components/Common/SearchInput";
-import CustomSelect from "../../../Components/Common/CustomSelect";
 import FeatherIcon from "feather-icons-react";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import CourseCreate from "../../../Components/Custom/Courses/CourseCreate";
@@ -27,6 +25,7 @@ import CourseEdit from "../../../Components/Custom/Courses/CourseEdit";
 import CourseDelete from "../../../Components/Custom/Courses/CourseDelete";
 import {getUserRoles} from "../../../helpers/getUserRoles";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 
 const Courses = (props: any) => {
@@ -126,49 +125,39 @@ const Courses = (props: any) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title={props.t('courses')} pageTitle={props.t('main')}/>
-                    <div className="d-flex justify-content-between my-2">
-                        <div className='d-flex gap-1'>
-                            <SearchInput
-                                value={search}
-                                onSearch={setSearch}
-                            />
-                            <CustomSelect
-                                placeholder={`${props.t('select_lang')}...`}
-                                value={selectedLang}
-                                options={languages || []}
-                                onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
-                            />
-                            <CustomSelect
-                                placeholder={`${props.t('select_level')}...`}
-                                value={selectedLevel}
-                                options={levels || []}
-                                onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
-                            />
-                            <CustomSelect
-                                placeholder={`${props.t('select_category')}...`}
-                                value={selectedCategory}
-                                options={categories || []}
-                                onChange={(v) => setSelectedLang(v === null || v === '' ? null : Number(v))}
-                            />
-                            <CustomSelect
-                                placeholder={props.t('select_status')}
-                                value={isActive}
-                                options={statusTypes}
-                                onChange={setIsActive}
-                            />
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
-                                <FeatherIcon color="white" size={12} icon="trash"/>
-                                {props.t('clear')}
-                            </Button>
-                        </div>
-                        {
-                            canManage
-                            && <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                                <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                                {props.t('create', {item: props.t('course')})}
-                            </Button>
-                        }
-                    </div>
+                    <FilterBar
+                        search={search}
+                        onSearch={setSearch}
+                        onClear={clearFilter}
+                        onCreate={canManage ? showCreate : undefined}
+                        createLabel={props.t('create', {item: props.t('course')})}
+                        filters={[
+                            {
+                                placeholder: `${props.t('select_lang')}...`,
+                                value: selectedLang,
+                                options: languages || [],
+                                onChange: (v) => setSelectedLang(v)
+                            },
+                            {
+                                placeholder: `${props.t('select_level')}...`,
+                                value: selectedLevel,
+                                options: levels || [],
+                                onChange: (v) => setSelectedLevel(v)
+                            },
+                            {
+                                placeholder: `${props.t('select_category')}...`,
+                                value: selectedCategory,
+                                options: categories || [],
+                                onChange: (v) => setSelectedCategory(v)
+                            },
+                            {
+                                placeholder: props.t('select_status'),
+                                value: isActive,
+                                options: statusTypes,
+                                onChange: setIsActive
+                            },
+                        ]}
+                    />
                     <Row>
                         {localData ? localData.map((item: any, key: number) => (
                             <Col xl={3} md={6} key={key}>

@@ -11,23 +11,20 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {withTranslation} from "react-i18next";
 import {enrollmentsTiles} from "../../../common/data/widgets";
 import CountUp from "react-countup";
-import SearchInput from "../../../Components/Common/SearchInput";
 import FeatherIcon from "feather-icons-react";
 import {useDispatch, useSelector} from "react-redux";
-import CustomSelect from "../../../Components/Common/CustomSelect";
 import {enrollmentsThunk} from "../../../slices/enrollments/reducer";
 import {closeLoading, showLoading} from "../../../utils/swal";
 import PaginationButtons from "../../../Components/Common/PaginationButtons";
 import {PER_PAGE} from "../../../constants";
 import {RootState} from "../../../slices";
-import {useModal} from "../../../Components/Hooks/useModal";
 import EnrollmentCreate from "../../../Components/Custom/Enrollments/EnrollmentCreate";
 import {useFetchData} from "../../../hooks/useFetchData";
-import {EditModalProps} from "../../../types/editModal";
 import EnrollmentEdit from "../../../Components/Custom/Enrollments/EnrollmentEdit";
 import EnrollmentDelete from "../../../Components/Custom/Enrollments/EnrollmentDelete";
 import {useCourseOptions} from "../../../hooks/useCourseOptions";
 import {useCrudModals} from "../../../hooks/useCrudModals";
+import FilterBar from "../../../Components/Custom/FilterBar";
 
 const Enrollments = (props: any) => {
     const dispatch = useDispatch<any>();
@@ -190,41 +187,29 @@ const Enrollments = (props: any) => {
                             </div>
                         </Col>
                     </Row>
-                    <div className="d-flex justify-content-between my-2">
-                        <div className='d-flex gap-1'>
-                            <SearchInput
-                                value={search}
-                                onSearch={setSearch}
-                            />
-                            <div style={{minWidth: 200}}>
-                                <CustomSelect
-                                    placeholder={props.t('select_course')}
-                                    value={courseFilter}
-                                    options={coursesOptions}
-                                    onChange={setCourseFilter}
-                                    isClearable
-                                />
-                            </div>
-
-                            <div style={{minWidth: 200}}>
-                                <CustomSelect
-                                    placeholder={props.t('select_status')}
-                                    value={statusFilter}
-                                    options={statusOptions}
-                                    onChange={setStatusFilter}
-                                    isClearable
-                                />
-                            </div>
-                            <Button className='btn btn-secondary d-flex gap-1 align-items-center' onClick={clearFilter}>
-                                <FeatherIcon color="white" size={12} icon="trash"/>
-                                {props.t('clear')}
-                            </Button>
-                        </div>
-                        <Button className='btn btn-success d-flex gap-1 align-items-center' onClick={showCreate}>
-                            <FeatherIcon color="white" size={12} icon="plus-circle"/>
-                            {props.t('create')}
-                        </Button>
-                    </div>
+                    <FilterBar
+                        search={search}
+                        onSearch={setSearch}
+                        onClear={clearFilter}
+                        onCreate={showCreate}
+                        createLabel={props.t('create')}
+                        filters={[
+                            {
+                                placeholder: props.t('select_course'),
+                                value: courseFilter,
+                                options: coursesOptions,
+                                onChange: setCourseFilter,
+                                isClearable: true
+                            },
+                            {
+                                placeholder: props.t('select_status'),
+                                value: statusFilter,
+                                options: statusOptions,
+                                onChange: setStatusFilter,
+                                isClearable: true
+                            },
+                        ]}
+                    />
                     <Table
                         className='table table-striped table-nowrap table-bordered align-middle mb-0 text-center my-4'>
                         <thead>
