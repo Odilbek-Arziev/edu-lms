@@ -232,10 +232,11 @@ import Materials from "../pages/Custom/Materials/Materials";
 import LiveSessions from "../pages/Custom/LiveSessions/LiveSessions";
 import Enrollments from "../pages/Custom/Enrollments/Enrollments";
 import AccessDenied from "../pages/Custom/AuthPages/AccessDenied";
-import LiveSessionsDashboard from "../pages/Custom/LiveSessions/LiveSessionsDashboard";
+import LiveSessionsDashboard from "../pages/Custom/Dashboards/LiveSessionsDashboard";
 import Homeworks from "../pages/Custom/Homeworks/Homeworks";
 import Submissions from "../pages/Custom/Submissions/Submissions";
 import SubmissionReview from "../pages/Custom/Submissions/SubmissionReview";
+import TeacherDashboard from "../pages/Custom/Dashboards/TeacherDashboard";
 
 
 const authProtectedRoutes = [
@@ -258,6 +259,7 @@ const authProtectedRoutes = [
     {path: "/submissions", element: <Submissions/>, roles: ['teacher', 'manager']},
     {path: "/submissions/:id", element: <SubmissionReview/>, roles: ['teacher', 'manager']},
     {path: "/access-denied", element: <AccessDenied/>},
+    {path: "/teacher-dashboard", element: <TeacherDashboard/>, roles: ['teacher', 'manager']},
 
     {path: "/dashboard-analytics", element: <DashboardAnalytics/>},
     {path: "/dashboard-crm", element: <DashboardCrm/>},

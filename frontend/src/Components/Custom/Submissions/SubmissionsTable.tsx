@@ -2,7 +2,7 @@ import React from "react";
 import {Table} from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import {useTranslation} from "react-i18next";
-import {SubmissionsTableProps} from "../../../types/HomeworkSubmission";
+import {HomeworkSubmission, SubmissionsTableProps} from "../../../types/HomeworkSubmission";
 import SubmissionsTableRow from "./SubmissionsTableRow";
 
 
@@ -31,7 +31,7 @@ function SubmissionsTable({submissions, onOpen}: SubmissionsTableProps) {
                 </tr>
                 </thead>
                 <tbody>
-                {submissions.map((submission) => (
+                {submissions.map((submission: HomeworkSubmission) => (
                     <SubmissionsTableRow
                         key={submission.id}
                         submission={submission}

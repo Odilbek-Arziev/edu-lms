@@ -5,8 +5,6 @@ from rest_framework import permissions
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
-from apps.users.permissions.permissions import role_required
-
 
 class MenuViewSet(BaseModelViewSet):
     serializer_class = MenuSerializer

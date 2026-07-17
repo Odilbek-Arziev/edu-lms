@@ -50,9 +50,17 @@ const Menu = (props: any) => {
         label: props.t(item.name),
     }))
 
+    const refresh = () => {
+        if (hasActiveFilters) {
+            fetchData();
+        } else {
+            dispatch(menuThunks.fetch());
+        }
+    };
+
     const {showCreate, showEdit, showDelete} = useCrudModals(
         {create: MenuCreate, edit: MenuEdit, remove: MenuDelete},
-        {onChange: fetchData}
+        {onChange: refresh}
     );
 
     async function getData(id: number) {
@@ -82,10 +90,18 @@ const Menu = (props: any) => {
     }, [dispatch])
 
     useEffect(() => {
+        if (page !== 1) {
+            setPage(1);
+        } else if (hasActiveFilters) {
+            fetchData();
+        }
+    }, [search, role]);
+
+    useEffect(() => {
         if (hasActiveFilters) {
             fetchData();
         }
-    }, [search, role, page]);
+    }, [page]);
 
     useEffect(() => {
         if (loading || isSearching) {

@@ -1884,7 +1884,7 @@
   fields:
     key: "live_sessions"
     value:
-      ru: "Живые занятия"
+      ru: "Онлайн занятия"
       uz: "Jonli darslar"
       en: "Live sessions"
 
@@ -2782,3 +2782,283 @@
       ru: "Посмотреть предыдущее выполнение"
       uz: "Oldingi topshipuvni ko'rish"
       en: "View previous submission"
+
+- model: app.languageline
+  pk: 313
+  fields:
+    key: "active_students"
+    value:
+      ru: "Активные студенты"
+      uz: "Faol talabalar"
+      en: "Active students"
+
+- model: app.languageline
+  pk: 314
+  fields:
+    key: "unchecked_submissions"
+    value:
+      ru: "Непроверенные работы"
+      uz: "Tekshirilmagan topshiriqlar"
+      en: "Unchecked submissions"
+
+- model: app.languageline
+  pk: 315
+  fields:
+    key: "upcoming_live_sessions"
+    value:
+      ru: "Предстоящие онлайн-занятия"
+      uz: "Yaqinlashayotgan jonli darslar"
+      en: "Upcoming live sessions"
+
+- model: app.languageline
+  pk: 316
+  fields:
+    key: "calendar"
+    value:
+      ru: "Календарь"
+      uz: "Kalendar"
+      en: "Calendar"
+
+- model: app.languageline
+  pk: 317
+  fields:
+    key: "all_submissions"
+    value:
+      ru: "Все работы"
+      uz: "Barcha topshiriqlar"
+      en: "All submissions"
+
+- model: app.languageline
+  pk: 318
+  fields:
+    key: "dashboard"
+    value:
+      ru: "Панель управления"
+      uz: "Boshqaruv paneli"
+      en: "Dashboard"
+
+- model: app.languageline
+  pk: 319
+  fields:
+    key: "less_than_hour"
+    value:
+      ru: "меньше часа"
+      uz: "bir soatdan kam"
+      en: "less than an hour"
+
+- model: app.languageline
+  pk: 320
+  fields:
+    key: "in_minutes"
+    value:
+      ru: "через {{count}} мин"
+      uz: "{{count}} daqiqadan so'ng"
+      en: "in {{count}} min"
+
+- model: app.languageline
+  pk: 321
+  fields:
+    key: "in_hours"
+    value:
+      ru: "через {{count}} ч"
+      uz: "{{count}} soatdan so'ng"
+      en: "in {{count}} h"
+
+- model: app.languageline
+  pk: 322
+  fields:
+    key: "hours_one"
+    value:
+      ru: "{{count}} час"
+      uz: "{{count}} soat"
+      en: "{{count}} hour"
+
+- model: app.languageline
+  pk: 323
+  fields:
+    key: "hours_few"
+    value:
+      ru: "{{count}} часа"
+      uz: "{{count}} soat"
+      en: "{{count}} hours"
+
+- model: app.languageline
+  pk: 324
+  fields:
+    key: "hours_many"
+    value:
+      ru: "{{count}} часов"
+      uz: "{{count}} soat"
+      en: "{{count}} hours"
+
+- model: app.languageline
+  pk: 325
+  fields:
+    key: "hours_other"
+    value:
+      ru: "{{count}} часов"
+      uz: "{{count}} soat"
+      en: "{{count}} hours"
+
+- model: app.languageline
+  pk: 326
+  fields:
+    key: "days_one"
+    value:
+      ru: "{{count}} день"
+      uz: "{{count}} kun"
+      en: "{{count}} day"
+
+- model: app.languageline
+  pk: 327
+  fields:
+    key: "days_few"
+    value:
+      ru: "{{count}} дня"
+      uz: "{{count}} kun"
+      en: "{{count}} days"
+
+- model: app.languageline
+  pk: 328
+  fields:
+    key: "days_many"
+    value:
+      ru: "{{count}} дней"
+      uz: "{{count}} kun"
+      en: "{{count}} days"
+
+- model: app.languageline
+  pk: 329
+  fields:
+    key: "days_other"
+    value:
+      ru: "{{count}} дней"
+      uz: "{{count}} kun"
+      en: "{{count}} days"
+
+- model: app.languageline
+  pk: 330
+  fields:
+    key: "waiting_one"
+    value:
+      ru: "ждёт"
+      uz: "kutmoqda"
+      en: "is waiting"
+
+- model: app.languageline
+  pk: 331
+  fields:
+    key: "waiting_few"
+    value:
+      ru: "ждут"
+      uz: "kutmoqda"
+      en: "are waiting"
+
+- model: app.languageline
+  pk: 332
+  fields:
+    key: "waiting_many"
+    value:
+      ru: "ждут"
+      uz: "kutmoqda"
+      en: "are waiting"
+
+- model: app.languageline
+  pk: 333
+  fields:
+    key: "waiting_other"
+    value:
+      ru: "ждут"
+      uz: "kutmoqda"
+      en: "are waiting"
+
+- model: app.languageline
+  pk: 334
+  fields:
+    key: "hours_short"
+    value:
+      ru: "ч"
+      uz: "soat"
+      en: "h"
+
+- model: app.languageline
+  pk: 335
+  fields:
+    key: "everything_normal"
+    value:
+      ru: "Всё в пределах нормы"
+      uz: "Hammasi me'yorida"
+      en: "Everything is on track"
+
+- model: app.languageline
+  pk: 336
+  fields:
+    key: "next_session"
+    value:
+      ru: "ближайшая {{time}}"
+      uz: "eng yaqin {{time}}"
+      en: "next {{time}}"
+
+- model: app.languageline
+  pk: 337
+  fields:
+    key: "no_sessions_planned"
+    value:
+      ru: "Запланированных нет"
+      uz: "Rejalashtirilgan darslar yo'q"
+      en: "No sessions scheduled"
+
+- model: app.languageline
+  pk: 338
+  fields:
+    key: "out_of_total"
+    value:
+      ru: "из {{count}} всего"
+      uz: "jami {{count}} tadan"
+      en: "out of {{count}} total"
+
+- model: app.languageline
+  pk: 339
+  fields:
+    key: "new_students_week"
+    value:
+      ru: "+{{count}} за неделю"
+      uz: "Bir hafta ichida +{{count}}"
+      en: "+{{count}} this week"
+
+- model: app.languageline
+  pk: 340
+  fields:
+    key: "today_sessions_only"
+    value:
+      ru: "{{count}} сегодня"
+      uz: "Bugun {{count}} ta"
+      en: "{{count}} today"
+
+- model: app.languageline
+  pk: 341
+  fields:
+    key: "today_with_next_session"
+    value:
+      ru: "{{count}} сегодня, ближайшая {{time}}"
+      uz: "Bugun {{count}} ta, eng yaqini {{time}}"
+      en: "{{count}} today, next {{time}}"
+
+
+- model: app.languageline
+  pk: 342
+  fields:
+    key: "active_courses"
+    value:
+      ru: "активные курсы"
+      uz: "faol kurslar"
+      en: "active courses"
+
+- model: app.languageline
+  pk: 343
+  fields:
+    key: "sessions_calendar"
+    value:
+      ru: "Календарь онлайн занятий"
+      uz: "Onlayn darslar taqvimi"
+      en: "Online Sessions Calendar"

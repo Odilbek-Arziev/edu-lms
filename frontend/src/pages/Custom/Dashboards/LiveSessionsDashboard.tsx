@@ -91,13 +91,13 @@ const LiveSessionsDashboard = (props: any) => {
         else closeLoading();
     }, [isSearching]);
 
-    document.title = props.t('live_sessions_dashboard_page');
+    document.title = props.t('sessions_calendar');
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title={props.t('live_sessions')} pageTitle={props.t('main')}/>
+                    <BreadCrumb title={props.t('sessions_calendar')} pageTitle={props.t('main')}/>
 
                     <Row>
                         {statCards.map((s, i) => (
